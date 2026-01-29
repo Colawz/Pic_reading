@@ -84,7 +84,7 @@ const INITIAL_LOCATIONS: Location[] = [
     bookId: "book-white-bone",
     name: "白虎岭",
     description: "荒山野岭，地势险峻，妖气弥漫。",
-    visualSummary: "怪石嶙峋的山岭，枯木横生，阴云密布，透着一股肃杀之气。",
+    visualSummary: "怪石嶙峋的山岭，枯木横生，阴云密布，透着一股杀气。",
     locked: true,
     generationStatus: 'success'
   },
@@ -105,7 +105,7 @@ const INITIAL_RELATIONSHIPS: Relationship[] = [
     bookId: "book-white-bone",
     sourceId: "char-wukong",
     targetId: "char-tangseng",
-    type: "师徒/嫌隙",
+    type: "师徒",
     description: "悟空尽力保护师父，唐僧却因误会和八戒的挑拨而多次责罚甚至驱逐他。"
   },
   {
@@ -113,7 +113,7 @@ const INITIAL_RELATIONSHIPS: Relationship[] = [
     bookId: "book-white-bone",
     sourceId: "char-wukong",
     targetId: "char-bajie",
-    type: "师兄弟/冲突",
+    type: "师兄弟",
     description: "八戒多次在唐僧面前诬陷悟空，导致师徒关系破裂。"
   },
   {
@@ -123,31 +123,6 @@ const INITIAL_RELATIONSHIPS: Relationship[] = [
     targetId: "char-white-bone",
     type: "死敌",
     description: "悟空三次识破并打击白骨精的变化，最终将其消灭。"
-  },
-  {
-    id: "rel-wb-4",
-    bookId: "book-white-bone",
-    sourceId: "char-tangseng",
-    targetId: "char-bajie",
-    type: "师徒/宠信",
-    description: "唐僧常听信八戒的谗言，对悟空产生猜忌。"
-  },
-  {
-    id: "rel-wb-5",
-    bookId: "book-white-bone",
-    sourceId: "char-shaseng",
-    targetId: "char-wukong",
-    type: "师兄弟/信任",
-    description: "沙僧在悟空离去时表现出不舍，并接受悟空的嘱托守护师父。"
-  },
-  // 龟兔赛跑
-  {
-    id: "rel-th-1",
-    bookId: "book-tortoise-hare",
-    sourceId: "char-rabbit",
-    targetId: "char-turtle",
-    type: "竞争对手",
-    description: "兔子嘲笑乌龟爬得慢，并发起了赛跑挑战。"
   }
 ];
 
@@ -177,14 +152,19 @@ const App: React.FC = () => {
       setView('reader');
   };
 
+  const handleUpdateBookCover = (bookId: string, coverUrl: string) => {
+    setBooks(prev => prev.map(b => b.id === bookId ? { ...b, coverUrl } : b));
+  };
+
   const handleUpdateBookStyle = (bookId: string, styleId: string) => {
       setBooks(prev => prev.map(b => b.id === bookId ? { ...b, visualSpecId: styleId } : b));
       const newSpec = availableSpecs.find(p => p.id === styleId);
       if (newSpec) setVisualSpec(newSpec);
   };
 
-  const handleImportBook = (title: string, content: string) => {
+  const handleImportBook = (title: string, content: string, coverUrl?: string) => {
       const newBook = createBook(`imported-${Date.now()}`, title, "未知作者", "自定义", "📚", availableSpecs[0].id, content);
+      if (coverUrl) newBook.coverUrl = coverUrl;
       setBooks(prev => [newBook, ...prev]);
       handleSelectBook(newBook);
   };
@@ -198,7 +178,6 @@ const App: React.FC = () => {
   });
 
   const handleDiscoverCharacter = async (char: Partial<Character>): Promise<string | undefined> => {
-      // 强力去重：去除首尾空格并统一小写匹配
       const charName = char.name?.trim() || "";
       const existing = characters.find(c => 
         c.bookId === char.bookId && 
@@ -219,7 +198,6 @@ const App: React.FC = () => {
         };
         setCharacters(prev => [...prev, newChar]);
       } else {
-        // 如果已存在但没图，标记为正在生成
         setCharacters(prev => prev.map(c => c.id === targetId ? { ...c, generationStatus: 'generating' } : c));
       }
 
@@ -279,7 +257,9 @@ const App: React.FC = () => {
       });
   };
 
+  const handleAddRelationship = (rel: Relationship) => setRelationships(prev => [...prev, rel]);
   const handleUpdateRelationship = (id: string, updates: Partial<Relationship>) => setRelationships(prev => prev.map(r => r.id === id ? { ...r, ...updates } : r));
+  const handleDeleteRelationship = (id: string) => setRelationships(prev => prev.filter(r => r.id !== id));
 
   const handleAddCustomStyle = (e: React.FormEvent) => {
     e.preventDefault();
@@ -297,7 +277,7 @@ const App: React.FC = () => {
 
   return (
     <Layout currentView={view} onNavigate={setView}>
-      {view === 'home' && <BookShelf books={books} onSelectBook={handleSelectBook} onImportBook={handleImportBook} />}
+      {view === 'home' && <BookShelf books={books} onSelectBook={handleSelectBook} onImportBook={handleImportBook} onUpdateBookCover={handleUpdateBookCover} />}
       {view === 'reader' && currentBook && (
         <Reader 
           book={currentBook}
@@ -315,7 +295,16 @@ const App: React.FC = () => {
         />
       )}
       {view === 'assets' && <AssetLibrary books={books} characters={characters} locations={locations} visualSpec={visualSpec} setCharacters={setCharacters} setLocations={setLocations} />}
-      {view === 'relationships' && <SocialNetwork books={books} characters={characters} relationships={relationships} onUpdateRelationship={handleUpdateRelationship} />}
+      {view === 'relationships' && (
+        <SocialNetwork 
+          books={books} 
+          characters={characters} 
+          relationships={relationships} 
+          onAddRelationship={handleAddRelationship}
+          onUpdateRelationship={handleUpdateRelationship} 
+          onDeleteRelationship={handleDeleteRelationship}
+        />
+      )}
       {view === 'settings' && (
         <div className="p-8 max-w-5xl mx-auto pb-24">
             <div className="mb-10 text-center md:text-left"><h2 className="text-3xl font-bold text-slate-900 mb-2">绘图风格管理</h2><p className="text-slate-500">管理内置风格或创建属于你自己的独特视觉语言。</p></div>

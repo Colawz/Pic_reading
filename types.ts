@@ -4,7 +4,8 @@ export interface Book {
   title: string;
   author: string;
   genre: string;
-  coverEmoji: string; // Simple placeholder for cover
+  coverEmoji: string; 
+  coverUrl?: string; // 新增：自定义封面图片链接
   chapters: Chapter[];
   visualSpecId: string;
 }
@@ -31,11 +32,11 @@ export interface VisualSpec {
 
 export interface Character {
   id: string;
-  bookId: string; // Linked to a specific book
+  bookId: string; 
   name: string;
   description: string;
-  visualSummary: string; // Condensed string for prompts
-  imageUrl?: string; // Reference image (e.g. generated turnaround)
+  visualSummary: string; 
+  imageUrl?: string; 
   locked: boolean;
   generationStatus?: 'idle' | 'generating' | 'success' | 'failed';
 }
@@ -43,15 +44,15 @@ export interface Character {
 export interface Relationship {
   id: string;
   bookId: string;
-  sourceId: string; // Character ID
-  targetId: string; // Character ID
-  type: string;     // e.g., "Friend", "Enemy", "Mentor"
+  sourceId: string; 
+  targetId: string; 
+  type: string;     
   description: string;
 }
 
 export interface Location {
   id: string;
-  bookId: string; // Linked to a specific book
+  bookId: string; 
   name: string;
   description: string;
   visualSummary: string;
@@ -79,7 +80,7 @@ export interface NarrativeFacts {
 }
 
 export interface ReaderSettings {
-  wordInterval: number; // 0 = manual, 300, 500, 1000 etc.
+  wordInterval: number; 
   preGenerate: boolean;
 }
 

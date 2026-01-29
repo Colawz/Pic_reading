@@ -1,30 +1,63 @@
-import React, { useState } from 'react';
+
+import React, { useState, useRef } from 'react';
 import { Book } from '../types';
-import { Book as BookIcon, ChevronRight, Plus, Upload } from 'lucide-react';
+import { Book as BookIcon, ChevronRight, Plus, Upload, Image as ImageIcon, Camera, X } from 'lucide-react';
 
 interface BookShelfProps {
   books: Book[];
   onSelectBook: (book: Book) => void;
-  onImportBook: (title: string, content: string) => void;
+  onImportBook: (title: string, content: string, coverUrl?: string) => void;
+  onUpdateBookCover: (bookId: string, coverUrl: string) => void;
 }
 
-export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImportBook }) => {
+export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImportBook, onUpdateBookCover }) => {
   const [showImportModal, setShowImportModal] = useState(false);
   const [importTitle, setImportTitle] = useState('');
   const [importContent, setImportContent] = useState('');
+  const [importCoverUrl, setImportCoverUrl] = useState<string | undefined>(undefined);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const updateCoverInputRef = useRef<HTMLInputElement>(null);
+  const [updatingBookId, setUpdatingBookId] = useState<string | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, isUpdate = false) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        if (isUpdate && updatingBookId) {
+          onUpdateBookCover(updatingBookId, result);
+          setUpdatingBookId(null);
+        } else {
+          setImportCoverUrl(result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleImportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (importTitle && importContent) {
-      onImportBook(importTitle, importContent);
+      onImportBook(importTitle, importContent, importCoverUrl);
       setImportTitle('');
       setImportContent('');
+      setImportCoverUrl(undefined);
       setShowImportModal(false);
     }
   };
 
+  const triggerUpdateCover = (e: React.MouseEvent, bookId: string) => {
+    e.stopPropagation();
+    setUpdatingBookId(bookId);
+    updateCoverInputRef.current?.click();
+  };
+
   return (
     <div className="p-8 max-w-7xl mx-auto">
+      {/* Hidden inputs for file upload */}
+      <input type="file" ref={updateCoverInputRef} className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, true)} />
+
       <div className="mb-10 text-center">
         <h1 className="text-4xl font-serif font-bold text-slate-900 mb-4">书架</h1>
         <p className="text-slate-500 text-lg">选择一本书，开始您的智绘阅读之旅</p>
@@ -40,20 +73,36 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
                 <Plus size={32} className="text-brand-500" />
             </div>
             <h3 className="text-xl font-bold text-slate-700 mb-1">导入故事</h3>
-            <p className="text-slate-400 text-sm text-center">粘贴文本，AI 自动为你配图</p>
+            <p className="text-slate-400 text-sm text-center">粘贴文本并上传封面，AI 为您配图</p>
         </div>
 
         {books.map(book => (
           <div 
             key={book.id}
             onClick={() => onSelectBook(book)}
-            className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer hover:shadow-lg hover:border-brand-300 transition-all transform hover:-translate-y-1 group"
+            className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer hover:shadow-lg hover:border-brand-300 transition-all transform hover:-translate-y-1 group relative"
           >
-            <div className="h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-6xl relative overflow-hidden">
-                <span className="z-10">{book.coverEmoji}</span>
-                <div className="absolute -bottom-4 -right-4 opacity-10 text-9xl">
-                    <BookIcon size={120} />
-                </div>
+            {/* Cover Image Area */}
+            <div className="h-56 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center relative overflow-hidden">
+                {book.coverUrl ? (
+                  <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                ) : (
+                  <>
+                    <span className="text-6xl z-10 transition-transform duration-500 group-hover:scale-125">{book.coverEmoji}</span>
+                    <div className="absolute -bottom-4 -right-4 opacity-10 text-9xl">
+                        <BookIcon size={120} />
+                    </div>
+                  </>
+                )}
+                
+                {/* Change Cover Hover Trigger */}
+                <button 
+                  onClick={(e) => triggerUpdateCover(e, book.id)}
+                  className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full shadow-sm text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white hover:text-brand-600"
+                  title="更换封面"
+                >
+                  <Camera size={16} />
+                </button>
             </div>
             
             <div className="p-6">
@@ -63,7 +112,7 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
                 </span>
               </div>
               
-              <h3 className="font-serif font-bold text-2xl text-slate-800 mb-1 group-hover:text-brand-600 transition-colors">
+              <h3 className="font-serif font-bold text-2xl text-slate-800 mb-1 group-hover:text-brand-600 transition-colors truncate">
                 {book.title}
               </h3>
               <p className="text-slate-500 text-sm mb-4">by {book.author}</p>
@@ -79,38 +128,63 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
       {/* Import Modal */}
       {showImportModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-               <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+               <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                    <h3 className="font-bold text-xl text-slate-800">导入新故事</h3>
-                   <button onClick={() => setShowImportModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+                   <button onClick={() => setShowImportModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors"><X size={24} /></button>
                </div>
-               <form onSubmit={handleImportSubmit} className="p-6">
-                   <div className="mb-4">
-                       <label className="block text-sm font-medium text-slate-700 mb-1">标题</label>
-                       <input 
-                         type="text" 
-                         value={importTitle}
-                         onChange={e => setImportTitle(e.target.value)}
-                         className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none"
-                         placeholder="例如：卖算力的小女孩"
-                         required
-                       />
+               <form onSubmit={handleImportSubmit} className="flex flex-col md:flex-row h-[500px]">
+                   {/* Left side: Cover Upload */}
+                   <div className="w-full md:w-1/3 bg-slate-100 border-r border-slate-200 p-6 flex flex-col items-center justify-center">
+                       <label className="block text-sm font-bold text-slate-500 uppercase mb-4 w-full text-center">书籍封面</label>
+                       <div 
+                         onClick={() => fileInputRef.current?.click()}
+                         className={`w-full aspect-[3/4] rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${importCoverUrl ? 'border-brand-500' : 'border-slate-300 hover:border-brand-400 hover:bg-white'}`}
+                       >
+                           {importCoverUrl ? (
+                             <img src={importCoverUrl} className="w-full h-full object-cover" />
+                           ) : (
+                             <>
+                               <ImageIcon size={48} className="text-slate-300 mb-2" />
+                               <span className="text-xs text-slate-400 font-medium px-4 text-center">点击上传封面图片<br/>(建议比例 3:4)</span>
+                             </>
+                           )}
+                       </div>
+                       <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, false)} />
+                       {importCoverUrl && (
+                         <button type="button" onClick={() => setImportCoverUrl(undefined)} className="mt-3 text-xs text-red-500 font-bold hover:underline">移除封面</button>
+                       )}
                    </div>
-                   <div className="mb-6">
-                       <label className="block text-sm font-medium text-slate-700 mb-1">故事内容 (粘贴文本)</label>
-                       <textarea 
-                         value={importContent}
-                         onChange={e => setImportContent(e.target.value)}
-                         className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none h-64 resize-none"
-                         placeholder="在这里粘贴小说或故事内容..."
-                         required
-                       />
-                   </div>
-                   <div className="flex justify-end gap-3">
-                       <button type="button" onClick={() => setShowImportModal(false)} className="px-5 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg">取消</button>
-                       <button type="submit" className="px-5 py-2 bg-brand-600 text-white font-bold rounded-lg hover:bg-brand-700 flex items-center gap-2">
-                           <Upload size={18} /> 导入并阅读
-                       </button>
+
+                   {/* Right side: Title & Content */}
+                   <div className="flex-1 p-6 flex flex-col">
+                       <div className="mb-4 shrink-0">
+                           <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">书籍标题</label>
+                           <input 
+                             type="text" 
+                             value={importTitle}
+                             onChange={e => setImportTitle(e.target.value)}
+                             className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none font-bold"
+                             placeholder="例如：卖算力的小女孩"
+                             required
+                           />
+                       </div>
+                       <div className="flex-1 flex flex-col">
+                           <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">故事内容</label>
+                           <textarea 
+                             value={importContent}
+                             onChange={e => setImportContent(e.target.value)}
+                             className="flex-1 w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none resize-none text-sm leading-relaxed font-serif"
+                             placeholder="在这里粘贴小说或故事内容..."
+                             required
+                           />
+                       </div>
+                       <div className="mt-6 flex justify-end gap-3 shrink-0">
+                           <button type="button" onClick={() => setShowImportModal(false)} className="px-5 py-2.5 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors">取消</button>
+                           <button type="submit" className="px-8 py-2.5 bg-brand-600 text-white font-bold rounded-lg hover:bg-brand-700 shadow-lg shadow-brand-500/20 flex items-center gap-2 transition-all">
+                               <Upload size={18} /> 导入并开始阅读
+                           </button>
+                       </div>
                    </div>
                </form>
            </div>
