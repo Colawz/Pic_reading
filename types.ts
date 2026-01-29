@@ -1,3 +1,4 @@
+
 export interface Book {
   id: string;
   title: string;
@@ -39,6 +40,15 @@ export interface Character {
   generationStatus?: 'idle' | 'generating' | 'success' | 'failed';
 }
 
+export interface Relationship {
+  id: string;
+  bookId: string;
+  sourceId: string; // Character ID
+  targetId: string; // Character ID
+  type: string;     // e.g., "Friend", "Enemy", "Mentor"
+  description: string;
+}
+
 export interface Location {
   id: string;
   bookId: string; // Linked to a specific book
@@ -69,8 +79,8 @@ export interface NarrativeFacts {
 }
 
 export interface ReaderSettings {
-  generationInterval: number; // 0 = manual, 5, 10, 15
+  wordInterval: number; // 0 = manual, 300, 500, 1000 etc.
   preGenerate: boolean;
 }
 
-export type ViewMode = 'home' | 'reader' | 'assets' | 'settings';
+export type ViewMode = 'home' | 'reader' | 'assets' | 'relationships' | 'settings';

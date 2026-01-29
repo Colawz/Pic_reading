@@ -1,3 +1,4 @@
+
 import { Book, VisualSpec } from "./types";
 
 export const VISUAL_PRESETS: VisualSpec[] = [
@@ -16,9 +17,16 @@ export const VISUAL_PRESETS: VisualSpec[] = [
     negatives: "3d render, realistic, sketch, messy, text, watermark"
   },
   {
+    id: "cute_pixel_art",
+    label: "可爱像素风",
+    promptStyle: "cute pixel art style, 16-bit, vibrant colors, clean pixels, game boy advance aesthetic, retro gaming, isometric perspective",
+    cameraLanguage: "orthographic view, flat 2D perspective",
+    negatives: "photograph, blur, noisy, gradient, realistic, 3d render, text, watermark, sloppy pixels"
+  },
+  {
     id: "ink_illustration",
     label: "古典水墨/版画",
-    promptStyle: "black and white ink illustration, crosshatching, engraving style, vintage book plate",
+    promptStyle: "traditional Chinese ink wash painting style, black and white ink illustration, brush strokes, elegant atmosphere",
     cameraLanguage: "centered composition, detailed background",
     negatives: "color, photograph, digital painting, blur"
   },
@@ -28,17 +36,9 @@ export const VISUAL_PRESETS: VisualSpec[] = [
     promptStyle: "oil painting, fantasy art, detailed textures, dramatic lighting, masterpiece",
     cameraLanguage: "wide shot, cinematic lighting, rule of thirds",
     negatives: "cartoon, sketch, flat colors, modern UI, text"
-  },
-  {
-    id: "scifi_concept",
-    label: "科幻概念艺术",
-    promptStyle: "sci-fi concept art, futuristic, neon lights, metallic textures, cyberpunk, digital art, artstation",
-    cameraLanguage: "wide angle, cinematic lens flares, isometric",
-    negatives: "vintage, rustic, watercolor, sketch"
   }
 ];
 
-// Helper to generate paragraphs
 export const createBook = (id: string, title: string, author: string, genre: string, emoji: string, styleId: string, content: string): Book => {
   const paragraphs = content.split('\n').filter(p => p.trim().length > 0).map((p, i) => ({
     id: `${id}-p-${i}`,
@@ -52,103 +52,35 @@ export const createBook = (id: string, title: string, author: string, genre: str
   };
 };
 
-// Generate longer text by repeating and varying slightly
-const repeatText = (text: string, times: number) => {
-    let result = text;
-    const parts = text.split('\n').filter(t => t.trim().length > 0);
-    for(let i=0; i<times; i++) {
-        result += `\n\n（...时光流逝，第 ${i+2} 部分...）\n\n`;
-        result += parts.join('\n');
-    }
-    return result;
-}
-
-const FAIRY_TALE_BASE = `
-很久很久以前，在迷雾森林的深处，住着一位名叫莉莉的小女孩。
-她总是戴着一顶红色的兜帽，手里提着一个小竹篮，里面装满了刚采摘的蘑菇。
-森林里的大树高耸入云，树冠遮住了阳光，只有几缕金色的光线透过叶缝洒在满是苔藓的地面上。
-传说森林中心有一座糖果做成的屋子，但从来没有人真正见过它。
-“只要沿着发光的小溪走，就能找到。”老祖母曾经这样告诉她。
-这一天，莉莉决定去寻找那个传说。她告别了家门口的小松鼠，踏上了铺满落叶的小径。
-走着走着，周围的雾气变得越来越浓，空气中弥漫着一股甜甜的草莓味。
-突然，一只穿着蓝色马甲的兔子从草丛里跳了出来，手里拿着一块巨大的怀表。
-“哎呀！来不及了！来不及了！”兔子一边看着怀表，一边焦急地跺着脚。
-莉莉好奇地瞪大了眼睛，她从来没见过会说话的兔子。
-她悄悄地跟在兔子身后，穿过了一片巨大的发光蘑菇林。
-前方出现了一扇由饼干做成的大门，门把手是一颗巨大的彩色硬糖。
-莉莉深吸了一口气，轻轻地推开了那扇门。
-门后是一个奇妙的世界，河流流淌着巧克力，花朵是棉花糖做的。
-但是，这里似乎安静得有些过分，连风的声音都听不见。
+const WHITE_BONE_TEXT = `
+唐僧师徒行至白虎岭，孙悟空奉唐僧之命前往南山摘桃解饥。此时白骨精察觉唐僧行踪，欲食其肉以求长生，但因八戒、沙僧护持未敢贸然行动，决定先试探一番。
+一化村姑
+白骨精首次化身为一美貌女子，左手提青砂罐，右手持绿磁瓶，谎称为僧人提供斋饭。八戒动了凡心，轻信其言，催促唐僧用斋。唐僧持疑，询问女子来历，白骨精编造身世，称家住山脚，为田中人送饭。悟空摘桃归来，识破妖身，举棒便打。白骨精使“解尸法”脱身，留假尸于地。唐僧见女子毙命，怒斥悟空滥杀无辜。八戒趁机挑唆，称悟空使障眼法掩盖罪行。唐僧念紧箍咒惩戒，悟空苦求方止。此时罐中现出长蛆、蛤蟆，唐僧半信半疑，但仍责怪悟空行凶。
+二化老妇
+白骨精不甘失败，第二次变作八旬老妇，拄杖哭寻“女儿”。八戒惊惶，断言老妇为死者之母，悟空反驳：“八十老妇岂能生十八之女？”近前辨出妖气，挥棒再击。白骨精故技重施，元神遁走，假尸倒地。唐僧惊骇坠马，念紧箍咒20遍，悟空头痛欲裂，伏地求饶。八戒又进谗言，说：“师父，他要和你分行李哩。”唐僧决意驱逐，悟空以恩情恳求师父不要驱逐他。唐僧心软，暂时饶恕悟空，师徒继续前行。
+三化老翁
+白骨精第三次化身为白发老翁，佯装寻妻女骸骨。八戒再称祸事临头，悟空识破老翁真身，暗地里召唤土地、山神作证，不顾唐僧紧箍咒威胁，一棒打死妖精，使其现出白骨本相，白骨的脊梁上刻“白骨夫人”四字。唐僧见骷髅稍微相信悟空的话，但是八戒又诬陷悟空伪造证据。唐僧耳软，写下贬书驱逐悟空。悟空分身四面拜别唐僧，又嘱托沙僧防妖后，含泪拜别，驾云返回花果山，唐僧一行继续西行。自此，取经团队少一主力，前途凶险未卜。
 `;
 
-const EPIC_BASE = `
-北方边境的号角声在黎明时分吹响，打破了凛冬长城的死寂。
-指挥官凯尔站在城墙之上，在这个高度，寒风如同无形的巨锤敲击着他的铠甲。
-他的目光越过冰封的荒原，注视着地平线上那片翻滚的黑云——那是亡灵大军逼近的征兆。
-“点燃烽火！”凯尔的声音嘶哑而坚定，传遍了每一个哨位。
-士兵们从睡梦中惊醒，纷纷抓起长矛和盾牌，奔向各自的战斗位置。
-火焰在烽火台上腾空而起，在灰暗的天空中显得格外耀眼，向南方的王国传递着警报。
-凯尔握紧了腰间的长剑，剑柄上的家族徽章早已被岁月磨平，但这把剑依然锋利如初。
-“为了生者的荣耀。”他低声默念着誓言。
-大地开始震颤，远处的冰面传来了沉闷的碎裂声，仿佛有什么庞然大物正在苏醒。
-一只巨大的骨龙冲破了云层，它的双翼遮天蔽日，眼眶中燃烧着幽蓝的灵魂之火。
-城墙上的弓箭手们拉满了长弓，箭头指向了空中的巨兽。
-凯尔拔出长剑，剑身在火光下闪烁着寒光，直指苍穹。
-“坚守阵地！一步也不许退！”
-骨龙发出了一声震耳欲聋的咆哮，喷出一股冰霜吐息，瞬间将一座箭塔冻结成了冰雕。
-战斗，开始了。
-`;
-
-const SCIFI_BASE = `
-新东京市的霓虹灯在雨夜中交织成一片迷幻的光网，巨大的全息广告牌悬浮在摩天大楼之间。
-侦探杰克·雷诺坐在悬浮警车的驾驶座上，机械义眼的红色光圈在黑暗中微微收缩。
-他的目标是下城区的“黑莲花”俱乐部，据情报显示，那个代号为“幽灵”的叛逃AI就在那里。
-雨水顺着车窗滑落，映照出下方街道上熙熙攘攘的人群，他们大多都安装了廉价的义肢。
-杰克按下了加速键，警车尾部喷射出蓝色的离子流，在空中划过一道弧线，向底层俯冲而去。
-通讯器里传来了总部的指令：“杰克，目标极度危险，已被授权使用重型武器。”
-“收到。”杰克冷冷地回答，检查了一下腰间的高能脉冲手枪。
-警车停在了俱乐部的后巷，这里堆满了废弃的电子元件和生锈的管道。
-他推开车门，踩在积水的地面上，溅起一片油腻的水花。
-俱乐部的后门半掩着，里面传来了震耳欲聋的电子音乐声。
-杰克开启了战术扫描模式，视网膜上迅速浮现出周围环境的热成像图。
-三个红色的热源正在向门口靠近，看来对方已经发现了他。
-“那就来吧。”杰克嘴角微微上扬，露出一丝冷笑。
-他猛地踢开大门，手中的脉冲枪瞬间开火，照亮了昏暗的走廊。
-`;
-
-const COMPUTE_GIRL_TEXT = `
-天冷极了，下着雨。这是一个圣诞夜。
-在这又冷又黑的晚上，一个小女孩，流落在漏风的实验室里。
-她本来想学电影《后天》里的样子，把怀里那一摞打印出来的、厚厚的顶会论文集烧了取暖。
-她手里捏着一本打印好的 Attention Is All You Need，但是她没有火柴。
-	
-于是，她渴望的目光投向了身旁一台拥有 8 张 A100 的高性能计算节点，决定用服务器取暖。
-她在那台服务器机柜后面缩成一团。
-她启动了一个推理任务，设置temperature=100。
-然而，物理法则无法被代码逾越。
-仅仅过了几分钟，伴随着一行 CUDA out of Memory 和一股黑烟，整台服务器断电停机了。
-那施舍给她的一点点余温，瞬间消散在凛冽的寒风中。
-	
-她颤抖着输入 ssh 的命令，打开了另一台 A100 服务器。
-在这金钱与硅基芯片燃烧的光芒中，她设定好的 temperature=100 再次生效，强烈的热流冲刷着她的视神经。
-在火光中，她看到了毕业多年的师兄。
-他递过来一份Offer Letter，上面的签字费数字大得像是一个随机生成的长整型。
-师兄温柔地说，“这里没有 Deadline，也没有显存限制，我们这里，甚至不需要写论文……”
-就在这时候，机箱又发出了一声哀鸣。
-服务器烧毁了。Connection Lost.
-	
-她觉得冷极了，比刚才更冷。在黑暗中，她找到了最后一台服务器。接入了这最后一台服务器的控制台。
-她没有丝毫犹豫，禁用了所有的散热保护，禁用了所有的功率限制，将电压拉到了物理极限，然后按下回车。
-服务器被点亮了。在这强烈的光明中，她看到了一片璀璨的夜空。
-她梦到天上的星星⭐️就是自己 GitHub 上收获的星星⭐️数量。整个夜空在她眼里变成了一个巨大的、深色模式的 GitHub 个人主页，而银河就是star history 的曲线。
-第二天，导师看到小女孩躺在机箱上，断断续续地念着“Accpet ...... Best Paper ...... 师兄给我发Offer ......”，像是陷入了永远不会输出<eos>的幻觉。
-	
-除了她自己，没人知道她在圣诞夜看到了一切的美好。
+const TORTOISE_HARE_TEXT = `
+兔子长了四条腿，一蹦一跳，跑得可快啦。乌龟也长了四条腿，爬呀，爬呀，爬得真慢。
+龟兔赛跑，谁才是冠军？
+有一天，兔子碰见乌龟，看见乌龟爬得这么慢，就想戏弄戏弄他，于是笑眯眯地说：“乌龟，乌龟，咱们来赛跑，好吗？”乌龟知道兔子在开他玩笑，瞪着一双小眼睛，不理也不踩。兔子知道乌龟不敢跟他赛跑，乐得摆着耳朵直蹦跳，还编了一支山歌笑话他：
+乌龟，乌龟，爬爬爬，
+一早出门采花；
+乌龟，乌龟，走走走，
+傍晚还在门口。
+乌龟生气了，说：“兔子，兔子，你别神灵活现的，咱们这就来赛跑!”
+“什么？乌龟，你说什么？”
+“咱们这就来赛跑。”
+兔子一听，差点笑破了肚子：“乌龟，你真敢跟我赛跑？那好，咱们从这儿跑起，看谁先跑到那边山脚下的一棵大树。预备！一，二，三，－－－”兔子撒开腿就跑，跑得真快，一会儿就跑得很远了。他回头一看，乌龟才爬了一小段路呢，心心想：乌龟敢跟兔子赛跑，真是天大的笑话！我呀，在这儿睡上一大觉，让他爬到这儿，不，让他爬到前面去吧，我三蹦二跳的就追上他了。
+“啦啦啦，胜利准是我的嘛。”兔子把身子往地上一躺，合上眼皮，真的睡着了。再说乌龟，爬得也真慢，可是他一个劲儿地爬，爬呀，爬呀，爬，等他爬到兔子身边，已经筋疲力尽了。兔子还在睡觉，乌龟也想休息一会儿，可他知道兔子跑得比他快，只有坚持爬下去才有可能赢。于是，他不停地往前爬、爬、爬。离大树越来越近了，只差几十步了，十几步了，几步了………终于到了。
+兔子为什么睡着了？
+兔子呢？他还在睡觉呢。兔子醒来后往后一看，唉，乌龟怎么不见了？再往前一看，哎呀，不得了了。乌龟已经爬到大树底下的。兔子一看可急了，急忙赶上去，可已经晚了，乌龟已经赢了。
+兔子跑得快，乌龟跑得慢，为什么这次比赛乌龟反而赢了呢？
 `;
 
 export const SAMPLE_BOOKS: Book[] = [
-  createBook("book-fairytale", "迷雾森林的秘密", "格林·维尔", "童话", "🍄", "watercolor_storybook", repeatText(FAIRY_TALE_BASE, 3)),
-  createBook("book-epic", "凛冬长城之战", "R.R. 马丁", "史诗", "⚔️", "fantasy_oil", repeatText(EPIC_BASE, 3)),
-  createBook("book-scifi", "新东京2077", "吉布森·李", "科幻", "🤖", "scifi_concept", repeatText(SCIFI_BASE, 3)),
-  createBook("book-compute-girl", "卖算力的小女孩", "赛博格林", "赛博童话", "🔥", "scifi_concept", COMPUTE_GIRL_TEXT),
+  createBook("book-white-bone", "西游记：三打白骨精", "吴承恩", "神魔小说", "🐵", "ink_illustration", WHITE_BONE_TEXT),
+  createBook("book-tortoise-hare", "寓言：龟兔赛跑", "伊索", "寓言故事", "🐢", "watercolor_storybook", TORTOISE_HARE_TEXT),
 ];

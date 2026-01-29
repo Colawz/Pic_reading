@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { BookOpen, Image, Settings, Sparkles, Home } from 'lucide-react';
+import { BookOpen, Image, Settings, Sparkles, Home, Share2 } from 'lucide-react';
 import { ViewMode } from '../types';
 
 interface LayoutProps {
@@ -43,6 +44,13 @@ export const Layout: React.FC<LayoutProps> = ({ currentView, onNavigate, childre
               <span className="hidden lg:block ml-3 font-medium">资产库</span>
             </button>
             <button
+              onClick={() => onNavigate('relationships')}
+              className={`w-full flex items-center p-3 rounded-lg transition-colors ${currentView === 'relationships' ? 'bg-brand-50 text-brand-700' : 'text-slate-500 hover:bg-slate-50'}`}
+            >
+              <Share2 size={20} />
+              <span className="hidden lg:block ml-3 font-medium">关系网</span>
+            </button>
+            <button
               onClick={() => onNavigate('settings')}
               className={`w-full flex items-center p-3 rounded-lg transition-colors ${currentView === 'settings' ? 'bg-brand-50 text-brand-700' : 'text-slate-500 hover:bg-slate-50'}`}
             >
@@ -54,7 +62,7 @@ export const Layout: React.FC<LayoutProps> = ({ currentView, onNavigate, childre
         
         <div className="p-4 border-t border-slate-100 hidden lg:block">
             <div className="text-xs text-slate-400">
-                <p>v0.2.0 Beta</p>
+                <p>v0.3.0 Beta</p>
                 <p className="mt-1">Powered by Gemini</p>
             </div>
         </div>

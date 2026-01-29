@@ -1,38 +1,17 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { NarrativeFacts, VisualSpec, Character, Location } from "../types";
 
-// Helper to get client safely
+import { GoogleGenAI, Type } from "@google/genai";
+import { NarrativeFacts, VisualSpec, Character, Location, Relationship } from "../types";
+
 const getClient = () => {
   const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    throw new Error("API Key not found in environment variables");
-  }
+  if (!apiKey) throw new Error("API Key not found in environment variables");
   return new GoogleGenAI({ apiKey });
 };
 
-export const scanChapterForAssets = async (
-    chapterText: string
-): Promise<{ characters: Partial<Character>[], locations: Partial<Location>[] }> => {
+export const scanChapterForAssets = async (chapterText: string): Promise<{ characters: Partial<Character>[], locations: Partial<Location>[] }> => {
     const ai = getClient();
-    
-    // Truncate text if too long to save tokens
     const textToAnalyze = chapterText.slice(0, 15000);
-
-    const prompt = `
-      Please analyze the following chapter text and extract ALL potential major Characters and Locations that appear or are described.
-      
-      For each Character:
-      - Name
-      - A short visual description summary (appearance).
-
-      For each Location:
-      - Name
-      - A short visual description summary.
-
-      Text:
-      "${textToAnalyze}"
-    `;
-
+    const prompt = `分析以下章节，提取主要角色和地点。Text: "${textToAnalyze}"`;
     try {
         const response = await ai.models.generateContent({
             model: "gemini-3-flash-preview",
@@ -42,79 +21,52 @@ export const scanChapterForAssets = async (
                 responseSchema: {
                     type: Type.OBJECT,
                     properties: {
-                        characters: {
-                            type: Type.ARRAY,
-                            items: {
-                                type: Type.OBJECT,
-                                properties: {
-                                    name: { type: Type.STRING },
-                                    visualSummary: { type: Type.STRING }
-                                }
-                            }
-                        },
-                        locations: {
-                            type: Type.ARRAY,
-                            items: {
-                                type: Type.OBJECT,
-                                properties: {
-                                    name: { type: Type.STRING },
-                                    visualSummary: { type: Type.STRING }
-                                }
-                            }
-                        }
+                        characters: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, visualSummary: { type: Type.STRING } } } },
+                        locations: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, visualSummary: { type: Type.STRING } } } }
                     }
                 }
             }
         });
-
-        const jsonText = response.text || "{}";
-        const result = JSON.parse(jsonText);
-        
-        return {
-            characters: result.characters || [],
-            locations: result.locations || []
-        };
-    } catch (error) {
-        console.error("Asset Scan Error:", error);
-        return { characters: [], locations: [] };
-    }
+        const result = JSON.parse(response.text || "{}");
+        return { characters: result.characters || [], locations: result.locations || [] };
+    } catch (e) { return { characters: [], locations: [] }; }
 };
 
-export const analyzeNarrative = async (
-  targetText: string,
-  contextText: string,
-  existingCharacters: Character[],
-  existingLocations: Location[]
-): Promise<NarrativeFacts> => {
+export const analyzeRelationships = async (chapterText: string, characters: Character[]): Promise<Partial<Relationship>[]> => {
+    if (characters.length < 2) return [];
+    const ai = getClient();
+    const textToAnalyze = chapterText.slice(0, 10000);
+    const charList = characters.map(c => c.name).join(", ");
+    const prompt = `分析角色间的社会关系。角色列表: [${charList}]。文本: "${textToAnalyze}"`;
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        relationships: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { sourceName: { type: Type.STRING }, targetName: { type: Type.STRING }, type: { type: Type.STRING }, description: { type: Type.STRING } }, required: ["sourceName", "targetName", "type", "description"] } }
+                    }
+                }
+            }
+        });
+        const result = JSON.parse(response.text || "{}");
+        const found: Partial<Relationship>[] = [];
+        (result.relationships || []).forEach((rel: any) => {
+            const s = characters.find(c => c.name.toLowerCase() === rel.sourceName.toLowerCase());
+            const t = characters.find(c => c.name.toLowerCase() === rel.targetName.toLowerCase());
+            if (s && t && s.id !== t.id) found.push({ sourceId: s.id, targetId: t.id, type: rel.type, description: rel.description });
+        });
+        return found;
+    } catch (e) { return []; }
+};
+
+export const analyzeNarrative = async (targetText: string, contextText: string, existingCharacters: Character[], existingLocations: Location[]): Promise<NarrativeFacts> => {
   const ai = getClient();
-  
-  const knownAssetsContext = `
-    已知的角色: ${existingCharacters.map(c => c.name).join(", ") || "无"}
-    已知的地点: ${existingLocations.map(l => l.name).join(", ") || "无"}
-  `;
-
-  const prompt = `
-    请分析以下小说片段。
-    
-    [背景信息]
-    ${knownAssetsContext}
-
-    [上下文语境 (Context)]
-    ${contextText}
-
-    [当前需要分析的段落 (Target)]
-    "${targetText}"
-
-    请基于 [当前需要分析的段落]，结合 [上下文语境] 补充细节，提取以下结构化数据：
-    1. 出场的角色 (characters)
-    2. 具体的地点描述 (location)
-    3. 发生的关键动作 (action)
-    4. 氛围/情绪 (mood)
-    5. 关键的物理道具/物品 (objects)
-
-    请用 JSON 格式返回。
-  `;
-
+  const knownAssets = `已知的角色: ${existingCharacters.map(c => c.name).join(", ") || "无"} | 已知的地点: ${existingLocations.map(l => l.name).join(", ") || "无"}`;
+  const prompt = `分析小说片段并提取绘图事实。背景: ${knownAssets} | 上下文: ${contextText} | 当前段落: "${targetText}"`;
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
@@ -133,142 +85,53 @@ export const analyzeNarrative = async (
         },
       },
     });
-
-    const jsonText = response.text || "{}";
-    return JSON.parse(jsonText) as NarrativeFacts;
-  } catch (error) {
-    console.error("NLU Error:", error);
-    return {
-      characters: [],
-      location: "未知",
-      action: "静止",
-      mood: "平静",
-      objects: [],
-    };
+    return JSON.parse(response.text || "{}") as NarrativeFacts;
+  } catch (e) {
+    return { characters: [], location: "未知", action: "静止", mood: "平静", objects: [] };
   }
 };
 
-export const generateIllustration = async (
-  facts: NarrativeFacts,
-  visualSpec: VisualSpec,
-  characters: Character[],
-  locations: Location[]
-): Promise<string> => {
+export const generateIllustration = async (facts: NarrativeFacts, visualSpec: VisualSpec, characters: Character[], locations: Location[]): Promise<string> => {
   const ai = getClient();
-
-  let charDescriptions = "";
+  let charDesc = "";
   facts.characters.forEach(name => {
     const match = characters.find(c => name.includes(c.name) || c.name.includes(name));
-    if (match) {
-      charDescriptions += `${match.name}: ${match.visualSummary}. `;
-    } else {
-      charDescriptions += `${name} (generic appearance). `;
-    }
+    charDesc += match ? `${match.name}: ${match.visualSummary}. ` : `${name}. `;
   });
-
-  const prompt = `
-    Draw this scene:
-    Description: ${facts.location}, ${facts.action}.
-    Cast: ${charDescriptions}
-    Vibe: ${facts.mood}
-    Key Items: ${facts.objects.join(", ")}
-    
-    Style Guidelines: ${visualSpec.promptStyle}
-    Framing: ${visualSpec.cameraLanguage}
-    Avoid: ${visualSpec.negatives}
-  `;
-
+  const prompt = `Generate a scene: Location: ${facts.location} | Characters: ${charDesc} | Action: ${facts.action} | Mood: ${facts.mood} | Style: ${visualSpec.promptStyle} | Camera: ${visualSpec.cameraLanguage}`;
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-image",
-      contents: {
-        parts: [{ text: prompt }]
-      },
+      contents: { parts: [{ text: prompt }] },
       config: {
-        systemInstruction: "COMMAND: ONLY OUTPUT IMAGE DATA. DO NOT TALK. DO NOT DESCRIBE. DO NOT APOLOGIZE. IF YOU CANNOT DRAW, RETURN NOTHING. NEVER START YOUR RESPONSE WITH TEXT.",
-        imageConfig: {
-            aspectRatio: "16:9"
-        }
+        systemInstruction: "Strictly generate an image based on the prompt. Do not provide text. Aspect: 16:9.",
+        imageConfig: { aspectRatio: "16:9" }
       }
     });
-
-    const candidate = response.candidates?.[0];
-    const parts = candidate?.content?.parts;
-
-    if (parts) {
-      // Prioritize finding an image part
-      for (const part of parts) {
-        if (part.inlineData && part.inlineData.data) {
-          return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-        }
-      }
-      
-      // If we got here, no image was returned. Check for text errors.
-      const textPart = parts.find(p => p.text);
-      if (textPart) {
-          throw new Error(`AI refused image generation and returned text instead: ${textPart.text.slice(0, 50)}...`);
-      }
-    }
-
-    if (candidate?.finishReason && candidate.finishReason !== 'STOP') {
-        throw new Error(`Generation interrupted: ${candidate.finishReason}`);
-    }
-
-    throw new Error("No image data found in response.");
-  } catch (error) {
-    console.error("Image Gen Error:", error);
-    throw error;
-  }
+    const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
+    if (part?.inlineData) return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+    throw new Error("No image data returned.");
+  } catch (e) { console.error(e); throw e; }
 };
 
-export const generateAssetVisual = async (
-  description: string,
-  type: 'character' | 'location',
-  visualSpec: VisualSpec
-): Promise<string> => {
+export const generateAssetVisual = async (description: string, type: 'character' | 'location', visualSpec: VisualSpec): Promise<string> => {
     const ai = getClient();
-    
-    const prompt = `
-        Create a professional concept art design for:
-        ${type === 'character' ? 'A character' : 'A location'}: ${description}
-        Art Style: ${visualSpec.promptStyle}
-        Environment: Clean studio background.
-    `;
-
+    const prompt = type === 'character' 
+        ? `Professional character concept design sheet: ${description}. 
+           Required: Three-view layout showing front view, side view, and back view. 
+           Style: ${visualSpec.promptStyle}. Background: Simple neutral background.`
+        : `Environment concept art: ${description}. Style: ${visualSpec.promptStyle}. Aspect: 1:1.`;
     try {
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash-image",
             contents: { parts: [{ text: prompt }] },
             config: {
-                systemInstruction: "STRICT: IMAGE OUTPUT ONLY. DO NOT USE TEXT. NO CHAT. NO EXPLANATIONS.",
-                imageConfig: {
-                    aspectRatio: "1:1"
-                }
+                systemInstruction: "Generate a single asset image. No text. Aspect: 1:1.",
+                imageConfig: { aspectRatio: "1:1" }
             }
         });
-
-        const candidate = response.candidates?.[0];
-        const parts = candidate?.content?.parts;
-
-        if (parts) {
-            for (const part of parts) {
-                if (part.inlineData && part.inlineData.data) {
-                    return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-                }
-            }
-            const textPart = parts.find(p => p.text);
-            if (textPart) {
-                throw new Error(`AI returned text instead of image: ${textPart.text.slice(0, 50)}...`);
-            }
-        }
-        
-        if (candidate?.finishReason && candidate.finishReason !== 'STOP') {
-            throw new Error(`Generation blocked: ${candidate.finishReason}`);
-        }
-
-        throw new Error("No image data returned from model.");
-    } catch (error) {
-        console.error("Asset Gen Error:", error);
-        throw error;
-    }
+        const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
+        if (part?.inlineData) return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+        throw new Error("No asset image returned.");
+    } catch (e) { console.error(e); throw e; }
 }
