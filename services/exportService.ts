@@ -191,7 +191,7 @@ const generateAssetHtml = (bookTitle: string, characters: Character[], locations
     <html lang="zh-CN">
     <head>
       <meta charset="UTF-8">
-      <title>${bookTitle} - 设定集</title>
+      <title>${bookTitle} - 世界观</title>
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@400;600&display=swap');
         body { font-family: 'Inter', sans-serif; background: #fff; color: #333; margin: 0; padding: 0; }
@@ -215,10 +215,10 @@ const generateAssetHtml = (bookTitle: string, characters: Character[], locations
     <body>
       <div class="cover">
         <h1>${bookTitle}</h1>
-        <p>视觉设定集 • AI 辅助生成</p>
+        <p>视觉世界观 • AI 辅助生成</p>
         <p style="margin-top: 50px; color: #666;">${date}</p>
       </div>
-      <h2 class="section-title">核心角色设定</h2>
+      <h2 class="section-title">核心角色</h2>
       <div class="grid">${characters.map(c => `
         <div class="card">
           ${c.imageUrl ? `<img src="${c.imageUrl}" />` : '<div style="aspect-ratio:1/1; background:#eee;"></div>'}
@@ -228,7 +228,7 @@ const generateAssetHtml = (bookTitle: string, characters: Character[], locations
             <p>${c.visualSummary || c.description}</p>
           </div>
         </div>`).join('')}</div>
-      <h2 class="section-title">核心场景设定</h2>
+      <h2 class="section-title">核心场景</h2>
       <div class="grid">${locations.map(l => `
         <div class="card">
           ${l.imageUrl ? `<img src="${l.imageUrl}" />` : '<div style="aspect-ratio:1/1; background:#eee;"></div>'}
@@ -261,7 +261,7 @@ export const exportAssetsToHtml = (bookTitle: string, characters: Character[], l
   const blob = new Blob([htmlContent], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `${bookTitle}_设定集.html`;
+  a.href = url; a.download = `${bookTitle}_世界观.html`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
 };
 

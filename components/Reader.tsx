@@ -71,7 +71,7 @@ export const Reader: React.FC<ReaderProps> = ({
       const text = currentChapter.paragraphs.map(p => p.text).join("\n");
       const results = await scanChapterForAssets(text);
       
-      // 只要库中已有该名称的角色，即便没图，也不再将其列为“扫描发现的新资产”
+      // 只要库中已有该名称的角色，即便没图，也不再将其列为“扫描发现的新世界观”
       const filteredCharacters = (results.characters || []).filter(sc => {
           const scName = (sc.name || "").trim().toLowerCase();
           return !characters.some(c => c.name.trim().toLowerCase() === scName);
@@ -128,7 +128,8 @@ export const Reader: React.FC<ReaderProps> = ({
         }
       }
 
-      const imageUrl = await generateIllustration(facts, visualSpec, characters, locations);
+      const isScience = book.genre.includes("科普") || book.genre.includes("科学");
+      const imageUrl = await generateIllustration(facts, visualSpec, characters, locations, isScience ? paragraph.text : undefined);
       onUpdateIllustration(paragraph.id, { status: 'completed', imageUrl: imageUrl });
     } catch (error: any) {
       onUpdateIllustration(paragraph.id, { status: 'failed', error: error.message || "生成失败" });
@@ -193,11 +194,11 @@ export const Reader: React.FC<ReaderProps> = ({
                 <div className="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4 text-brand-600">
                   <UserPlus size={32} />
                 </div>
-                <h3 className="text-xl font-bold mb-2">缺失角色形象设定</h3>
-                <p className="text-sm text-slate-500 mb-6">场景中涉及角色：<b>{missingChars.join(", ")}</b>。<br/>资产库中尚未生成这些角色的形象。为了保证视觉一致性，建议先建立资产。</p>
+                <h3 className="text-xl font-bold mb-2">缺失角色形象</h3>
+                <p className="text-sm text-slate-500 mb-6">场景中涉及角色：<b>{missingChars.join(", ")}</b>。<br/>世界观中尚未生成这些角色的形象。为了保证视觉一致性，建议先完善世界观。</p>
                 <div className="flex flex-col gap-3">
-                  <button onClick={handleGenMissingChars} className="w-full py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-colors">生成形象资产并继续</button>
-                  <button onClick={handleSkipMissingChars} className="w-full py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-colors">不生成资产直接绘制</button>
+                  <button onClick={handleGenMissingChars} className="w-full py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-colors">生成形象设定并继续</button>
+                  <button onClick={handleSkipMissingChars} className="w-full py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-colors">不生成设定直接绘制</button>
                 </div>
               </div>
             </div>
@@ -239,8 +240,8 @@ export const Reader: React.FC<ReaderProps> = ({
           <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
               <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col">
                   <div className="p-6 border-b flex justify-between items-center">
-                    <h3 className="text-xl font-bold">扫描发现新视觉资产</h3>
-                    <div className="text-xs text-slate-400">已自动过滤库中已有资产</div>
+                    <h3 className="text-xl font-bold">扫描发现新视觉设定</h3>
+                    <div className="text-xs text-slate-400">已自动过滤库中已有设定</div>
                   </div>
                   <div className="flex-1 overflow-y-auto p-6 space-y-4">
                     {scanResults.characters.length > 0 && (
@@ -276,7 +277,7 @@ export const Reader: React.FC<ReaderProps> = ({
                         scanResults.characters.forEach(c => { if (selectedScanItems[`char-${c.name}`]) onDiscoverCharacter({ id: `char-${Date.now()}-${Math.random()}`, bookId: book.id, name: c.name!, description: "AI扫描发现", visualSummary: c.visualSummary!, locked: false }); });
                         scanResults.locations.forEach(l => { if (selectedScanItems[`loc-${l.name}`]) onDiscoverLocation({ id: `loc-${Date.now()}-${Math.random()}`, bookId: book.id, name: l.name!, description: "AI扫描发现", visualSummary: l.visualSummary!, locked: false }); });
                         setShowScanModal(false);
-                      }} className="px-6 py-2 bg-brand-600 text-white rounded-lg font-bold shadow-md hover:bg-brand-700 transition-colors">确认并建立形象库</button>
+                      }} className="px-6 py-2 bg-brand-600 text-white rounded-lg font-bold shadow-md hover:bg-brand-700 transition-colors">确认并建立设定库</button>
                   </div>
               </div>
           </div>
@@ -286,7 +287,7 @@ export const Reader: React.FC<ReaderProps> = ({
 
       <div className="absolute top-4 right-4 z-20 flex gap-2">
          <button onClick={() => setShowStylePicker(true)} className="p-2 bg-white rounded-lg border text-sm px-3 shadow-sm hover:text-brand-600 flex items-center gap-2"><Palette size={16} /><span className="hidden sm:inline">{visualSpec.label}</span></button>
-         <button onClick={handleScanAssets} disabled={isScanning} className="p-2 bg-white rounded-lg border text-sm px-3 shadow-sm hover:text-brand-600 flex items-center gap-2">{isScanning ? <Loader2 className="animate-spin" size={16} /> : <ScanSearch size={16} />}<span className="hidden sm:inline">扫描资产</span></button>
+         <button onClick={handleScanAssets} disabled={isScanning} className="p-2 bg-white rounded-lg border text-sm px-3 shadow-sm hover:text-brand-600 flex items-center gap-2">{isScanning ? <Loader2 className="animate-spin" size={16} /> : <ScanSearch size={16} />}<span className="hidden sm:inline">扫描设定</span></button>
          <button onClick={() => setShowBatchModal(true)} className="p-2 bg-white rounded-lg border text-sm px-3 shadow-sm hover:text-brand-600 flex items-center gap-2"><Layers size={16} /><span className="hidden sm:inline">批量/导出</span></button>
          <button onClick={() => setShowSettings(!showSettings)} className="p-2 bg-white rounded-lg border shadow-sm hover:text-brand-600 transition-all"><Settings2 size={20} /></button>
          
@@ -341,7 +342,7 @@ export const Reader: React.FC<ReaderProps> = ({
                           </div>
                         </div>
                       )}
-                      {ill.status === 'failed' && <div className="p-8 text-red-400 bg-red-50 flex flex-col items-center text-center"><AlertCircle size={32} className="mb-2" /><span className="font-bold">生成失败</span><button onClick={() => handleGenerate(currentChapterIndex, pIdx)} className="mt-4 px-6 py-2 bg-red-100 rounded-xl text-xs font-bold hover:bg-red-200 transition-colors">重新尝试</button></div>}
+                      {ill.status === 'failed' && <div className="p-8 text-red-400 bg-red-50 flex flex-col items-center text-center"><AlertCircle size={32} className="mb-2" /><span className="font-bold">生成失败</span>{ill.error && <p className="text-xs mt-2 max-w-md break-words opacity-80">{ill.error}</p>}<button onClick={() => handleGenerate(currentChapterIndex, pIdx)} className="mt-4 px-6 py-2 bg-red-100 rounded-xl text-xs font-bold hover:bg-red-200 transition-colors">重新尝试</button></div>}
                     </div>
                   ) : (
                     <div className={`transition-all duration-300 ${shouldShowSuggestControl ? 'opacity-100 mb-10' : 'opacity-0 h-0 overflow-hidden group-hover:h-12 group-hover:opacity-100'}`}>

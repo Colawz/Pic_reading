@@ -100,6 +100,7 @@ const INITIAL_LOCATIONS: Location[] = [
 ];
 
 const INITIAL_RELATIONSHIPS: Relationship[] = [
+  // 孙悟空的关系
   {
     id: "rel-wb-1",
     bookId: "book-white-bone",
@@ -114,7 +115,7 @@ const INITIAL_RELATIONSHIPS: Relationship[] = [
     sourceId: "char-wukong",
     targetId: "char-bajie",
     type: "师兄弟",
-    description: "八戒多次在唐僧面前诬陷悟空，导致师徒关系破裂。"
+    description: "八戒多次在唐僧面前诬陷悟空，导致师徒关系破裂，悟空对八戒既气愤又无奈。"
   },
   {
     id: "rel-wb-3",
@@ -123,6 +124,94 @@ const INITIAL_RELATIONSHIPS: Relationship[] = [
     targetId: "char-white-bone",
     type: "死敌",
     description: "悟空三次识破并打击白骨精的变化，最终将其消灭。"
+  },
+  {
+    id: "rel-wb-4",
+    bookId: "book-white-bone",
+    sourceId: "char-wukong",
+    targetId: "char-shaseng",
+    type: "师兄弟",
+    description: "沙僧在悟空被驱逐时虽未极力挽留，但平日里悟空对沙僧较为信任。"
+  },
+  
+  // 唐僧的关系
+  {
+    id: "rel-wb-5",
+    bookId: "book-white-bone",
+    sourceId: "char-tangseng",
+    targetId: "char-bajie",
+    type: "师徒",
+    description: "唐僧偏听偏信八戒的谗言，认为八戒憨厚老实。"
+  },
+  {
+    id: "rel-wb-6",
+    bookId: "book-white-bone",
+    sourceId: "char-tangseng",
+    targetId: "char-shaseng",
+    type: "师徒",
+    description: "唐僧认为沙僧忠厚老实，是值得信赖的徒弟。"
+  },
+  {
+    id: "rel-wb-7",
+    bookId: "book-white-bone",
+    sourceId: "char-tangseng",
+    targetId: "char-white-bone",
+    type: "猎物",
+    description: "唐僧肉眼凡胎，被白骨精变化的假象所迷惑，将其视为无辜百姓。"
+  },
+
+  // 猪八戒的关系
+  {
+    id: "rel-wb-8",
+    bookId: "book-white-bone",
+    sourceId: "char-bajie",
+    targetId: "char-shaseng",
+    type: "师兄弟",
+    description: "两人平时一起挑担牵马，八戒常把重活推给沙僧。"
+  },
+  {
+    id: "rel-wb-9",
+    bookId: "book-white-bone",
+    sourceId: "char-bajie",
+    targetId: "char-white-bone",
+    type: "被诱惑",
+    description: "八戒见白骨精变化的女子美貌，动了凡心，极力在师父面前为'女子'辩护。"
+  },
+
+  // 沙和尚的关系
+  {
+    id: "rel-wb-10",
+    bookId: "book-white-bone",
+    sourceId: "char-shaseng",
+    targetId: "char-white-bone",
+    type: "敌对",
+    description: "沙僧虽然法力不及悟空，但也站在保护师父的一方，对妖精保持警惕。"
+  },
+
+  // 白骨精的关系
+  {
+    id: "rel-wb-11",
+    bookId: "book-white-bone",
+    sourceId: "char-white-bone",
+    targetId: "char-wukong",
+    type: "忌惮",
+    description: "白骨精深知孙悟空法力高强，只能通过离间计来对付他。"
+  },
+  {
+    id: "rel-wb-12",
+    bookId: "book-white-bone",
+    sourceId: "char-white-bone",
+    targetId: "char-tangseng",
+    type: "贪欲",
+    description: "白骨精一心想吃唐僧肉以求长生不老。"
+  },
+  {
+    id: "rel-wb-13",
+    bookId: "book-white-bone",
+    sourceId: "char-white-bone",
+    targetId: "char-bajie",
+    type: "利用",
+    description: "白骨精利用八戒的贪吃好色和对悟空的嫉妒，成功离间了师徒关系。"
   }
 ];
 
@@ -226,7 +315,7 @@ const App: React.FC = () => {
           bookId: loc.bookId!, 
           name: locName, 
           description: loc.description || "新发现的地点", 
-          visualSummary: loc.visualSummary || `${locName}的视觉设定`,
+          visualSummary: loc.visualSummary || `${locName}的视觉形象`,
           locked: false,
           generationStatus: 'generating' 
         };

@@ -41,7 +41,7 @@ export const Layout: React.FC<LayoutProps> = ({ currentView, onNavigate, childre
               className={`w-full flex items-center p-3 rounded-lg transition-colors ${currentView === 'assets' ? 'bg-brand-50 text-brand-700' : 'text-slate-500 hover:bg-slate-50'}`}
             >
               <Image size={20} />
-              <span className="hidden lg:block ml-3 font-medium">资产库</span>
+              <span className="hidden lg:block ml-3 font-medium">世界观</span>
             </button>
             <button
               onClick={() => onNavigate('relationships')}
@@ -63,7 +63,7 @@ export const Layout: React.FC<LayoutProps> = ({ currentView, onNavigate, childre
         <div className="p-4 border-t border-slate-100 hidden lg:block">
             <div className="text-xs text-slate-400">
                 <p>v0.3.0 Beta</p>
-                <p className="mt-1">Powered by Gemini</p>
+                <p className="mt-1">Created by Colawz</p>
             </div>
         </div>
       </aside>

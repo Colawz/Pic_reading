@@ -31,15 +31,22 @@ export const VISUAL_PRESETS: VisualSpec[] = [
     negatives: "color, photograph, digital painting, blur"
   },
   {
-    id: "fantasy_oil",
-    label: "史诗厚涂油画",
-    promptStyle: "oil painting, fantasy art, detailed textures, dramatic lighting, masterpiece",
-    cameraLanguage: "wide shot, cinematic lighting, rule of thirds",
-    negatives: "cartoon, sketch, flat colors, modern UI, text"
+    id: "chinese_line_art",
+    label: "工笔白描/年画风",
+    promptStyle: "traditional chinese line art, gongbi style, new year picture aesthetic, flat coloring, large color blocks, ink line outlines, decorative lines, retro color palette, low saturation, earthy background, chinese opera character styling, exaggerated poses, strong narrative, lianhuanhua style",
+    cameraLanguage: "flat perspective, 2D composition, narrative framing",
+    negatives: "volumetric lighting, gradient, 3d render, realistic, photograph, oil painting, impasto, thick paint, modern, shiny"
+  },
+  {
+    id: "minimalist_lines",
+    label: "简约线条风",
+    promptStyle: "minimalist line art, continuous line drawing, abstract style, clean background, high contrast, monochrome or limited color palette, vector art style, simple shapes, modern aesthetic",
+    cameraLanguage: "flat lay, 2D perspective, plenty of negative space",
+    negatives: "detailed, complex, realistic, 3d, shading, gradient, cluttered, messy, photograph, texture"
   }
 ];
 
-export const createBook = (id: string, title: string, author: string, genre: string, emoji: string, styleId: string, content: string): Book => {
+export const createBook = (id: string, title: string, author: string, genre: string, emoji: string, styleId: string, content: string, coverUrl?: string): Book => {
   const paragraphs = content.split('\n').filter(p => p.trim().length > 0).map((p, i) => ({
     id: `${id}-p-${i}`,
     text: p.trim(),
@@ -47,19 +54,23 @@ export const createBook = (id: string, title: string, author: string, genre: str
   }));
 
   return {
-    id, title, author, genre, coverEmoji: emoji, visualSpecId: styleId,
+    id, title, author, genre, coverEmoji: emoji, visualSpecId: styleId, coverUrl,
     chapters: [{ id: `${id}-ch1`, title: "第一章", paragraphs }]
   };
 };
 
 const WHITE_BONE_TEXT = `
 唐僧师徒行至白虎岭，孙悟空奉唐僧之命前往南山摘桃解饥。此时白骨精察觉唐僧行踪，欲食其肉以求长生，但因八戒、沙僧护持未敢贸然行动，决定先试探一番。
-一化村姑
-白骨精首次化身为一美貌女子，左手提青砂罐，右手持绿磁瓶，谎称为僧人提供斋饭。八戒动了凡心，轻信其言，催促唐僧用斋。唐僧持疑，询问女子来历，白骨精编造身世，称家住山脚，为田中人送饭。悟空摘桃归来，识破妖身，举棒便打。白骨精使“解尸法”脱身，留假尸于地。唐僧见女子毙命，怒斥悟空滥杀无辜。八戒趁机挑唆，称悟空使障眼法掩盖罪行。唐僧念紧箍咒惩戒，悟空苦求方止。此时罐中现出长蛆、蛤蟆，唐僧半信半疑，但仍责怪悟空行凶。
-二化老妇
-白骨精不甘失败，第二次变作八旬老妇，拄杖哭寻“女儿”。八戒惊惶，断言老妇为死者之母，悟空反驳：“八十老妇岂能生十八之女？”近前辨出妖气，挥棒再击。白骨精故技重施，元神遁走，假尸倒地。唐僧惊骇坠马，念紧箍咒20遍，悟空头痛欲裂，伏地求饶。八戒又进谗言，说：“师父，他要和你分行李哩。”唐僧决意驱逐，悟空以恩情恳求师父不要驱逐他。唐僧心软，暂时饶恕悟空，师徒继续前行。
-三化老翁
-白骨精第三次化身为白发老翁，佯装寻妻女骸骨。八戒再称祸事临头，悟空识破老翁真身，暗地里召唤土地、山神作证，不顾唐僧紧箍咒威胁，一棒打死妖精，使其现出白骨本相，白骨的脊梁上刻“白骨夫人”四字。唐僧见骷髅稍微相信悟空的话，但是八戒又诬陷悟空伪造证据。唐僧耳软，写下贬书驱逐悟空。悟空分身四面拜别唐僧，又嘱托沙僧防妖后，含泪拜别，驾云返回花果山，唐僧一行继续西行。自此，取经团队少一主力，前途凶险未卜。
+
+白骨精首次化身为一美貌女子，左手提青砂罐，右手持绿磁瓶，谎称为僧人提供斋饭。八戒动了凡心，轻信其言，催促唐僧用斋。唐僧持疑，询问女子来历，白骨精编造身世，称家住山脚，为田中人送饭。
+悟空摘桃归来，识破妖身，举棒便打。白骨精使“解尸法”脱身，留假尸于地。唐僧见女子毙命，怒斥悟空滥杀无辜。八戒趁机挑唆，称悟空使障眼法掩盖罪行。唐僧念紧箍咒惩戒，悟空苦求方止。
+此时罐中现出长蛆、蛤蟆，唐僧半信半疑，但仍责怪悟空行凶。
+白骨精不甘失败，第二次变作八旬老妇，拄杖哭寻“女儿”。八戒惊惶，断言老妇为死者之母，悟空反驳：“八十老妇岂能生十八之女？”近前辨出妖气，挥棒再击。
+白骨精故技重施，元神遁走，假尸倒地。唐僧惊骇坠马，念紧箍咒20遍，悟空头痛欲裂，伏地求饶。
+八戒又进谗言，说：“师父，他要和你分行李哩。”唐僧决意驱逐，悟空以恩情恳求师父不要驱逐他。唐僧心软，暂时饶恕悟空，师徒继续前行。
+白骨精第三次化身为白发老翁，佯装寻妻女骸骨。八戒再称祸事临头，悟空识破老翁真身，暗地里召唤土地、山神作证，不顾唐僧紧箍咒威胁，一棒打死妖精，使其现出白骨本相，白骨的脊梁上刻“白骨夫人”四字。
+唐僧见骷髅稍微相信悟空的话，但是八戒又诬陷悟空伪造证据。唐僧耳软，写下贬书驱逐悟空。
+悟空分身四面拜别唐僧，又嘱托沙僧防妖后，含泪拜别，驾云返回花果山，唐僧一行继续西行。自此，取经团队少一主力，前途凶险未卜。
 `;
 
 const TORTOISE_HARE_TEXT = `
@@ -80,7 +91,15 @@ const TORTOISE_HARE_TEXT = `
 兔子跑得快，乌龟跑得慢，为什么这次比赛乌龟反而赢了呢？
 `;
 
+
+const WATER_CYCLE_TEXT = `
+水循环是地球上水在海洋、陆地与大气之间不断往返的过程，靠的主要是太阳能驱动蒸发与大气运动，外加重力让水回到地表并汇入江河湖海。海洋、湖泊、土壤和植物把水以水汽形式送入空气（蒸发/蒸腾），水汽随气流上升冷却后形成云，并在合适条件下变成雨、雪等降到地面（凝结与降水）。降到陆地的水一部分沿地表流动汇成溪流河流（地表径流），一部分渗入土壤和岩层成为地下水并缓慢流动（下渗与地下径流），最终又回到海洋；同时地表水还会再次蒸发。正是这套循环，持续补给淡水资源、调节气候，也影响着洪涝与干旱的发生。
+
+水循环可以按“海洋/陆地 → 大气 → 陆地/海洋 → 回到海洋”这条闭环来理解。首先，太阳加热海面、湖泊、河流和湿润地表，使水变成水汽上升（蒸发）；植物通过叶片把水分释放到空气中（蒸腾），两者合起来常写作“蒸散”。水汽被风带走并抬升到更高处，温度降低后在尘埃等凝结核上形成小水滴或冰晶，聚集成云（凝结/成云）。当云滴长大到空气托不住，就会落到地面或海面，形成雨、雪、冰雹等（降水）。降到陆地的水有几条去路：一部分顺坡流入沟渠、溪流、江河，最后入海（地表径流）；一部分渗入土壤成为土壤水，被植物吸收后再蒸腾回到空气（入渗—植物吸收—蒸腾）；还有一部分继续下渗到更深处形成含水层中的地下水，缓慢流动并在泉、河道或海岸处补给地表水/海洋（地下径流与出露）。在寒冷地区，降水会暂时以积雪、冰川的形式储存，气温回升后融化补给河流（冻结—融化）。这样，水不断在各“水库”（海洋、大气、河流湖泊、土壤、地下水、冰雪）之间转移，构成一张用箭头就能清晰表达的循环流程图。
+`;
+
 export const SAMPLE_BOOKS: Book[] = [
-  createBook("book-white-bone", "西游记：三打白骨精", "吴承恩", "神魔小说", "🐵", "ink_illustration", WHITE_BONE_TEXT),
-  createBook("book-tortoise-hare", "寓言：龟兔赛跑", "伊索", "寓言故事", "🐢", "watercolor_storybook", TORTOISE_HARE_TEXT),
+  createBook("book-white-bone", "西游记：三打白骨精", "吴承恩", "神魔小说", "🐵", "chinese_line_art", WHITE_BONE_TEXT, "/covers/white-bone-demon.png"),
+  createBook("book-tortoise-hare", "寓言：龟兔赛跑", "伊索", "寓言故事", "🐢", "watercolor_storybook", TORTOISE_HARE_TEXT, "/covers/tortoise-hare.png"),
+  createBook("book-water-cycle", "科普：水循环", "科普", "科普百科", "💧", "minimalist_lines", WATER_CYCLE_TEXT, "/covers/water-cycle.png"),
 ];

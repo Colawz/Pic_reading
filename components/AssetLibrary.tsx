@@ -42,8 +42,8 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
         <div>
-            <h2 className="text-2xl font-bold text-slate-900">视觉资产库</h2>
-            <p className="text-slate-500">管理故事世界的视觉一致性核心数据。</p>
+            <h2 className="text-2xl font-bold text-slate-900">视觉世界观</h2>
+            <p className="text-slate-500">管理故事世界的视觉世界观。</p>
         </div>
         <div className="flex items-center gap-2">
              <select value={selectedBookId} onChange={(e) => setSelectedBookId(e.target.value)} className="px-3 py-2 rounded-lg border bg-white text-sm focus:ring-2 focus:ring-brand-500">
@@ -80,7 +80,7 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
         ))}
         <div className="border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center p-6 text-slate-400 min-h-[300px]">
             <Plus size={32} className="mb-2" />
-            <span className="text-xs text-center">阅读新章节时<br/>AI 会自动发现新资产</span>
+            <span className="text-xs text-center">阅读新章节时<br/>AI 会自动发现新世界观</span>
         </div>
       </div>
     </div>

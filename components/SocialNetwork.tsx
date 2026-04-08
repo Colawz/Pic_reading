@@ -257,7 +257,7 @@ export const SocialNetwork: React.FC<SocialNetworkProps> = ({
             ) : (
               <div className="text-slate-300 flex flex-col items-center gap-4">
                 <Share2 size={64} className="opacity-20" />
-                <p className="text-sm font-medium">暂无角色数据，请在阅读器中扫描资产</p>
+                <p className="text-sm font-medium">暂无角色数据，请在阅读器中扫描世界观</p>
               </div>
             )}
           </div>
