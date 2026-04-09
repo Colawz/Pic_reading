@@ -23,7 +23,7 @@ interface ReaderProps {
   onDiscoverRelationships: (rels: Relationship[]) => void;
   onUpdateBookStyle: (bookId: string, styleId: string) => void;
   onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
-  onGenerateIllustration: (bookId: string, paragraphId: string, facts: NarrativeFacts, spec: VisualSpec, illustrationCharacters: Character[], illustrationLocations: Location[], originalText?: string) => Promise<string>;
+  onGenerateIllustration: (bookId: string, paragraphId: string, facts: NarrativeFacts, spec: VisualSpec, illustrationCharacters: Character[], illustrationLocations: Location[], originalText?: string, customRequirement?: string) => Promise<{ imageUrl: string; promptUsed: string }>;
   onOpenAssetsView: (bookId?: string) => void;
 }
 
@@ -54,6 +54,9 @@ export const Reader: React.FC<ReaderProps> = ({
   const [activeGenerationMap, setActiveGenerationMap] = useState<Record<string, boolean>>({});
   const [missingActionMode, setMissingActionMode] = useState<'generate' | 'skip' | null>(null);
   const [batchStageLabel, setBatchStageLabel] = useState('正在绘制...');
+  const [customRequirements, setCustomRequirements] = useState<Record<string, string>>({});
+  const [requirementEditorMap, setRequirementEditorMap] = useState<Record<string, boolean>>({});
+  const autoResumingPendingRef = useRef<Record<string, boolean>>({});
 
   // Missing Character Modal State
   const [pendingGenerationQueue, setPendingGenerationQueue] = useState<Array<{
@@ -86,6 +89,32 @@ export const Reader: React.FC<ReaderProps> = ({
   useEffect(() => {
     latestLocationsRef.current = locations;
   }, [locations]);
+
+  useEffect(() => {
+    const pendingIllustrations = Object.values(illustrations).filter(
+      (illustration) =>
+        illustration.status === 'pending' &&
+        currentChapter.paragraphs.some((paragraph) => paragraph.id === illustration.paragraphId)
+    );
+
+    pendingIllustrations.forEach((illustration) => {
+      const paragraph = currentChapter.paragraphs.find((item) => item.id === illustration.paragraphId);
+      if (!paragraph) return;
+      if (activeGenerationMap[paragraph.id]) return;
+      if (pendingGenerationQueue.some((item) => item.task.pIdx === currentChapter.paragraphs.indexOf(paragraph))) return;
+      if (autoResumingPendingRef.current[paragraph.id]) return;
+
+      autoResumingPendingRef.current[paragraph.id] = true;
+      setTaskActive(paragraph.id, true);
+
+      void runGenerationTask(createGenerationTask(currentChapterIndex, currentChapter.paragraphs.indexOf(paragraph)), {
+        interactive: false,
+      }).finally(() => {
+        setTaskActive(paragraph.id, false);
+        delete autoResumingPendingRef.current[paragraph.id];
+      });
+    });
+  }, [illustrations, characters, locations, pendingGenerationQueue, currentChapter]);
 
   useEffect(() => {
     const hasAssets = characters.length > 0;
@@ -189,16 +218,18 @@ export const Reader: React.FC<ReaderProps> = ({
     characterPool: Character[],
     locationPool: Location[]
   ) => {
-    const imageUrl = await onGenerateIllustration(
+    const customRequirement = customRequirements[task.paragraph.id]?.trim() || undefined;
+    const { imageUrl, promptUsed } = await onGenerateIllustration(
       book.id,
       task.paragraph.id,
       task.facts,
       visualSpec,
       characterPool,
       locationPool,
-      isScienceBook ? task.paragraph.text : undefined
+      isScienceBook ? task.paragraph.text : undefined,
+      customRequirement
     );
-    onUpdateIllustration(task.paragraph.id, { status: 'completed', imageUrl });
+    onUpdateIllustration(task.paragraph.id, { status: 'completed', imageUrl, promptUsed });
   };
 
   const runWithConcurrency = async <T,>(
@@ -216,6 +247,19 @@ export const Reader: React.FC<ReaderProps> = ({
         await worker(items[index], index);
       }
     }));
+  };
+
+  const runInOrderedBatches = async <T,>(
+    items: T[],
+    batchSize: number,
+    worker: (item: T, index: number) => Promise<void>
+  ) => {
+    for (let start = 0; start < items.length; start += batchSize) {
+      const batch = items.slice(start, start + batchSize);
+      await Promise.all(
+        batch.map((item, offset) => worker(item, start + offset))
+      );
+    }
   };
 
   const ensureCharacterAssets = async (names: string[], characterPool: Character[]) => {
@@ -363,14 +407,15 @@ export const Reader: React.FC<ReaderProps> = ({
         return;
       }
 
-      const analyzedTargets: AnalyzedTask[] = [];
+      const analyzedTargets = new Array<AnalyzedTask>(targets.length);
 
-      await runWithConcurrency(targets, BATCH_CONCURRENCY, async (task) => {
+      await runWithConcurrency(targets, BATCH_CONCURRENCY, async (task, index) => {
         const analyzedTask = await analyzeGenerationTask(task, latestCharactersRef.current, latestLocationsRef.current);
-        analyzedTargets.push(analyzedTask);
+        analyzedTargets[index] = analyzedTask;
       });
 
-      const missingNames = Array.from(new Set(analyzedTargets.flatMap(target => target.missingCharacterNames)));
+      const orderedAnalyzedTargets = analyzedTargets.filter(Boolean);
+      const missingNames = Array.from(new Set(orderedAnalyzedTargets.flatMap(target => target.missingCharacterNames)));
       setBatchStageLabel(missingNames.length > 0 ? '正在补全缺失角色设定...' : '正在生成插图...');
       const batchCharacters = missingNames.length > 0
         ? await ensureCharacterAssets(missingNames, latestCharactersRef.current)
@@ -378,7 +423,7 @@ export const Reader: React.FC<ReaderProps> = ({
       const batchLocations = latestLocationsRef.current;
 
       setBatchStageLabel('正在生成插图...');
-      await runWithConcurrency(analyzedTargets, BATCH_CONCURRENCY, async (task) => {
+      await runInOrderedBatches(orderedAnalyzedTargets, BATCH_CONCURRENCY, async (task) => {
         try {
           await renderGenerationTask(task, batchCharacters, batchLocations);
         } catch (error: any) {
@@ -458,6 +503,10 @@ export const Reader: React.FC<ReaderProps> = ({
     void runGenerationTask(createGenerationTask(currentPendingGeneration.task.chIdx, currentPendingGeneration.task.pIdx), { skipCharCheck: true });
     setPendingGenerationQueue(prev => prev.slice(1));
     setTimeout(() => setMissingActionMode(null), 0);
+  };
+
+  const toggleRequirementEditor = (paragraphId: string) => {
+    setRequirementEditorMap(prev => ({ ...prev, [paragraphId]: !prev[paragraphId] }));
   };
 
   return (
@@ -625,6 +674,8 @@ export const Reader: React.FC<ReaderProps> = ({
             const pIdx = currentPage * PARAGRAPHS_PER_PAGE + index;
             const wordData = paragraphWordData[pIdx];
             const ill = illustrations[paragraph.id];
+            const customRequirement = customRequirements[paragraph.id] || '';
+            const isRequirementEditorOpen = !!requirementEditorMap[paragraph.id];
             const interval = settings.wordInterval;
             const isIntervalReached = interval > 0 && Math.floor(wordData.start / interval) < Math.floor(wordData.end / interval);
             const isFirstPar = pIdx === 0 && interval > 0;
@@ -635,26 +686,77 @@ export const Reader: React.FC<ReaderProps> = ({
                 <p className={`font-serif text-xl leading-loose text-slate-800 mb-4 hover:bg-brand-50 rounded px-2 -mx-2 cursor-pointer transition-colors ${activeParagraphId === paragraph.id ? 'bg-brand-50 shadow-sm' : ''}`} onClick={() => setActiveParagraphId(paragraph.id)}>{paragraph.text}</p>
                 <div className="my-6">
                   {ill ? (
-                    <div className="relative rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm group/ill">
+                    <div className="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm group/ill">
                       {ill.status === 'generating' && <div className="h-64 flex flex-col items-center justify-center text-slate-400 animate-pulse"><Wand2 className="animate-spin mb-2 text-brand-500" size={32} />正在为您构思画面...</div>}
-                      {ill.status === 'pending' && <div className="h-64 flex flex-col items-center justify-center text-amber-500 bg-amber-50/30"><Info size={32} className="mb-2" />等待角色设定加载...</div>}
+                      {ill.status === 'pending' && (
+                        <div className="h-64 flex flex-col items-center justify-center text-amber-500 bg-amber-50/30 px-6 text-center">
+                          <Info size={32} className="mb-2" />
+                          <div className="font-medium">等待角色设定加载...</div>
+                          <div className="mt-2 text-xs text-amber-600/80">角色设定补齐后会自动继续生成。</div>
+                          <button
+                            onClick={() => handleGenerate(currentChapterIndex, pIdx)}
+                            disabled={!!activeGenerationMap[paragraph.id]}
+                            className="mt-4 rounded-xl bg-amber-100 px-4 py-2 text-xs font-bold text-amber-700 transition-colors hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {activeGenerationMap[paragraph.id] ? '继续生成中...' : '手动继续生成'}
+                          </button>
+                        </div>
+                      )}
                       {ill.status === 'completed' && ill.imageUrl && (
                         <div className="relative">
                           <img src={ill.imageUrl} className="w-full h-auto object-cover max-h-[550px] transition-transform duration-700 group-hover/ill:scale-[1.02]" />
-                          <div className="absolute top-4 right-4 flex items-center gap-2">
-                            <button
-                              onClick={() => handleGenerate(currentChapterIndex, pIdx)}
-                              className="px-3 py-1.5 bg-white/90 backdrop-blur text-slate-700 rounded-lg text-xs font-bold shadow-sm hover:bg-white hover:text-brand-600 transition-colors"
-                            >
-                              重生成
-                            </button>
-                            <button
-                              onClick={() => onDeleteIllustration(paragraph.id)}
-                              className="p-2 bg-white/90 backdrop-blur text-slate-700 rounded-lg shadow-sm hover:bg-white hover:text-red-500 transition-colors"
-                              title="删除图片"
-                            >
-                              <Trash2 size={16} />
-                            </button>
+                          <div className="absolute top-4 right-4 flex items-start gap-2">
+                            <div className="relative">
+                              <button
+                                onClick={() => toggleRequirementEditor(paragraph.id)}
+                                className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium shadow-sm backdrop-blur transition-colors ${isRequirementEditorOpen ? 'bg-white text-slate-900' : 'bg-white/90 text-slate-700 hover:bg-white'} `}
+                                title="打开本张图片操作"
+                              >
+                                <Settings2 size={16} />
+                                <span>{customRequirement.trim() ? '本张设置' : '图片操作'}</span>
+                              </button>
+                              {isRequirementEditorOpen && (
+                                <div className="absolute right-0 top-12 z-10 w-[320px] rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur">
+                                  <div className="mb-3 flex items-center justify-between">
+                                    <div>
+                                      <div className="text-sm font-semibold text-slate-800">本张生图要求</div>
+                                      <div className="text-[11px] text-slate-400">留空则完全按系统自动分析生成</div>
+                                    </div>
+                                    <button
+                                      onClick={() => toggleRequirementEditor(paragraph.id)}
+                                      className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+                                      title="收起"
+                                    >
+                                      <X size={14} />
+                                    </button>
+                                  </div>
+                                  <input
+                                    value={customRequirement}
+                                    onChange={(e) => setCustomRequirements(prev => ({ ...prev, [paragraph.id]: e.target.value }))}
+                                    placeholder="例如：低机位、人物居中、突出表情"
+                                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-brand-300"
+                                  />
+                                  <div className="mt-2 text-[11px] text-slate-400">
+                                    {customRequirement.trim().length > 0 ? `当前将附加 ${customRequirement.trim().length} 个字的本张要求` : '未填写附加要求'}
+                                  </div>
+                                  <div className="mt-3 flex items-center justify-end gap-2">
+                                    <button
+                                      onClick={() => onDeleteIllustration(paragraph.id)}
+                                      className="rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-600 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                                    >
+                                      删除
+                                    </button>
+                                    <button
+                                      disabled={!!activeGenerationMap[paragraph.id]}
+                                      onClick={() => handleGenerate(currentChapterIndex, pIdx)}
+                                      className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                      重生成
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 opacity-0 group-hover/ill:opacity-100 transition-opacity">
                              {ill.extractedFacts && <p className="text-white text-xs italic">场景: {ill.extractedFacts.location} | 氛围: {ill.extractedFacts.mood}</p>}
@@ -664,12 +766,37 @@ export const Reader: React.FC<ReaderProps> = ({
                       {ill.status === 'failed' && <div className="p-8 text-red-400 bg-red-50 flex flex-col items-center text-center"><AlertCircle size={32} className="mb-2" /><span className="font-bold">生成失败</span>{ill.error && <p className="text-xs mt-2 max-w-md break-words opacity-80">{ill.error}</p>}<button onClick={() => handleGenerate(currentChapterIndex, pIdx)} className="mt-4 px-6 py-2 bg-red-100 rounded-xl text-xs font-bold hover:bg-red-200 transition-colors">重新尝试</button></div>}
                     </div>
                   ) : (
-                    <div className={`transition-all duration-300 ${shouldShowSuggestControl ? 'opacity-100 mb-10' : 'opacity-0 h-0 overflow-hidden group-hover:h-12 group-hover:opacity-100'}`}>
-                        <div className={`flex items-center justify-center border-2 border-dashed rounded-2xl transition-colors ${shouldShowSuggestControl ? 'border-brand-200 bg-brand-50/30 py-6' : 'border-slate-100 py-2'}`}>
-                          <button disabled={!!activeGenerationMap[paragraph.id]} onClick={() => handleGenerate(currentChapterIndex, pIdx)} className={`flex items-center gap-3 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed ${shouldShowSuggestControl ? 'text-brand-600 hover:text-brand-700 hover:scale-105' : 'text-slate-300 hover:text-brand-500 text-xs'}`}>
-                            <Wand2 size={shouldShowSuggestControl ? 24 : 16} className={shouldShowSuggestControl ? 'animate-pulse' : ''} />
-                            <span>{shouldShowSuggestControl ? `AI 建议生图点 (${wordData.start}字处)` : '在此处生图'}</span>
-                          </button>
+                    <div className={`transition-all duration-300 ${shouldShowSuggestControl || isRequirementEditorOpen ? 'opacity-100 mb-10' : 'opacity-0 h-0 overflow-hidden group-hover:h-12 group-hover:opacity-100'}`}>
+                        <div className={`border-2 border-dashed rounded-2xl transition-colors ${shouldShowSuggestControl || isRequirementEditorOpen ? 'border-brand-200 bg-brand-50/30 p-4' : 'border-slate-100 p-3'}`}>
+                          <div className="flex flex-col gap-3">
+                            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:items-center sm:justify-center">
+                              <button disabled={!!activeGenerationMap[paragraph.id]} onClick={() => handleGenerate(currentChapterIndex, pIdx)} className={`flex items-center justify-center gap-3 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0 ${shouldShowSuggestControl ? 'text-brand-600 hover:text-brand-700 hover:scale-105' : 'text-slate-300 hover:text-brand-500 text-xs'}`}>
+                                <Wand2 size={shouldShowSuggestControl ? 24 : 16} className={shouldShowSuggestControl ? 'animate-pulse' : ''} />
+                                <span>{shouldShowSuggestControl ? `AI 建议生图点 (${wordData.start}字处)` : '在此处生图'}</span>
+                              </button>
+                              <button
+                                onClick={() => toggleRequirementEditor(paragraph.id)}
+                                className={`px-3 py-2 rounded-xl text-xs font-medium transition-colors ${customRequirement.trim() ? 'bg-amber-50 text-amber-700 hover:bg-amber-100' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-300 hover:text-slate-700'}`}
+                              >
+                                {isRequirementEditorOpen ? '收起要求' : '本张要求'}
+                              </button>
+                            </div>
+                            {isRequirementEditorOpen && (
+                              <div className="flex w-full items-center gap-2">
+                                <input
+                                  value={customRequirement}
+                                  onChange={(e) => setCustomRequirements(prev => ({ ...prev, [paragraph.id]: e.target.value }))}
+                                  placeholder="可为空，例如：低机位、人物居中、突出表情"
+                                  className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-brand-300"
+                                />
+                              </div>
+                            )}
+                          </div>
+                          {isRequirementEditorOpen && (
+                            <div className="mt-2 text-center text-[11px] text-slate-400 px-1">
+                              {customRequirement.trim().length > 0 ? `当前将附加 ${customRequirement.trim().length} 个字的本张要求` : '留空则完全按系统自动分析生成'}
+                            </div>
+                          )}
                         </div>
                     </div>
                   )}

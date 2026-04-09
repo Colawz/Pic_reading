@@ -15,7 +15,15 @@ const getMimeType = (filePath: string) => {
   return 'application/octet-stream';
 };
 
-const sanitizeSegment = (value: string) => value.replace(/[^a-zA-Z0-9-_]/g, '_');
+const sanitizeSegment = (value: string) => {
+  const sanitized = value
+    .normalize('NFKC')
+    .replace(/[<>:"/\\|?*\u0000-\u001F]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return sanitized || 'untitled';
+};
 
 const removeEmptyDirectories = async (directory: string) => {
   if (directory === PIC_DB_DIR || !directory.startsWith(PIC_DB_DIR)) {
@@ -35,11 +43,39 @@ const removeEmptyDirectories = async (directory: string) => {
   }
 };
 
+const resolvePicDbPath = async (relativePath: string) => {
+  const primaryPath = path.resolve(PIC_DB_DIR, relativePath);
+  if (primaryPath.startsWith(PIC_DB_DIR) && fs.existsSync(primaryPath) && fs.statSync(primaryPath).isFile()) {
+    return primaryPath;
+  }
+
+  const pathSegments = relativePath.split('/').filter(Boolean);
+  if (pathSegments.length < 2) {
+    return primaryPath;
+  }
+
+  const fallbackRelativeSuffix = pathSegments.slice(1);
+
+  try {
+    const bookFolders = await fsp.readdir(PIC_DB_DIR);
+    for (const bookFolder of bookFolders) {
+      const fallbackPath = path.resolve(PIC_DB_DIR, bookFolder, ...fallbackRelativeSuffix);
+      if (fallbackPath.startsWith(PIC_DB_DIR) && fs.existsSync(fallbackPath) && fs.statSync(fallbackPath).isFile()) {
+        return fallbackPath;
+      }
+    }
+  } catch {
+    // Ignore fallback lookup failures and let the original path miss.
+  }
+
+  return primaryPath;
+};
+
 const attachLocalImageMiddlewares = (middlewares: any) => {
   middlewares.use('/pic_db', async (req: any, res: any, next: any) => {
     const requestPath = decodeURIComponent((req.url || '').split('?')[0]);
     const relativePath = requestPath.replace(/^\/+/, '');
-    const filePath = path.resolve(PIC_DB_DIR, relativePath);
+    const filePath = await resolvePicDbPath(relativePath);
 
     if (!filePath.startsWith(PIC_DB_DIR) || !fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
       next();
@@ -96,6 +132,24 @@ const attachLocalImageMiddlewares = (middlewares: any) => {
       const filePath = path.join(directory, fileName);
       const arrayBuffer = await upstreamResponse.arrayBuffer();
       await fsp.writeFile(filePath, Buffer.from(arrayBuffer));
+
+      // Keep only the latest generated file for the same entity/paragraph.
+      const siblingFiles = await fsp.readdir(directory);
+      await Promise.all(
+        siblingFiles
+          .filter((name) => name !== fileName && name.startsWith(`${fileStem}-`))
+          .map(async (name) => {
+            const siblingPath = path.join(directory, name);
+            try {
+              const stats = await fsp.stat(siblingPath);
+              if (stats.isFile()) {
+                await fsp.unlink(siblingPath);
+              }
+            } catch {
+              // Best-effort cleanup only.
+            }
+          })
+      );
 
       const localUrl = `/pic_db/${[bookId, category, subcategory, fileName].map(encodeURIComponent).join('/')}`;
       res.setHeader('Content-Type', 'application/json');
@@ -186,6 +240,136 @@ const attachLocalImageMiddlewares = (middlewares: any) => {
     } catch (error: any) {
       res.statusCode = 500;
       res.end(error?.message || 'Failed to check generated image');
+    }
+  });
+
+  middlewares.use('/api/find-generated-image', async (req: any, res: any, next: any) => {
+    if (req.method !== 'POST') {
+      next();
+      return;
+    }
+
+    try {
+      const chunks: Buffer[] = [];
+      for await (const chunk of req) {
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      }
+
+      const body = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
+      const bookFolder = sanitizeSegment(String(body.bookFolder || ''));
+      const category = sanitizeSegment(String(body.category || 'misc'));
+      const subcategory = sanitizeSegment(String(body.subcategory || 'misc'));
+      const fileStem = sanitizeSegment(String(body.fileStem || ''));
+
+      if (!bookFolder || !fileStem) {
+        res.statusCode = 400;
+        res.end('bookFolder and fileStem are required');
+        return;
+      }
+
+      const directory = path.resolve(PIC_DB_DIR, bookFolder, category, subcategory);
+      if (!directory.startsWith(PIC_DB_DIR) || !fs.existsSync(directory) || !fs.statSync(directory).isDirectory()) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ localUrl: null }));
+        return;
+      }
+
+      const entries = await fsp.readdir(directory);
+      const matchedFile = entries
+        .filter((name) => name.startsWith(`${fileStem}-`))
+        .sort()
+        .at(-1);
+
+      const localUrl = matchedFile
+        ? `/pic_db/${[bookFolder, category, subcategory, matchedFile].map(encodeURIComponent).join('/')}`
+        : null;
+
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ localUrl }));
+    } catch (error: any) {
+      res.statusCode = 500;
+      res.end(error?.message || 'Failed to find generated image');
+    }
+  });
+
+  middlewares.use('/api/relocate-generated-image', async (req: any, res: any, next: any) => {
+    if (req.method !== 'POST') {
+      next();
+      return;
+    }
+
+    try {
+      const chunks: Buffer[] = [];
+      for await (const chunk of req) {
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      }
+
+      const body = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
+      const localUrl = String(body.localUrl || '');
+      const targetBookFolder = sanitizeSegment(String(body.targetBookFolder || ''));
+
+      if (!localUrl.startsWith('/pic_db/')) {
+        res.statusCode = 400;
+        res.end('localUrl must start with /pic_db/');
+        return;
+      }
+
+      if (!targetBookFolder) {
+        res.statusCode = 400;
+        res.end('targetBookFolder is required');
+        return;
+      }
+
+      const relativePath = decodeURIComponent(localUrl.replace(/^\/pic_db\//, ''));
+      const pathSegments = relativePath.split('/').filter(Boolean);
+
+      if (pathSegments.length < 4) {
+        res.statusCode = 400;
+        res.end('localUrl format is invalid');
+        return;
+      }
+
+      const [, ...restSegments] = pathSegments;
+      const nextRelativePath = [targetBookFolder, ...restSegments];
+      const sourcePath = path.resolve(PIC_DB_DIR, relativePath);
+      const targetPath = path.resolve(PIC_DB_DIR, ...nextRelativePath);
+
+      if (!sourcePath.startsWith(PIC_DB_DIR) || !targetPath.startsWith(PIC_DB_DIR)) {
+        res.statusCode = 400;
+        res.end('Invalid path');
+        return;
+      }
+
+      if (sourcePath !== targetPath) {
+        await fsp.mkdir(path.dirname(targetPath), { recursive: true });
+
+        try {
+          await fsp.unlink(targetPath);
+        } catch (error: any) {
+          if (error?.code !== 'ENOENT') {
+            throw error;
+          }
+        }
+
+        try {
+          const stats = await fsp.stat(sourcePath);
+          if (stats.isFile()) {
+            await fsp.rename(sourcePath, targetPath);
+            await removeEmptyDirectories(path.dirname(sourcePath));
+          }
+        } catch (error: any) {
+          if (error?.code !== 'ENOENT') {
+            throw error;
+          }
+        }
+      }
+
+      const nextLocalUrl = `/pic_db/${nextRelativePath.map(encodeURIComponent).join('/')}`;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ localUrl: nextLocalUrl }));
+    } catch (error: any) {
+      res.statusCode = 500;
+      res.end(error?.message || 'Failed to relocate generated image');
     }
   });
 };

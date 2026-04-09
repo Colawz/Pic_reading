@@ -1,20 +1,23 @@
 
 import React, { useState, useRef } from 'react';
 import { Book } from '../types';
-import { Book as BookIcon, ChevronRight, Plus, Upload, Image as ImageIcon, Camera, X } from 'lucide-react';
+import { Book as BookIcon, ChevronRight, Plus, Upload, Image as ImageIcon, Camera, Sparkles, Loader2, Trash2, X } from 'lucide-react';
 
 interface BookShelfProps {
   books: Book[];
   onSelectBook: (book: Book) => void;
   onImportBook: (title: string, content: string, coverUrl?: string) => void;
   onUpdateBookCover: (bookId: string, coverUrl: string) => void;
+  onGenerateBookCover: (title: string, content: string) => Promise<string>;
+  onDeleteBook: (bookId: string) => void;
 }
 
-export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImportBook, onUpdateBookCover }) => {
+export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImportBook, onUpdateBookCover, onGenerateBookCover, onDeleteBook }) => {
   const [showImportModal, setShowImportModal] = useState(false);
   const [importTitle, setImportTitle] = useState('');
   const [importContent, setImportContent] = useState('');
   const [importCoverUrl, setImportCoverUrl] = useState<string | undefined>(undefined);
+  const [isGeneratingCover, setIsGeneratingCover] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const updateCoverInputRef = useRef<HTMLInputElement>(null);
   const [updatingBookId, setUpdatingBookId] = useState<string | null>(null);
@@ -47,10 +50,31 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
     }
   };
 
+  const handleGenerateCover = async () => {
+    if (!importTitle.trim() || !importContent.trim()) {
+      return;
+    }
+
+    setIsGeneratingCover(true);
+    try {
+      const coverUrl = await onGenerateBookCover(importTitle.trim(), importContent.trim());
+      setImportCoverUrl(coverUrl);
+    } finally {
+      setIsGeneratingCover(false);
+    }
+  };
+
   const triggerUpdateCover = (e: React.MouseEvent, bookId: string) => {
     e.stopPropagation();
     setUpdatingBookId(bookId);
     updateCoverInputRef.current?.click();
+  };
+
+  const handleDeleteBook = (e: React.MouseEvent, book: Book) => {
+    e.stopPropagation();
+    const confirmed = window.confirm(`确认删除《${book.title}》及其角色、地点、关系、插图和本地图片吗？`);
+    if (!confirmed) return;
+    onDeleteBook(book.id);
   };
 
   return (
@@ -95,14 +119,22 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
                   </>
                 )}
                 
-                {/* Change Cover Hover Trigger */}
-                <button 
-                  onClick={(e) => triggerUpdateCover(e, book.id)}
-                  className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full shadow-sm text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white hover:text-brand-600"
-                  title="更换封面"
-                >
-                  <Camera size={16} />
-                </button>
+                <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button 
+                    onClick={(e) => triggerUpdateCover(e, book.id)}
+                    className="p-2 bg-white/80 backdrop-blur rounded-full shadow-sm text-slate-600 hover:bg-white hover:text-brand-600"
+                    title="更换封面"
+                  >
+                    <Camera size={16} />
+                  </button>
+                  <button 
+                    onClick={(e) => handleDeleteBook(e, book)}
+                    className="p-2 bg-white/80 backdrop-blur rounded-full shadow-sm text-slate-600 hover:bg-white hover:text-red-600"
+                    title="删除书籍"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
             </div>
             
             <div className="p-6">
@@ -145,15 +177,35 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
                              <img src={importCoverUrl} className="w-full h-full object-cover" />
                            ) : (
                              <>
-                               <ImageIcon size={48} className="text-slate-300 mb-2" />
-                               <span className="text-xs text-slate-400 font-medium px-4 text-center">点击上传封面图片<br/>(建议比例 3:4)</span>
+                               {isGeneratingCover ? (
+                                 <>
+                                   <Loader2 size={40} className="text-brand-500 mb-3 animate-spin" />
+                                   <span className="text-xs text-brand-500 font-medium px-4 text-center">正在生成书籍封面...</span>
+                                 </>
+                               ) : (
+                                 <>
+                                   <ImageIcon size={48} className="text-slate-300 mb-2" />
+                                   <span className="text-xs text-slate-400 font-medium px-4 text-center">点击上传封面图片<br/>(建议比例 3:4)</span>
+                                 </>
+                               )}
                              </>
                            )}
                        </div>
                        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, false)} />
-                       {importCoverUrl && (
-                         <button type="button" onClick={() => setImportCoverUrl(undefined)} className="mt-3 text-xs text-red-500 font-bold hover:underline">移除封面</button>
-                       )}
+                       <div className="mt-3 flex w-full flex-col gap-2">
+                         <button
+                           type="button"
+                           onClick={handleGenerateCover}
+                           disabled={isGeneratingCover || !importTitle.trim() || !importContent.trim()}
+                           className="w-full rounded-lg bg-white px-3 py-2 text-xs font-bold text-brand-600 shadow-sm transition-colors hover:bg-brand-50 disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2"
+                         >
+                           {isGeneratingCover ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
+                           {isGeneratingCover ? '封面生成中...' : 'AI 生成封面'}
+                         </button>
+                         {importCoverUrl && (
+                           <button type="button" onClick={() => setImportCoverUrl(undefined)} className="text-xs text-red-500 font-bold hover:underline">移除封面</button>
+                         )}
+                       </div>
                    </div>
 
                    {/* Right side: Title & Content */}

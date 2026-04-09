@@ -7,8 +7,8 @@ import { Reader } from './components/Reader';
 import { AssetLibrary } from './components/AssetLibrary';
 import { BookShelf } from './components/BookShelf';
 import { SocialNetwork } from './components/SocialNetwork';
-import { generateAssetVisual, generateIllustration } from './services/aiService';
-import { checkGeneratedImageLocally, deleteGeneratedImageLocally, isLocalPicDbUrl, saveGeneratedImageLocally } from './services/localImageService';
+import { generateAssetVisual, generateBookCover, generateIllustration } from './services/aiService';
+import { checkGeneratedImageLocally, deleteGeneratedImageLocally, findGeneratedImageLocally, isLocalPicDbUrl, relocateGeneratedImageLocally, saveGeneratedImageLocally } from './services/localImageService';
 import { loadPersistedAppState, savePersistedAppState, saveStoredImageRecords } from './services/storageService';
 import { Plus, Trash2, Sparkles, Wand2 } from 'lucide-react';
 
@@ -294,6 +294,16 @@ const buildStoredImageRecords = (
   return [...characterRecords, ...locationRecords, ...illustrationRecords];
 };
 
+const getBookStorageFolderName = (books: Book[], bookId: string) =>
+  books.find(book => book.id === bookId)?.title?.trim() || bookId;
+
+const isUsableLocalUrl = async (localUrl?: string) => {
+  if (!isLocalPicDbUrl(localUrl)) {
+    return false;
+  }
+  return checkGeneratedImageLocally({ localUrl }).catch(() => false);
+};
+
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('home');
   const [books, setBooks] = useState<Book[]>(SAMPLE_BOOKS);
@@ -413,22 +423,40 @@ const App: React.FC = () => {
     const reconcilePersistedImages = async () => {
       try {
         const characterUpdates = await Promise.all(characters.map(async (character) => {
-          const remoteUrl = character.referenceImageUrl || (!isLocalPicDbUrl(character.imageUrl) ? character.imageUrl : undefined);
-          if (!remoteUrl) {
-            return null;
+          const bookFolder = getBookStorageFolderName(books, character.bookId);
+          let nextLocalUrl = character.imageUrl;
+          const indexedLocalUrl = await findGeneratedImageLocally({
+            bookFolder,
+            category: 'assets',
+            subcategory: 'characters',
+            fileStem: character.id,
+          }).catch(() => null);
+
+          if (indexedLocalUrl) {
+            nextLocalUrl = indexedLocalUrl;
           }
 
-          const localExists = isLocalPicDbUrl(character.imageUrl)
-            ? await checkGeneratedImageLocally({ localUrl: character.imageUrl! }).catch(() => false)
-            : false;
+          if (isLocalPicDbUrl(nextLocalUrl)) {
+            nextLocalUrl = (await relocateGeneratedImageLocally({
+              localUrl: nextLocalUrl!,
+              targetBookFolder: bookFolder,
+            }).catch(() => ({ localUrl: nextLocalUrl! }))).localUrl;
+          }
+
+          const remoteUrl = character.referenceImageUrl || (!isLocalPicDbUrl(character.imageUrl) ? character.imageUrl : undefined);
+          if (!remoteUrl) {
+            return nextLocalUrl !== character.imageUrl ? { id: character.id, localUrl: nextLocalUrl } : null;
+          }
+
+          const localExists = await isUsableLocalUrl(nextLocalUrl);
 
           if (localExists) {
-            return null;
+            return nextLocalUrl !== character.imageUrl ? { id: character.id, localUrl: nextLocalUrl, remoteUrl } : null;
           }
 
           const { localUrl } = await saveGeneratedImageLocally({
             remoteUrl,
-            bookId: character.bookId,
+            bookId: bookFolder,
             category: 'assets',
             subcategory: 'characters',
             fileStem: character.id,
@@ -445,22 +473,40 @@ const App: React.FC = () => {
         }
 
         const locationUpdates = await Promise.all(locations.map(async (location) => {
-          const remoteUrl = location.referenceImageUrl || (!isLocalPicDbUrl(location.imageUrl) ? location.imageUrl : undefined);
-          if (!remoteUrl) {
-            return null;
+          const bookFolder = getBookStorageFolderName(books, location.bookId);
+          let nextLocalUrl = location.imageUrl;
+          const indexedLocalUrl = await findGeneratedImageLocally({
+            bookFolder,
+            category: 'assets',
+            subcategory: 'locations',
+            fileStem: location.id,
+          }).catch(() => null);
+
+          if (indexedLocalUrl) {
+            nextLocalUrl = indexedLocalUrl;
           }
 
-          const localExists = isLocalPicDbUrl(location.imageUrl)
-            ? await checkGeneratedImageLocally({ localUrl: location.imageUrl! }).catch(() => false)
-            : false;
+          if (isLocalPicDbUrl(nextLocalUrl)) {
+            nextLocalUrl = (await relocateGeneratedImageLocally({
+              localUrl: nextLocalUrl!,
+              targetBookFolder: bookFolder,
+            }).catch(() => ({ localUrl: nextLocalUrl! }))).localUrl;
+          }
+
+          const remoteUrl = location.referenceImageUrl || (!isLocalPicDbUrl(location.imageUrl) ? location.imageUrl : undefined);
+          if (!remoteUrl) {
+            return nextLocalUrl !== location.imageUrl ? { id: location.id, localUrl: nextLocalUrl } : null;
+          }
+
+          const localExists = await isUsableLocalUrl(nextLocalUrl);
 
           if (localExists) {
-            return null;
+            return nextLocalUrl !== location.imageUrl ? { id: location.id, localUrl: nextLocalUrl, remoteUrl } : null;
           }
 
           const { localUrl } = await saveGeneratedImageLocally({
             remoteUrl,
-            bookId: location.bookId,
+            bookId: bookFolder,
             category: 'assets',
             subcategory: 'locations',
             fileStem: location.id,
@@ -478,32 +524,51 @@ const App: React.FC = () => {
 
         const illustrationEntries = Object.values(illustrations);
         const illustrationUpdates = await Promise.all(illustrationEntries.map(async (illustration) => {
-          const currentUrl = illustration.imageUrl;
+          let currentUrl = illustration.imageUrl;
           if (!currentUrl) {
             return null;
           }
 
+          const bookId = findBookIdByParagraphId(books, illustration.paragraphId);
+          if (bookId) {
+            const indexedLocalUrl = await findGeneratedImageLocally({
+              bookFolder: getBookStorageFolderName(books, bookId),
+              category: 'illustrations',
+              subcategory: 'paragraphs',
+              fileStem: illustration.paragraphId,
+            }).catch(() => null);
+
+            if (indexedLocalUrl) {
+              currentUrl = indexedLocalUrl;
+            }
+          }
+
+          if (isLocalPicDbUrl(currentUrl) && bookId) {
+            const bookFolder = getBookStorageFolderName(books, bookId);
+            currentUrl = (await relocateGeneratedImageLocally({
+              localUrl: currentUrl,
+              targetBookFolder: bookFolder,
+            }).catch(() => ({ localUrl: currentUrl }))).localUrl;
+          }
+
           const isLocalUrl = isLocalPicDbUrl(currentUrl);
-          const localExists = isLocalPicDbUrl(currentUrl)
-            ? await checkGeneratedImageLocally({ localUrl: currentUrl }).catch(() => false)
-            : false;
+          const localExists = await isUsableLocalUrl(currentUrl);
 
           if (isLocalUrl && localExists) {
-            return null;
+            return currentUrl !== illustration.imageUrl ? { paragraphId: illustration.paragraphId, localUrl: currentUrl } : null;
           }
 
           if (isLocalUrl) {
             return null;
           }
 
-          const bookId = findBookIdByParagraphId(books, illustration.paragraphId);
           if (!bookId) {
             return null;
           }
 
           const { localUrl } = await saveGeneratedImageLocally({
             remoteUrl: currentUrl,
-            bookId,
+            bookId: getBookStorageFolderName(books, bookId),
             category: 'illustrations',
             subcategory: 'paragraphs',
             fileStem: illustration.paragraphId,
@@ -557,7 +622,7 @@ const App: React.FC = () => {
     const remoteUrl = await generateAssetVisual(description, type, specOverride || visualSpec, imageModelId);
     const { localUrl } = await saveGeneratedImageLocally({
       remoteUrl,
-      bookId,
+      bookId: getBookStorageFolderName(books, bookId),
       category: 'assets',
       subcategory: type === 'character' ? 'characters' : 'locations',
       fileStem: entityId,
@@ -573,24 +638,39 @@ const App: React.FC = () => {
     spec: VisualSpec,
     illustrationCharacters: Character[],
     illustrationLocations: Location[],
-    originalText?: string
+    originalText?: string,
+    customRequirement?: string
   ) => {
-    const remoteUrl = await generateIllustration(
+    const { imageUrl: remoteUrl, promptUsed } = await generateIllustration(
       facts,
       spec,
       illustrationCharacters,
       illustrationLocations,
       imageModelId,
-      originalText
+      originalText,
+      customRequirement
     );
     const { localUrl } = await saveGeneratedImageLocally({
       remoteUrl,
-      bookId,
+      bookId: getBookStorageFolderName(books, bookId),
       category: 'illustrations',
       subcategory: 'paragraphs',
       fileStem: paragraphId,
     });
     incrementImageGenerationStats('illustration', imageModelId);
+    return { imageUrl: localUrl, promptUsed };
+  };
+
+  const handleGenerateImportBookCover = async (title: string, content: string) => {
+    const remoteUrl = await generateBookCover(title, content, visualSpec, imageModelId);
+    const { localUrl } = await saveGeneratedImageLocally({
+      remoteUrl,
+      bookId: title.trim() || 'untitled-book',
+      category: 'covers',
+      subcategory: 'books',
+      fileStem: 'cover',
+    });
+    incrementImageGenerationStats('asset', imageModelId);
     return localUrl;
   };
 
@@ -623,6 +703,43 @@ const App: React.FC = () => {
       if (coverUrl) newBook.coverUrl = coverUrl;
       setBooks(prev => [newBook, ...prev]);
       handleSelectBook(newBook);
+  };
+
+  const handleDeleteBook = async (bookId: string) => {
+    const targetBook = books.find(book => book.id === bookId);
+    if (!targetBook) return;
+
+    const paragraphIds = targetBook.chapters.flatMap(chapter => chapter.paragraphs.map(paragraph => paragraph.id));
+    const relatedIllustrations = paragraphIds
+      .map(paragraphId => illustrations[paragraphId])
+      .filter((illustration): illustration is Illustration => Boolean(illustration));
+    const relatedCharacters = characters.filter(character => character.bookId === bookId);
+    const relatedLocations = locations.filter(location => location.bookId === bookId);
+    const localImages = [
+      targetBook.coverUrl,
+      ...relatedIllustrations.map(item => item.imageUrl),
+      ...relatedCharacters.map(item => item.imageUrl),
+      ...relatedLocations.map(item => item.imageUrl),
+    ];
+
+    await Promise.all(localImages.map((localUrl) => cleanupLocalImage(localUrl)));
+
+    setBooks(prev => prev.filter(book => book.id !== bookId));
+    setCharacters(prev => prev.filter(character => character.bookId !== bookId));
+    setLocations(prev => prev.filter(location => location.bookId !== bookId));
+    setRelationships(prev => prev.filter(relationship => relationship.bookId !== bookId));
+    setIllustrations(prev => {
+      const next = { ...prev };
+      paragraphIds.forEach((paragraphId) => {
+        delete next[paragraphId];
+      });
+      return next;
+    });
+
+    if (currentBookId === bookId) {
+      setCurrentBookId(null);
+      setView('home');
+    }
   };
 
   const handleAddIllustration = (ill: Illustration) => setIllustrations(prev => ({ ...prev, [ill.paragraphId]: ill }));
@@ -779,7 +896,7 @@ const App: React.FC = () => {
 
   return (
     <Layout currentView={view} onNavigate={setView}>
-      {view === 'home' && <BookShelf books={books} onSelectBook={handleSelectBook} onImportBook={handleImportBook} onUpdateBookCover={handleUpdateBookCover} />}
+      {view === 'home' && <BookShelf books={books} onSelectBook={handleSelectBook} onImportBook={handleImportBook} onUpdateBookCover={handleUpdateBookCover} onGenerateBookCover={handleGenerateImportBookCover} onDeleteBook={handleDeleteBook} />}
       {view === 'reader' && currentBook && (
         <Reader 
           book={currentBook}

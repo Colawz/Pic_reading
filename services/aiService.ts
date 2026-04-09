@@ -213,8 +213,9 @@ export const generateIllustration = async (
   characters: Character[],
   locations: Location[],
   modelId: ImageGenerationModelId,
-  originalText?: string
-): Promise<string> => {
+  originalText?: string,
+  customRequirement?: string
+): Promise<{ imageUrl: string; promptUsed: string }> => {
   let charDesc = "";
   const referenceImages: string[] = [];
 
@@ -240,8 +241,13 @@ export const generateIllustration = async (
   if (originalText) {
       prompt = `生成画面: 依据原文: "${originalText}" | 地点: ${facts.location} | 角色: ${charDesc} | 动作: ${facts.action} | 氛围: ${facts.mood} | 风格: ${visualSpec.promptStyle} | 镜头: ${visualSpec.cameraLanguage}｜禁止出现文字`;
   }
+
+  if (customRequirement?.trim()) {
+      prompt = `${prompt} | 额外要求: ${customRequirement.trim()}`;
+  }
   
-  return await callVolcImage(prompt, "16:9", modelId, referenceImages);
+  const imageUrl = await callVolcImage(prompt, "16:9", modelId, referenceImages);
+  return { imageUrl, promptUsed: prompt };
 };
 
 export const generateAssetVisual = async (
@@ -258,3 +264,17 @@ export const generateAssetVisual = async (
     
     return await callVolcImage(prompt, "1:1", modelId);
 }
+
+export const generateBookCover = async (
+    title: string,
+    content: string,
+    visualSpec: VisualSpec,
+    modelId: ImageGenerationModelId
+): Promise<string> => {
+    const summary = content
+      .replace(/\s+/g, ' ')
+      .slice(0, 400);
+
+    const prompt = `儿童故事书封面设计。标题：《${title}》。内容摘要：${summary}。要求：突出主角与核心冲突，单主体明确，封面构图完整，适合竖版书籍封面，留出标题区域但不要生成任何文字。风格：${visualSpec.promptStyle}。镜头：centered composition, poster framing, cover illustration.`;
+    return await callVolcImage(prompt, "1:1", modelId);
+};
