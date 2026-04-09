@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Book, Character, Location, Illustration, VisualSpec, Relationship, ReaderSettings } from '../types';
-import { analyzeNarrative, generateIllustration, scanChapterForAssets, analyzeRelationships } from '../services/geminiService';
+import { Book, Character, Location, Illustration, VisualSpec, Relationship, ReaderSettings, ImageGenerationModelId, NarrativeFacts } from '../types';
+import { analyzeNarrative, scanChapterForAssets, analyzeRelationships } from '../services/aiService';
 import { exportBookToHtml, exportBookToPdf } from '../services/exportService';
 import { BatchActionsModal } from './BatchActionsModal';
 import { Wand2, AlertCircle, Settings2, PlayCircle, Loader2, ChevronLeft, ChevronRight, ScanSearch, CheckCircle2, Circle, Layers, Palette, X, UserPlus, Info, Type } from 'lucide-react';
@@ -12,6 +12,8 @@ interface ReaderProps {
   locations: Location[];
   visualSpec: VisualSpec;
   availableSpecs: VisualSpec[];
+  imageModelId: ImageGenerationModelId;
+  imageModels: Array<{ id: ImageGenerationModelId; label: string; description: string }>;
   illustrations: Record<string, Illustration>;
   onAddIllustration: (ill: Illustration) => void;
   onUpdateIllustration: (paragraphId: string, updates: Partial<Illustration>) => void;
@@ -19,19 +21,20 @@ interface ReaderProps {
   onDiscoverLocation: (loc: Location) => Promise<void>;
   onDiscoverRelationships: (rels: Relationship[]) => void;
   onUpdateBookStyle: (bookId: string, styleId: string) => void;
+  onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
+  onGenerateIllustration: (facts: NarrativeFacts, spec: VisualSpec, illustrationCharacters: Character[], illustrationLocations: Location[], originalText?: string) => Promise<string>;
   onOpenAssetsView: (bookId?: string) => void;
 }
 
 export const Reader: React.FC<ReaderProps> = ({
-  book, characters, locations, visualSpec, availableSpecs, illustrations,
-  onAddIllustration, onUpdateIllustration, onDiscoverCharacter, onDiscoverLocation, onDiscoverRelationships, onUpdateBookStyle, onOpenAssetsView
+  book, characters, locations, visualSpec, availableSpecs, imageModelId, imageModels, illustrations,
+  onAddIllustration, onUpdateIllustration, onDiscoverCharacter, onDiscoverLocation, onDiscoverRelationships, onUpdateBookStyle, onUpdateImageModel, onGenerateIllustration, onOpenAssetsView
 }) => {
   const BATCH_CONCURRENCY = 3;
   const [activeParagraphId, setActiveParagraphId] = useState<string | null>(null);
   const [settings, setSettings] = useState<ReaderSettings>({ wordInterval: 300, preGenerate: false });
   const [showSettings, setShowSettings] = useState(false);
   const [showStylePicker, setShowStylePicker] = useState(false);
-  const processingRef = useRef(false);
   const latestCharactersRef = useRef(characters);
   const latestLocationsRef = useRef(locations);
   const [currentPage, setCurrentPage] = useState(0);
@@ -46,10 +49,16 @@ export const Reader: React.FC<ReaderProps> = ({
   const [showBatchModal, setShowBatchModal] = useState(false);
   const [batchProgress, setBatchProgress] = useState({ current: 0, total: 0 });
   const [isBatchProcessing, setIsBatchProcessing] = useState(false);
+  const [isGeneratingMissingAssets, setIsGeneratingMissingAssets] = useState(false);
+  const [activeGenerationMap, setActiveGenerationMap] = useState<Record<string, boolean>>({});
+  const [missingActionMode, setMissingActionMode] = useState<'generate' | 'skip' | null>(null);
+  const [batchStageLabel, setBatchStageLabel] = useState('正在绘制...');
 
   // Missing Character Modal State
-  const [missingChars, setMissingChars] = useState<string[]>([]);
-  const [pendingGenParams, setPendingGenParams] = useState<{chIdx: number, pIdx: number} | null>(null);
+  const [pendingGenerationQueue, setPendingGenerationQueue] = useState<Array<{
+    task: { chIdx: number; pIdx: number };
+    missingChars: string[];
+  }>>([]);
 
   const currentChapterIndex = 0; 
   const currentChapter = book.chapters[currentChapterIndex];
@@ -66,6 +75,8 @@ export const Reader: React.FC<ReaderProps> = ({
   const totalPages = Math.ceil(currentChapter.paragraphs.length / PARAGRAPHS_PER_PAGE);
   const currentParagraphs = currentChapter.paragraphs.slice(currentPage * PARAGRAPHS_PER_PAGE, (currentPage + 1) * PARAGRAPHS_PER_PAGE);
   const isScienceBook = book.genre.includes("科普") || book.genre.includes("科学");
+  const currentPendingGeneration = pendingGenerationQueue[0] || null;
+  const queuedGenerationCount = Math.max(0, pendingGenerationQueue.length - 1);
 
   useEffect(() => {
     latestCharactersRef.current = characters;
@@ -140,6 +151,17 @@ export const Reader: React.FC<ReaderProps> = ({
     paragraph: book.chapters[chIdx].paragraphs[pIdx],
   });
 
+  const setTaskActive = (paragraphId: string, active: boolean) => {
+    setActiveGenerationMap(prev => {
+      if (active) {
+        return { ...prev, [paragraphId]: true };
+      }
+      const next = { ...prev };
+      delete next[paragraphId];
+      return next;
+    });
+  };
+
   const analyzeGenerationTask = async (
     task: GenerationTask,
     characterPool: Character[],
@@ -166,7 +188,7 @@ export const Reader: React.FC<ReaderProps> = ({
     characterPool: Character[],
     locationPool: Location[]
   ) => {
-    const imageUrl = await generateIllustration(
+    const imageUrl = await onGenerateIllustration(
       task.facts,
       visualSpec,
       characterPool,
@@ -239,8 +261,14 @@ export const Reader: React.FC<ReaderProps> = ({
       if (!options?.skipCharCheck && analyzedTask.missingCharacterNames.length > 0) {
         if (interactive) {
           onUpdateIllustration(task.paragraph.id, { status: 'pending' });
-          setMissingChars(analyzedTask.missingCharacterNames);
-          setPendingGenParams({ chIdx: task.chIdx, pIdx: task.pIdx });
+          setPendingGenerationQueue(prev => {
+            const alreadyQueued = prev.some(item => item.task.chIdx === task.chIdx && item.task.pIdx === task.pIdx);
+            if (alreadyQueued) return prev;
+            return [...prev, {
+              task: { chIdx: task.chIdx, pIdx: task.pIdx },
+              missingChars: analyzedTask.missingCharacterNames
+            }];
+          });
           return;
         }
 
@@ -294,14 +322,19 @@ export const Reader: React.FC<ReaderProps> = ({
   };
 
   const handleGenerate = async (chIdx: number, pIdx: number) => {
-      if (processingRef.current) return;
-      processingRef.current = true;
-      await runGenerationTask(createGenerationTask(chIdx, pIdx));
-      processingRef.current = false;
+      const task = createGenerationTask(chIdx, pIdx);
+      if (activeGenerationMap[task.paragraph.id]) return;
+      setTaskActive(task.paragraph.id, true);
+      try {
+        await runGenerationTask(task);
+      } finally {
+        setTaskActive(task.paragraph.id, false);
+      }
   };
 
   const handleStartBatch = async (interval: number, scope: 'chapter' | 'next_n' | 'all', nValue: number) => {
     setIsBatchProcessing(true);
+    setBatchStageLabel('正在分析段落...');
 
     try {
       const chapterIndexes =
@@ -335,11 +368,13 @@ export const Reader: React.FC<ReaderProps> = ({
       });
 
       const missingNames = Array.from(new Set(analyzedTargets.flatMap(target => target.missingCharacterNames)));
+      setBatchStageLabel(missingNames.length > 0 ? '正在补全缺失角色设定...' : '正在生成插图...');
       const batchCharacters = missingNames.length > 0
         ? await ensureCharacterAssets(missingNames, latestCharactersRef.current)
         : latestCharactersRef.current;
       const batchLocations = latestLocationsRef.current;
 
+      setBatchStageLabel('正在生成插图...');
       await runWithConcurrency(analyzedTargets, BATCH_CONCURRENCY, async (task) => {
         try {
           await renderGenerationTask(task, batchCharacters, batchLocations);
@@ -353,6 +388,7 @@ export const Reader: React.FC<ReaderProps> = ({
       setShowBatchModal(false);
     } finally {
       setIsBatchProcessing(false);
+      setBatchStageLabel('正在绘制...');
     }
   };
 
@@ -362,17 +398,24 @@ export const Reader: React.FC<ReaderProps> = ({
   };
 
   const handleGenMissingChars = async () => {
-    if (!pendingGenParams) return;
-    const charNames = [...missingChars];
-    setMissingChars([]); 
+    if (!currentPendingGeneration) return;
+    const charNames = [...currentPendingGeneration.missingChars];
+    setIsGeneratingMissingAssets(true);
+    setMissingActionMode('generate');
+    onOpenAssetsView(book.id);
 
-    const refreshedCharacters = await ensureCharacterAssets(charNames, latestCharactersRef.current);
-    await runGenerationTask(createGenerationTask(pendingGenParams.chIdx, pendingGenParams.pIdx), {
-      skipCharCheck: true,
-      characterPool: refreshedCharacters,
-      locationPool: latestLocationsRef.current
-    });
-    setPendingGenParams(null);
+    try {
+      const refreshedCharacters = await ensureCharacterAssets(charNames, latestCharactersRef.current);
+      await runGenerationTask(createGenerationTask(currentPendingGeneration.task.chIdx, currentPendingGeneration.task.pIdx), {
+        skipCharCheck: true,
+        characterPool: refreshedCharacters,
+        locationPool: latestLocationsRef.current
+      });
+      setPendingGenerationQueue(prev => prev.slice(1));
+    } finally {
+      setIsGeneratingMissingAssets(false);
+      setMissingActionMode(null);
+    }
   };
 
   const handleConfirmScanResults = async () => {
@@ -401,20 +444,23 @@ export const Reader: React.FC<ReaderProps> = ({
 
     setShowScanModal(false);
     onOpenAssetsView(book.id);
-    void Promise.allSettled([...characterTasks, ...locationTasks]);
+    void Promise.allSettled([...characterTasks, ...locationTasks]).finally(() => {
+      setIsCreatingAssets(false);
+    });
   };
 
   const handleSkipMissingChars = () => {
-    if (!pendingGenParams) return;
-    runGenerationTask(createGenerationTask(pendingGenParams.chIdx, pendingGenParams.pIdx), { skipCharCheck: true });
-    setMissingChars([]);
-    setPendingGenParams(null);
+    if (!currentPendingGeneration) return;
+    setMissingActionMode('skip');
+    void runGenerationTask(createGenerationTask(currentPendingGeneration.task.chIdx, currentPendingGeneration.task.pIdx), { skipCharCheck: true });
+    setPendingGenerationQueue(prev => prev.slice(1));
+    setTimeout(() => setMissingActionMode(null), 0);
   };
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8 relative min-h-full flex flex-col">
       {/* Missing Character Modal */}
-      {missingChars.length > 0 && (
+      {currentPendingGeneration && (
           <div className="fixed inset-0 bg-black/60 z-[110] flex items-center justify-center p-4 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
               <div className="p-6 text-center">
@@ -422,10 +468,17 @@ export const Reader: React.FC<ReaderProps> = ({
                   <UserPlus size={32} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">缺失角色形象</h3>
-                <p className="text-sm text-slate-500 mb-6">场景中涉及角色：<b>{missingChars.join(", ")}</b>。<br/>世界观中尚未生成这些角色的形象。为了保证视觉一致性，建议先完善世界观。</p>
+                <p className="text-sm text-slate-500 mb-6">场景中涉及角色：<b>{currentPendingGeneration.missingChars.join(", ")}</b>。<br/>世界观中尚未生成这些角色的形象。为了保证视觉一致性，建议先完善世界观。</p>
+                {queuedGenerationCount > 0 && <div className="mb-4 text-xs text-slate-400 bg-slate-50 rounded-lg px-3 py-2">当前还有 {queuedGenerationCount} 个待处理生图任务在排队。</div>}
                 <div className="flex flex-col gap-3">
-                  <button onClick={handleGenMissingChars} className="w-full py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-colors">生成形象设定并继续</button>
-                  <button onClick={handleSkipMissingChars} className="w-full py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-colors">不生成设定直接绘制</button>
+                  <button onClick={handleGenMissingChars} disabled={isGeneratingMissingAssets} className="w-full py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-colors disabled:bg-brand-300 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    {isGeneratingMissingAssets && missingActionMode === 'generate' && <Loader2 size={16} className="animate-spin" />}
+                    {isGeneratingMissingAssets && missingActionMode === 'generate' ? '生成中...' : '生成形象设定并继续'}
+                  </button>
+                  <button onClick={handleSkipMissingChars} disabled={isGeneratingMissingAssets} className="w-full py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    {isGeneratingMissingAssets && missingActionMode === 'skip' && <Loader2 size={16} className="animate-spin" />}
+                    {isGeneratingMissingAssets && missingActionMode === 'skip' ? '绘制中...' : '不生成设定直接绘制'}
+                  </button>
                 </div>
               </div>
             </div>
@@ -509,7 +562,20 @@ export const Reader: React.FC<ReaderProps> = ({
           </div>
       )}
 
-      <BatchActionsModal book={book} currentChapterIndex={currentChapterIndex} isOpen={showBatchModal} isProcessing={isBatchProcessing} progress={batchProgress} onClose={() => setShowBatchModal(false)} onStartBatch={handleStartBatch} onExport={handleExport} />
+      <BatchActionsModal
+        book={book}
+        currentChapterIndex={currentChapterIndex}
+        imageModelId={imageModelId}
+        imageModels={imageModels}
+        isOpen={showBatchModal}
+        isProcessing={isBatchProcessing}
+        stageLabel={batchStageLabel}
+        progress={batchProgress}
+        onClose={() => setShowBatchModal(false)}
+        onStartBatch={handleStartBatch}
+        onUpdateImageModel={onUpdateImageModel}
+        onExport={handleExport}
+      />
 
       <div className="absolute top-4 right-4 z-20 flex gap-2">
          <button onClick={() => setShowStylePicker(true)} className="p-2 bg-white rounded-lg border text-sm px-3 shadow-sm hover:text-brand-600 flex items-center gap-2"><Palette size={16} /><span className="hidden sm:inline">{visualSpec.label}</span></button>
@@ -531,6 +597,15 @@ export const Reader: React.FC<ReaderProps> = ({
                   </div>
                   <div className="text-[10px] text-slate-400 italic bg-slate-50 p-2 rounded">
                     {settings.wordInterval === 0 ? '仅在手动点击时生图' : `每隔约 ${settings.wordInterval} 字出现生图控件`}
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">图片模型</label>
+                    <select value={imageModelId} onChange={e => onUpdateImageModel(e.target.value as ImageGenerationModelId)} className="w-full px-3 py-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-500 outline-none">
+                      {imageModels.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
+                    </select>
+                    <div className="text-[10px] text-slate-400 italic bg-slate-50 p-2 rounded mt-2">
+                      {imageModels.find(model => model.id === imageModelId)?.description}
+                    </div>
                   </div>
                 </div>
             </div>
@@ -563,6 +638,12 @@ export const Reader: React.FC<ReaderProps> = ({
                       {ill.status === 'completed' && ill.imageUrl && (
                         <div className="relative">
                           <img src={ill.imageUrl} className="w-full h-auto object-cover max-h-[550px] transition-transform duration-700 group-hover/ill:scale-[1.02]" />
+                          <button
+                            onClick={() => handleGenerate(currentChapterIndex, pIdx)}
+                            className="absolute top-4 right-4 px-3 py-1.5 bg-white/90 backdrop-blur text-slate-700 rounded-lg text-xs font-bold shadow-sm hover:bg-white hover:text-brand-600 transition-colors"
+                          >
+                            重生成
+                          </button>
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 opacity-0 group-hover/ill:opacity-100 transition-opacity">
                              {ill.extractedFacts && <p className="text-white text-xs italic">场景: {ill.extractedFacts.location} | 氛围: {ill.extractedFacts.mood}</p>}
                           </div>
@@ -573,7 +654,7 @@ export const Reader: React.FC<ReaderProps> = ({
                   ) : (
                     <div className={`transition-all duration-300 ${shouldShowSuggestControl ? 'opacity-100 mb-10' : 'opacity-0 h-0 overflow-hidden group-hover:h-12 group-hover:opacity-100'}`}>
                         <div className={`flex items-center justify-center border-2 border-dashed rounded-2xl transition-colors ${shouldShowSuggestControl ? 'border-brand-200 bg-brand-50/30 py-6' : 'border-slate-100 py-2'}`}>
-                          <button onClick={() => handleGenerate(currentChapterIndex, pIdx)} className={`flex items-center gap-3 font-bold transition-all ${shouldShowSuggestControl ? 'text-brand-600 hover:text-brand-700 hover:scale-105' : 'text-slate-300 hover:text-brand-500 text-xs'}`}>
+                          <button disabled={!!activeGenerationMap[paragraph.id]} onClick={() => handleGenerate(currentChapterIndex, pIdx)} className={`flex items-center gap-3 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed ${shouldShowSuggestControl ? 'text-brand-600 hover:text-brand-700 hover:scale-105' : 'text-slate-300 hover:text-brand-500 text-xs'}`}>
                             <Wand2 size={shouldShowSuggestControl ? 24 : 16} className={shouldShowSuggestControl ? 'animate-pulse' : ''} />
                             <span>{shouldShowSuggestControl ? `AI 建议生图点 (${wordData.start}字处)` : '在此处生图'}</span>
                           </button>

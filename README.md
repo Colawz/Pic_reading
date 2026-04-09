@@ -89,7 +89,7 @@ zhihui-reading/
 │   ├── BatchActionsModal.tsx   # 批量生图 / 导出弹窗
 │   └── Layout.tsx              # 全局布局
 ├── services/
-│   ├── geminiService.ts        # AI 分析与生图调用
+│   ├── aiService.ts            # AI 分析与生图调用
 │   └── exportService.ts        # HTML / PDF 导出
 ├── docs/                       # 项目文档
 ├── public/                     # 封面等静态资源

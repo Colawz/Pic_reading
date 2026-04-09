@@ -1,5 +1,22 @@
 
-import { Book, VisualSpec } from "./types";
+import { Book, ImageGenerationModelId, VisualSpec } from "./types";
+
+export const IMAGE_GENERATION_MODELS: Array<{
+  id: ImageGenerationModelId;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: "doubao-seedream-4-5-251128",
+    label: "Seedream 4.5",
+    description: "当前默认模型，生成速度和稳定性较均衡。"
+  },
+  {
+    id: "doubao-seedream-5-0-260128",
+    label: "Seedream 5.0",
+    description: "更新一代模型，可用于更高质量的图像生成。"
+  }
+];
 
 export const VISUAL_PRESETS: VisualSpec[] = [
   {

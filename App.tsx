@@ -1,13 +1,14 @@
 
-import React, { useState } from 'react';
-import { Book, Character, Location, Illustration, VisualSpec, ViewMode, Relationship } from './types';
-import { VISUAL_PRESETS, SAMPLE_BOOKS, createBook } from './constants';
+import React, { useEffect, useRef, useState } from 'react';
+import { Book, Character, Location, Illustration, VisualSpec, ViewMode, Relationship, ImageGenerationModelId, ImageGenerationStats, NarrativeFacts } from './types';
+import { VISUAL_PRESETS, SAMPLE_BOOKS, createBook, IMAGE_GENERATION_MODELS } from './constants';
 import { Layout } from './components/Layout';
 import { Reader } from './components/Reader';
 import { AssetLibrary } from './components/AssetLibrary';
 import { BookShelf } from './components/BookShelf';
 import { SocialNetwork } from './components/SocialNetwork';
-import { generateAssetVisual } from './services/geminiService';
+import { generateAssetVisual, generateIllustration } from './services/aiService';
+import { loadPersistedAppState, savePersistedAppState } from './services/storageService';
 import { Plus, Trash2, Sparkles, Wand2 } from 'lucide-react';
 
 const INITIAL_CHARACTERS: Character[] = [
@@ -215,24 +216,167 @@ const INITIAL_RELATIONSHIPS: Relationship[] = [
   }
 ];
 
+const DEFAULT_VISUAL_SPEC = VISUAL_PRESETS[0];
+const DEFAULT_IMAGE_MODEL_ID: ImageGenerationModelId = IMAGE_GENERATION_MODELS[0].id;
+const DEFAULT_IMAGE_GENERATION_STATS: ImageGenerationStats = {
+  total: 0,
+  assets: 0,
+  illustrations: 0,
+  byModel: {
+    'doubao-seedream-4-5-251128': 0,
+    'doubao-seedream-5-0-260128': 0,
+  },
+  lastGeneratedAt: null,
+};
+
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('home');
   const [books, setBooks] = useState<Book[]>(SAMPLE_BOOKS);
   const [currentBookId, setCurrentBookId] = useState<string | null>(null);
   const [availableSpecs, setAvailableSpecs] = useState<VisualSpec[]>(VISUAL_PRESETS);
-  const [visualSpec, setVisualSpec] = useState<VisualSpec>(VISUAL_PRESETS[0]);
+  const [visualSpec, setVisualSpec] = useState<VisualSpec>(DEFAULT_VISUAL_SPEC);
   const [characters, setCharacters] = useState<Character[]>(INITIAL_CHARACTERS);
   const [locations, setLocations] = useState<Location[]>(INITIAL_LOCATIONS);
   const [relationships, setRelationships] = useState<Relationship[]>(INITIAL_RELATIONSHIPS);
   const [illustrations, setIllustrations] = useState<Record<string, Illustration>>({});
+  const [imageModelId, setImageModelId] = useState<ImageGenerationModelId>(DEFAULT_IMAGE_MODEL_ID);
+  const [imageGenerationStats, setImageGenerationStats] = useState<ImageGenerationStats>(DEFAULT_IMAGE_GENERATION_STATS);
+  const [isBootstrapping, setIsBootstrapping] = useState(true);
   const [newStyle, setNewStyle] = useState<Partial<VisualSpec>>({
     label: '',
     promptStyle: '',
     cameraLanguage: 'cinematic composition',
     negatives: 'text, watermark, logo, blur'
   });
+  const hasHydratedRef = useRef(false);
 
   const currentBook = books.find(b => b.id === currentBookId) || null;
+  const currentImageModel = IMAGE_GENERATION_MODELS.find(model => model.id === imageModelId) || IMAGE_GENERATION_MODELS[0];
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const hydrateApp = async () => {
+      try {
+        const persistedState = await loadPersistedAppState();
+        if (cancelled) return;
+
+        if (persistedState) {
+          const nextBooks = persistedState.books?.length ? persistedState.books : SAMPLE_BOOKS;
+          const nextSpecs = persistedState.availableSpecs?.length ? persistedState.availableSpecs : VISUAL_PRESETS;
+          const nextCurrentBookId = persistedState.currentBookId ?? null;
+          const preferredVisualSpecId = persistedState.preferredVisualSpecId ?? nextBooks[0]?.visualSpecId ?? DEFAULT_VISUAL_SPEC.id;
+          const resolvedSpec =
+            nextSpecs.find(spec => spec.id === preferredVisualSpecId) ||
+            nextSpecs.find(spec => spec.id === nextBooks.find(book => book.id === nextCurrentBookId)?.visualSpecId) ||
+            nextSpecs[0] ||
+            DEFAULT_VISUAL_SPEC;
+
+          setBooks(nextBooks);
+          setAvailableSpecs(nextSpecs);
+          setCharacters(persistedState.characters || INITIAL_CHARACTERS);
+          setLocations(persistedState.locations || INITIAL_LOCATIONS);
+          setRelationships(persistedState.relationships || INITIAL_RELATIONSHIPS);
+          setIllustrations(persistedState.illustrations || {});
+          setCurrentBookId(nextCurrentBookId);
+          setVisualSpec(resolvedSpec);
+          setImageModelId(persistedState.imageModelId || DEFAULT_IMAGE_MODEL_ID);
+          setImageGenerationStats(persistedState.imageGenerationStats || DEFAULT_IMAGE_GENERATION_STATS);
+        } else {
+          setBooks(SAMPLE_BOOKS);
+          setAvailableSpecs(VISUAL_PRESETS);
+          setCharacters(INITIAL_CHARACTERS);
+          setLocations(INITIAL_LOCATIONS);
+          setRelationships(INITIAL_RELATIONSHIPS);
+          setIllustrations({});
+          setCurrentBookId(null);
+          setVisualSpec(DEFAULT_VISUAL_SPEC);
+          setImageModelId(DEFAULT_IMAGE_MODEL_ID);
+          setImageGenerationStats(DEFAULT_IMAGE_GENERATION_STATS);
+        }
+      } catch (error) {
+        console.error("Failed to hydrate app state from IndexedDB:", error);
+      } finally {
+        if (!cancelled) {
+          hasHydratedRef.current = true;
+          setIsBootstrapping(false);
+        }
+      }
+    };
+
+    void hydrateApp();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydratedRef.current) return;
+
+    const persist = async () => {
+      try {
+        await savePersistedAppState({
+          books,
+          availableSpecs,
+          characters,
+          locations,
+          relationships,
+          illustrations,
+          currentBookId,
+          preferredVisualSpecId: visualSpec.id,
+          imageModelId,
+          imageGenerationStats,
+        });
+      } catch (error) {
+        console.error("Failed to persist app state to IndexedDB:", error);
+      }
+    };
+
+    void persist();
+  }, [books, availableSpecs, characters, locations, relationships, illustrations, currentBookId, visualSpec.id, imageModelId, imageGenerationStats]);
+
+  const incrementImageGenerationStats = (category: 'asset' | 'illustration', modelId: ImageGenerationModelId) => {
+    setImageGenerationStats(prev => ({
+      total: prev.total + 1,
+      assets: prev.assets + (category === 'asset' ? 1 : 0),
+      illustrations: prev.illustrations + (category === 'illustration' ? 1 : 0),
+      byModel: {
+        ...prev.byModel,
+        [modelId]: (prev.byModel[modelId] || 0) + 1,
+      },
+      lastGeneratedAt: new Date().toISOString(),
+    }));
+  };
+
+  const handleGenerateAssetVisual = async (
+    description: string,
+    type: 'character' | 'location',
+    specOverride?: VisualSpec
+  ) => {
+    const imageUrl = await generateAssetVisual(description, type, specOverride || visualSpec, imageModelId);
+    incrementImageGenerationStats('asset', imageModelId);
+    return imageUrl;
+  };
+
+  const handleGenerateIllustration = async (
+    facts: NarrativeFacts,
+    spec: VisualSpec,
+    illustrationCharacters: Character[],
+    illustrationLocations: Location[],
+    originalText?: string
+  ) => {
+    const imageUrl = await generateIllustration(
+      facts,
+      spec,
+      illustrationCharacters,
+      illustrationLocations,
+      imageModelId,
+      originalText
+    );
+    incrementImageGenerationStats('illustration', imageModelId);
+    return imageUrl;
+  };
 
   const handleSelectBook = (book: Book) => {
       setCurrentBookId(book.id);
@@ -299,7 +443,7 @@ const App: React.FC = () => {
 
       try {
         const visualSummary = existing ? (existing.visualSummary || existing.description) : char.visualSummary!;
-        const imageUrl = await generateAssetVisual(visualSummary, 'character', visualSpec);
+        const imageUrl = await handleGenerateAssetVisual(visualSummary, 'character');
         setCharacters(prev => prev.map(c => c.id === targetId ? { ...c, imageUrl, locked: true, generationStatus: 'success' } : c));
         return imageUrl;
       } catch (e) {
@@ -333,7 +477,7 @@ const App: React.FC = () => {
 
       try {
         const visualSummary = existing ? (existing.visualSummary || existing.description) : loc.visualSummary!;
-        const imageUrl = await generateAssetVisual(visualSummary, 'location', visualSpec);
+        const imageUrl = await handleGenerateAssetVisual(visualSummary, 'location');
         setLocations(prev => prev.map(l => l.id === targetId ? { ...l, imageUrl, locked: true, generationStatus: 'success' } : l));
       } catch (e) {
         setLocations(prev => prev.map(l => l.id === targetId ? { ...l, generationStatus: 'failed' } : l));
@@ -371,6 +515,18 @@ const App: React.FC = () => {
     setAvailableSpecs(prev => prev.filter(p => p.id !== id));
   };
 
+  if (isBootstrapping) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
+        <div className="bg-white border border-slate-200 shadow-sm rounded-2xl px-8 py-10 text-center max-w-sm w-full">
+          <div className="w-12 h-12 mx-auto mb-4 rounded-full border-4 border-brand-100 border-t-brand-500 animate-spin" />
+          <h1 className="text-xl font-bold text-slate-900 mb-2">正在加载阅读空间</h1>
+          <p className="text-sm text-slate-500">正在从本地数据库恢复书籍、世界观和插图状态。</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Layout currentView={view} onNavigate={setView}>
       {view === 'home' && <BookShelf books={books} onSelectBook={handleSelectBook} onImportBook={handleImportBook} onUpdateBookCover={handleUpdateBookCover} />}
@@ -381,6 +537,8 @@ const App: React.FC = () => {
           locations={locations.filter(l => l.bookId === currentBook.id)}
           visualSpec={visualSpec}
           availableSpecs={availableSpecs}
+          imageModelId={imageModelId}
+          imageModels={IMAGE_GENERATION_MODELS}
           illustrations={illustrations}
           onAddIllustration={handleAddIllustration}
           onUpdateIllustration={handleUpdateIllustration}
@@ -388,10 +546,26 @@ const App: React.FC = () => {
           onDiscoverLocation={handleDiscoverLocation}
           onDiscoverRelationships={handleDiscoverRelationships}
           onUpdateBookStyle={handleUpdateBookStyle}
+          onUpdateImageModel={setImageModelId}
+          onGenerateIllustration={handleGenerateIllustration}
           onOpenAssetsView={handleOpenAssetsView}
         />
       )}
-      {view === 'assets' && <AssetLibrary books={books} characters={characters} locations={locations} visualSpec={visualSpec} setCharacters={setCharacters} setLocations={setLocations} focusedBookId={currentBookId} />}
+      {view === 'assets' && (
+        <AssetLibrary
+          books={books}
+          characters={characters}
+          locations={locations}
+          visualSpec={visualSpec}
+          imageModelId={imageModelId}
+          imageModels={IMAGE_GENERATION_MODELS}
+          setCharacters={setCharacters}
+          setLocations={setLocations}
+          onGenerateAssetVisual={handleGenerateAssetVisual}
+          onUpdateImageModel={setImageModelId}
+          focusedBookId={currentBookId}
+        />
+      )}
       {view === 'relationships' && (
         <SocialNetwork 
           books={books} 
@@ -407,7 +581,19 @@ const App: React.FC = () => {
             <div className="mb-10 text-center md:text-left"><h2 className="text-3xl font-bold text-slate-900 mb-2">绘图风格管理</h2><p className="text-slate-500">管理内置风格或创建属于你自己的独特视觉语言。</p></div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-1">
-                    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm sticky top-8">
+                    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm sticky top-8 space-y-6">
+                        <div>
+                          <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Wand2 className="text-brand-500" size={20} /> 图片模型</h3>
+                          <div className="space-y-3">
+                            <div>
+                              <label className="block text-xs font-bold text-slate-500 uppercase mb-1">当前模型</label>
+                              <select value={imageModelId} onChange={e => setImageModelId(e.target.value as ImageGenerationModelId)} className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-sm bg-white">
+                                {IMAGE_GENERATION_MODELS.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
+                              </select>
+                            </div>
+                            <p className="text-xs text-slate-500 leading-relaxed">{currentImageModel.description}</p>
+                          </div>
+                        </div>
                         <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Plus className="text-brand-500" size={20} /> 新建自定义风格</h3>
                         <form onSubmit={handleAddCustomStyle} className="space-y-4">
                             <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">风格名称</label><input value={newStyle.label} onChange={e => setNewStyle(prev => ({...prev, label: e.target.value}))} placeholder="如：赛博朋克" className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-sm" required /></div>
@@ -417,6 +603,34 @@ const App: React.FC = () => {
                     </div>
                 </div>
                 <div className="lg:col-span-2 space-y-4">
+                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                      <div className="flex items-center justify-between gap-4 mb-4">
+                        <div>
+                          <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">生图统计</h3>
+                          <p className="text-sm text-slate-500 mt-1">统计当前浏览器内已成功发起的图片生成次数。</p>
+                        </div>
+                        <div className="text-xs text-slate-400">当前模型：{currentImageModel.label}</div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                        <div className="rounded-xl bg-slate-50 p-4 border border-slate-100"><div className="text-xs text-slate-400 mb-1">总生图数</div><div className="text-2xl font-bold text-slate-900">{imageGenerationStats.total}</div></div>
+                        <div className="rounded-xl bg-slate-50 p-4 border border-slate-100"><div className="text-xs text-slate-400 mb-1">段落插图</div><div className="text-2xl font-bold text-slate-900">{imageGenerationStats.illustrations}</div></div>
+                        <div className="rounded-xl bg-slate-50 p-4 border border-slate-100"><div className="text-xs text-slate-400 mb-1">资产设定图</div><div className="text-2xl font-bold text-slate-900">{imageGenerationStats.assets}</div></div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {IMAGE_GENERATION_MODELS.map(model => (
+                          <div key={model.id} className={`rounded-xl border p-4 ${imageModelId === model.id ? 'border-brand-200 bg-brand-50' : 'border-slate-100 bg-slate-50'}`}>
+                            <div className="flex items-center justify-between gap-3">
+                              <div>
+                                <div className="font-bold text-slate-900">{model.label}</div>
+                                <div className="text-xs text-slate-500 mt-1">{model.description}</div>
+                              </div>
+                              <div className="text-2xl font-bold text-slate-900">{imageGenerationStats.byModel[model.id] || 0}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {imageGenerationStats.lastGeneratedAt && <div className="text-xs text-slate-400 mt-4">最近一次生图：{new Date(imageGenerationStats.lastGeneratedAt).toLocaleString()}</div>}
+                    </div>
                     <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">当前可用风格 ({availableSpecs.length})</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {availableSpecs.map(preset => {

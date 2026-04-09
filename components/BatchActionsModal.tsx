@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Book } from '../types';
+import { Book, ImageGenerationModelId } from '../types';
 import { Download, Wand2, X, Calculator, Layers, FileText, CheckCircle2, Loader2, FileType } from 'lucide-react';
 
 interface BatchActionsModalProps {
   book: Book;
   currentChapterIndex: number;
+  imageModelId: ImageGenerationModelId;
+  imageModels: Array<{ id: ImageGenerationModelId; label: string; description: string }>;
   isOpen: boolean;
   isProcessing: boolean;
+  stageLabel: string;
   progress: { current: number; total: number };
   onClose: () => void;
   onStartBatch: (interval: number, scope: 'chapter' | 'next_n' | 'all', nValue: number) => void;
+  onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
   onExport: (mode: 'full' | 'generated_chapters', format: 'html' | 'pdf') => void;
 }
 
 export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
   book,
   currentChapterIndex,
+  imageModelId,
+  imageModels,
   isOpen,
   isProcessing,
+  stageLabel,
   progress,
   onClose,
   onStartBatch,
+  onUpdateImageModel,
   onExport
 }) => {
   const [activeTab, setActiveTab] = useState<'generate' | 'export'>('generate');
@@ -73,7 +81,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
             <div className="text-center py-8">
                <div className="mb-6">
                  <div className="flex justify-between text-sm font-medium text-slate-600 mb-2">
-                   <span>正在绘制...</span>
+                   <span>{stageLabel}</span>
                    <span>{percentage}%</span>
                  </div>
                  <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
@@ -82,7 +90,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                </div>
                <div className="flex flex-col items-center gap-4">
                   {percentage < 100 ? <Loader2 className="animate-spin text-brand-500" size={48} /> : <CheckCircle2 className="text-green-500" size={48} />}
-                  <h4 className="text-lg font-bold text-slate-800">{percentage < 100 ? 'AI 绘制中...' : '绘制完成！'}</h4>
+                  <h4 className="text-lg font-bold text-slate-800">{percentage < 100 ? stageLabel : '绘制完成！'}</h4>
                   <p className="text-slate-500 text-sm">已完成 {progress.current} / {progress.total} 张插图</p>
                </div>
             </div>
@@ -104,6 +112,13 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                     )}
                   </label>
                 ))}
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">图片模型</label>
+                <select value={imageModelId} onChange={e => onUpdateImageModel(e.target.value as ImageGenerationModelId)} className="w-full px-3 py-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-500 outline-none">
+                  {imageModels.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
+                </select>
+                <div className="text-xs text-slate-400 mt-2">{imageModels.find(model => model.id === imageModelId)?.description}</div>
               </div>
               <button onClick={() => onStartBatch(interval, scope, nChapters)} className="w-full py-3 bg-brand-600 text-white rounded-xl font-bold shadow-lg hover:bg-brand-700 active:scale-[0.98]">开始生成 ({estimatedCount} 张图)</button>
             </div>

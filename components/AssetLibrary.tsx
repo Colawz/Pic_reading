@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Character, Location, VisualSpec, Book } from '../types';
-import { generateAssetVisual } from '../services/geminiService';
+import { Character, Location, VisualSpec, Book, ImageGenerationModelId } from '../types';
 import { exportAssetsToHtml, exportAssetsToPdf } from '../services/exportService';
 import { Loader2, Lock, Plus, RefreshCw, Trash2, User, AlertCircle, BookOpen, FileType, Sparkles } from 'lucide-react';
 
@@ -9,8 +8,12 @@ interface AssetLibraryProps {
   characters: Character[];
   locations: Location[];
   visualSpec: VisualSpec;
+  imageModelId: ImageGenerationModelId;
+  imageModels: Array<{ id: ImageGenerationModelId; label: string; description: string }>;
   setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
   setLocations: React.Dispatch<React.SetStateAction<Location[]>>;
+  onGenerateAssetVisual: (description: string, type: 'character' | 'location', specOverride?: VisualSpec) => Promise<string>;
+  onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
   focusedBookId: string | null;
 }
 
@@ -19,8 +22,12 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
   characters,
   locations,
   visualSpec,
+  imageModelId,
+  imageModels,
   setCharacters,
   setLocations,
+  onGenerateAssetVisual,
+  onUpdateImageModel,
   focusedBookId,
 }) => {
   const [activeTab, setActiveTab] = useState<'characters' | 'locations'>('characters');
@@ -46,7 +53,7 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
     }
 
     try {
-      const imageUrl = await generateAssetVisual(desc, type, visualSpec);
+      const imageUrl = await onGenerateAssetVisual(desc, type, visualSpec);
       if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, imageUrl, locked: true, generationStatus: 'success' } : c));
       else setLocations(prev => prev.map(l => l.id === id ? { ...l, imageUrl, locked: true, generationStatus: 'success' } : l));
     } catch (e) {
@@ -64,6 +71,9 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
             <p className="text-slate-500">管理故事世界的视觉世界观。</p>
         </div>
         <div className="flex items-center gap-2">
+             <select value={imageModelId} onChange={(e) => onUpdateImageModel(e.target.value as ImageGenerationModelId)} className="px-3 py-2 rounded-lg border bg-white text-sm focus:ring-2 focus:ring-brand-500">
+                {imageModels.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
+             </select>
              <select value={selectedBookId} onChange={(e) => setSelectedBookId(e.target.value)} className="px-3 py-2 rounded-lg border bg-white text-sm focus:ring-2 focus:ring-brand-500">
                 <option value="all">所有书籍</option>
                 {books.map(b => <option key={b.id} value={b.id}>{b.title}</option>)}

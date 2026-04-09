@@ -30,6 +30,18 @@ export interface VisualSpec {
   negatives: string;
 }
 
+export type ImageGenerationModelId =
+  | 'doubao-seedream-4-5-251128'
+  | 'doubao-seedream-5-0-260128';
+
+export interface ImageGenerationStats {
+  total: number;
+  assets: number;
+  illustrations: number;
+  byModel: Record<ImageGenerationModelId, number>;
+  lastGeneratedAt: string | null;
+}
+
 export interface Character {
   id: string;
   bookId: string; 

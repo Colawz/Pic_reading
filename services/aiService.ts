@@ -1,5 +1,5 @@
 
-import { NarrativeFacts, VisualSpec, Character, Location, Relationship } from "../types";
+import { NarrativeFacts, VisualSpec, Character, Location, Relationship, ImageGenerationModelId } from "../types";
 
 const VOLC_API_KEY = "329e6764-2c64-4a91-9d31-eaa7c1e3609a";
 
@@ -7,9 +7,7 @@ const VOLC_API_KEY = "329e6764-2c64-4a91-9d31-eaa7c1e3609a";
 const TEXT_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/chat/completions";
 const TEXT_MODEL = "deepseek-v3-2-251201";
 
-// Image Model (Doubao)
 const IMAGE_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/images/generations";
-const IMAGE_MODEL = "doubao-seedream-4-5-251128";
 
 async function callDeepSeek(prompt: string): Promise<string> {
     try {
@@ -47,7 +45,12 @@ async function callDeepSeek(prompt: string): Promise<string> {
     }
 }
 
-async function callVolcImage(prompt: string, aspectRatio: "1:1" | "16:9", referenceImages?: string[]): Promise<string> {
+async function callVolcImage(
+    prompt: string,
+    aspectRatio: "1:1" | "16:9",
+    modelId: ImageGenerationModelId,
+    referenceImages?: string[]
+): Promise<string> {
     // Determine size based on aspect ratio
     // Doubao API supports width/height. 
     // 1:1 -> 1024x1024
@@ -57,7 +60,7 @@ async function callVolcImage(prompt: string, aspectRatio: "1:1" | "16:9", refere
 
     try {
         const body: any = {
-            model: IMAGE_MODEL,
+            model: modelId,
             prompt: prompt,
             width: width,
             height: height,
@@ -204,7 +207,14 @@ export const analyzeNarrative = async (targetText: string, contextText: string, 
   }
 };
 
-export const generateIllustration = async (facts: NarrativeFacts, visualSpec: VisualSpec, characters: Character[], locations: Location[], originalText?: string): Promise<string> => {
+export const generateIllustration = async (
+  facts: NarrativeFacts,
+  visualSpec: VisualSpec,
+  characters: Character[],
+  locations: Location[],
+  modelId: ImageGenerationModelId,
+  originalText?: string
+): Promise<string> => {
   let charDesc = "";
   const referenceImages: string[] = [];
 
@@ -231,15 +241,20 @@ export const generateIllustration = async (facts: NarrativeFacts, visualSpec: Vi
       prompt = `生成画面: 依据原文: "${originalText}" | 地点: ${facts.location} | 角色: ${charDesc} | 动作: ${facts.action} | 氛围: ${facts.mood} | 风格: ${visualSpec.promptStyle} | 镜头: ${visualSpec.cameraLanguage}｜禁止出现文字`;
   }
   
-  return await callVolcImage(prompt, "16:9", referenceImages);
+  return await callVolcImage(prompt, "16:9", modelId, referenceImages);
 };
 
-export const generateAssetVisual = async (description: string, type: 'character' | 'location', visualSpec: VisualSpec): Promise<string> => {
+export const generateAssetVisual = async (
+    description: string,
+    type: 'character' | 'location',
+    visualSpec: VisualSpec,
+    modelId: ImageGenerationModelId
+): Promise<string> => {
     const prompt = type === 'character' 
         ? `专业角色设定图: ${description}。
            要求: 三视图（包含正面、侧面、背面）。
            风格: ${visualSpec.promptStyle}。背景: 简单的纯色背景。`
         : `环境概念设计图: ${description}。风格: ${visualSpec.promptStyle}。`;
     
-    return await callVolcImage(prompt, "1:1");
+    return await callVolcImage(prompt, "1:1", modelId);
 }
