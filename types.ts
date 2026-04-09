@@ -97,6 +97,18 @@ export interface StoredImageRecord {
   updatedAt: string;
 }
 
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  assistantMode?: 'companion' | 'character';
+  assistantCharacterId?: string;
+}
+
+export interface RelationshipChatState {
+  messages: ChatMessage[];
+  scopeLabel?: string;
+}
+
 export interface NarrativeFacts {
   characters: string[];
   location: string;

@@ -71,6 +71,12 @@ const resolvePicDbPath = async (relativePath: string) => {
   return primaryPath;
 };
 
+const isStemMatch = (name: string, fileStem: string) => {
+  const ext = path.extname(name);
+  const baseName = path.basename(name, ext);
+  return baseName === fileStem || baseName.startsWith(`${fileStem}-`);
+};
+
 const attachLocalImageMiddlewares = (middlewares: any) => {
   middlewares.use('/pic_db', async (req: any, res: any, next: any) => {
     const requestPath = decodeURIComponent((req.url || '').split('?')[0]);
@@ -128,16 +134,16 @@ const attachLocalImageMiddlewares = (middlewares: any) => {
 
       const directory = path.join(PIC_DB_DIR, bookId, category, subcategory);
       await fsp.mkdir(directory, { recursive: true });
-      const fileName = `${fileStem}-${Date.now()}.${extension}`;
+      const fileName = `${fileStem}.${extension}`;
       const filePath = path.join(directory, fileName);
       const arrayBuffer = await upstreamResponse.arrayBuffer();
       await fsp.writeFile(filePath, Buffer.from(arrayBuffer));
 
-      // Keep only the latest generated file for the same entity/paragraph.
+      // Keep only the normalized file for the same entity/paragraph.
       const siblingFiles = await fsp.readdir(directory);
       await Promise.all(
         siblingFiles
-          .filter((name) => name !== fileName && name.startsWith(`${fileStem}-`))
+          .filter((name) => name !== fileName && isStemMatch(name, fileStem))
           .map(async (name) => {
             const siblingPath = path.join(directory, name);
             try {
@@ -276,8 +282,8 @@ const attachLocalImageMiddlewares = (middlewares: any) => {
 
       const entries = await fsp.readdir(directory);
       const matchedFile = entries
-        .filter((name) => name.startsWith(`${fileStem}-`))
-        .sort()
+        .filter((name) => isStemMatch(name, fileStem))
+        .sort((a, b) => Number(path.basename(a, path.extname(a)) === fileStem) - Number(path.basename(b, path.extname(b)) === fileStem))
         .at(-1);
 
       const localUrl = matchedFile
@@ -289,6 +295,81 @@ const attachLocalImageMiddlewares = (middlewares: any) => {
     } catch (error: any) {
       res.statusCode = 500;
       res.end(error?.message || 'Failed to find generated image');
+    }
+  });
+
+  middlewares.use('/api/normalize-generated-image', async (req: any, res: any, next: any) => {
+    if (req.method !== 'POST') {
+      next();
+      return;
+    }
+
+    try {
+      const chunks: Buffer[] = [];
+      for await (const chunk of req) {
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      }
+
+      const body = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
+      const localUrl = String(body.localUrl || '');
+      const targetBookFolder = sanitizeSegment(String(body.targetBookFolder || ''));
+      const category = sanitizeSegment(String(body.category || 'misc'));
+      const subcategory = sanitizeSegment(String(body.subcategory || 'misc'));
+      const fileStem = sanitizeSegment(String(body.fileStem || 'image'));
+
+      if (!localUrl.startsWith('/pic_db/')) {
+        res.statusCode = 400;
+        res.end('localUrl must start with /pic_db/');
+        return;
+      }
+
+      const relativePath = decodeURIComponent(localUrl.replace(/^\/pic_db\//, ''));
+      const sourcePath = await resolvePicDbPath(relativePath);
+      if (!sourcePath.startsWith(PIC_DB_DIR) || !fs.existsSync(sourcePath) || fs.statSync(sourcePath).isDirectory()) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ localUrl }));
+        return;
+      }
+
+      const extension = path.extname(sourcePath) || '.png';
+      const targetDirectory = path.join(PIC_DB_DIR, targetBookFolder, category, subcategory);
+      const targetFileName = `${fileStem}${extension}`;
+      const targetPath = path.join(targetDirectory, targetFileName);
+
+      await fsp.mkdir(targetDirectory, { recursive: true });
+
+      const siblingFiles = await fsp.readdir(targetDirectory).catch(() => []);
+      await Promise.all(
+        siblingFiles
+          .filter((name) => isStemMatch(name, fileStem) && name !== targetFileName)
+          .map(async (name) => {
+            try {
+              await fsp.unlink(path.join(targetDirectory, name));
+            } catch {
+              // Best-effort cleanup.
+            }
+          })
+      );
+
+      if (sourcePath !== targetPath) {
+        try {
+          await fsp.unlink(targetPath);
+        } catch (error: any) {
+          if (error?.code !== 'ENOENT') {
+            throw error;
+          }
+        }
+
+        await fsp.rename(sourcePath, targetPath);
+        await removeEmptyDirectories(path.dirname(sourcePath));
+      }
+
+      const nextLocalUrl = `/pic_db/${[targetBookFolder, category, subcategory, targetFileName].map(encodeURIComponent).join('/')}`;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ localUrl: nextLocalUrl }));
+    } catch (error: any) {
+      res.statusCode = 500;
+      res.end(error?.message || 'Failed to normalize generated image');
     }
   });
 

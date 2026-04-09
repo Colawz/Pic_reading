@@ -30,6 +30,14 @@ interface FindGeneratedImageParams {
   fileStem: string;
 }
 
+interface NormalizeGeneratedImageParams {
+  localUrl: string;
+  targetBookFolder: string;
+  category: 'assets' | 'illustrations' | 'covers';
+  subcategory: string;
+  fileStem: string;
+}
+
 export const saveGeneratedImageLocally = async ({
   remoteUrl,
   bookId,
@@ -149,6 +157,33 @@ export const findGeneratedImageLocally = async ({
 
   const data = await response.json() as { localUrl: string | null };
   return data.localUrl;
+};
+
+export const normalizeGeneratedImageLocally = async ({
+  localUrl,
+  targetBookFolder,
+  category,
+  subcategory,
+  fileStem,
+}: NormalizeGeneratedImageParams): Promise<{ localUrl: string }> => {
+  if (!localUrl.startsWith('/pic_db/')) {
+    return { localUrl };
+  }
+
+  const response = await fetch('/api/normalize-generated-image', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ localUrl, targetBookFolder, category, subcategory, fileStem }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || '规范化本地图片命名失败');
+  }
+
+  return response.json() as Promise<{ localUrl: string }>;
 };
 
 export const isLocalPicDbUrl = (url?: string) => Boolean(url && url.startsWith('/pic_db/'));

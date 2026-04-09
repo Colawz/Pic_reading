@@ -1,27 +1,42 @@
 
-import React, { useState, useMemo } from 'react';
-import { Character, Relationship, Book } from '../types';
-import { User, Share2, Info, ArrowRight, Edit2, Check, X, Plus, Trash2 } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Character, Relationship, Book, Illustration, RelationshipChatState } from '../types';
+import { chatWithBookRole } from '../services/aiService';
+import { User, Share2, Info, ArrowRight, Edit2, X, Plus, Trash2, Sparkles, Loader2, MessageCircle, Send, Bot, RotateCcw } from 'lucide-react';
 
 interface SocialNetworkProps {
   books: Book[];
   characters: Character[];
   relationships: Relationship[];
+  relationshipChats: Record<string, RelationshipChatState>;
+  illustrations: Record<string, Illustration>;
   onAddRelationship: (rel: Relationship) => void;
   onUpdateRelationship: (id: string, updates: Partial<Relationship>) => void;
   onDeleteRelationship: (id: string) => void;
+  onGenerateRelationshipsFromBook: (bookId: string) => Promise<{ chapterTitle: string; relationshipCount: number; scopeLabel: string }>;
+  onUpdateRelationshipChat: (bookId: string, chatState: RelationshipChatState) => void;
 }
 
 export const SocialNetwork: React.FC<SocialNetworkProps> = ({
   books,
   characters,
   relationships,
+  relationshipChats,
+  illustrations,
   onAddRelationship,
   onUpdateRelationship,
-  onDeleteRelationship
+  onDeleteRelationship,
+  onGenerateRelationshipsFromBook,
+  onUpdateRelationshipChat
 }) => {
   const [selectedBookId, setSelectedBookId] = useState<string>(books[0]?.id || 'all');
   const [focusedCharId, setFocusedCharId] = useState<string | null>(null);
+  const [isGeneratingByLlm, setIsGeneratingByLlm] = useState(false);
+  const [generationHint, setGenerationHint] = useState('');
+  const [chatRole, setChatRole] = useState<string>('companion');
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
+  const [isChatting, setIsChatting] = useState(false);
   
   // Creation state
   const [isAddingRel, setIsAddingRel] = useState(false);
@@ -36,6 +51,7 @@ export const SocialNetwork: React.FC<SocialNetworkProps> = ({
   const [editDesc, setEditDesc] = useState('');
 
   const filteredBooks = books;
+  const selectedBook = filteredBooks.find(book => book.id === selectedBookId);
   
   const bookCharacters = useMemo(() => 
     selectedBookId === 'all' ? characters : characters.filter(c => c.bookId === selectedBookId),
@@ -53,6 +69,54 @@ export const SocialNetwork: React.FC<SocialNetworkProps> = ({
     }
     return bookCharacters[0];
   }, [bookCharacters, focusedCharId]);
+
+  const currentChatCharacter = useMemo(
+    () => bookCharacters.find(character => character.id === chatRole),
+    [bookCharacters, chatRole]
+  );
+
+  const getAssistantAvatar = (message: { assistantMode?: 'companion' | 'character'; assistantCharacterId?: string }) => {
+    if (message.assistantMode === 'character' && message.assistantCharacterId) {
+      return bookCharacters.find(character => character.id === message.assistantCharacterId);
+    }
+    return null;
+  };
+
+  const latestIllustratedChapterIndex = useMemo(() => {
+    if (!selectedBook) return -1;
+    return selectedBook.chapters.reduce((latestIndex, chapter, chapterIndex) => {
+      const hasCompletedIllustration = chapter.paragraphs.some(paragraph => {
+        const illustration = illustrations[paragraph.id];
+        return illustration?.status === 'completed' && Boolean(illustration.imageUrl);
+      });
+      return hasCompletedIllustration ? chapterIndex : latestIndex;
+    }, -1);
+  }, [selectedBook, illustrations]);
+
+  const readingScopeLabel = useMemo(() => {
+    if (!selectedBook || latestIllustratedChapterIndex < 0) return '';
+    return `这是到${selectedBook.chapters[latestIllustratedChapterIndex].title}为止的阅读进度`;
+  }, [selectedBook, latestIllustratedChapterIndex]);
+
+  useEffect(() => {
+    setGenerationHint('');
+    setChatInput('');
+    setChatRole('companion');
+    const persistedChat = selectedBookId === 'all' ? undefined : relationshipChats[selectedBookId];
+    setChatMessages(
+      persistedChat?.messages?.length
+        ? persistedChat.messages
+        : [
+            {
+              role: 'assistant',
+              assistantMode: 'companion',
+              content: selectedBookId === 'all'
+                ? '先选择一本书，我再结合这本书的角色设定和关系与你聊天。'
+                : '可以问我剧情理解、人物关系，也可以切换成书中角色和你对话。'
+            }
+          ]
+    );
+  }, [selectedBookId, relationshipChats]);
 
   // Radiant Graph Layout Logic (Simple Circle)
   const relatedLinks = useMemo(() => {
@@ -109,6 +173,121 @@ export const SocialNetwork: React.FC<SocialNetworkProps> = ({
     }
   };
 
+  const handleGenerateByLlm = async () => {
+    if (selectedBookId === 'all') {
+      setGenerationHint('请先选择一本具体书籍，再生成关系图。');
+      return;
+    }
+
+    setIsGeneratingByLlm(true);
+    setGenerationHint('');
+
+    try {
+      const result = await onGenerateRelationshipsFromBook(selectedBookId);
+      onUpdateRelationshipChat(selectedBookId, {
+        messages: relationshipChats[selectedBookId]?.messages?.length
+          ? relationshipChats[selectedBookId].messages
+          : chatMessages,
+        scopeLabel: result.scopeLabel,
+      });
+      setGenerationHint(`已生成 ${result.relationshipCount} 条关系，范围截至 ${result.chapterTitle}。`);
+      setFocusedCharId(null);
+    } catch (error: any) {
+      setGenerationHint(error?.message || '关系图生成失败。');
+    } finally {
+      setIsGeneratingByLlm(false);
+    }
+  };
+
+  const handleSendChat = async () => {
+    const trimmedInput = chatInput.trim();
+    if (!trimmedInput || !selectedBook || isChatting) {
+      return;
+    }
+
+    const nextHistory = [...chatMessages, { role: 'user' as const, content: trimmedInput }];
+    setChatMessages(nextHistory);
+    setChatInput('');
+    setIsChatting(true);
+    const roleCharacter = chatRole === 'companion' ? undefined : bookCharacters.find(character => character.id === chatRole);
+
+    try {
+      const roleRelationships = roleCharacter
+        ? bookRelationships.filter(rel => rel.sourceId === roleCharacter.id || rel.targetId === roleCharacter.id)
+        : bookRelationships;
+      const scopedChapters = roleCharacter
+        ? (latestIllustratedChapterIndex >= 0 ? selectedBook.chapters.slice(0, latestIllustratedChapterIndex + 1) : [])
+        : selectedBook.chapters;
+      const bookText = scopedChapters
+        .map(chapter => `${chapter.title}\n${chapter.paragraphs.map(paragraph => paragraph.text).join('\n')}`)
+        .join('\n\n');
+
+      const reply = await chatWithBookRole({
+        bookTitle: selectedBook.title,
+        bookText,
+        roleMode: roleCharacter ? 'character' : 'companion',
+        roleCharacter,
+        relatedRelationships: roleRelationships,
+        history: nextHistory,
+        userMessage: trimmedInput,
+        readingScopeLabel: roleCharacter ? readingScopeLabel : `整本《${selectedBook.title}》`,
+        hasReadingProgress: latestIllustratedChapterIndex >= 0,
+      });
+
+      setChatMessages(prev => {
+        const nextMessages = [...prev, {
+          role: 'assistant' as const,
+          content: reply,
+          assistantMode: roleCharacter ? 'character' as const : 'companion' as const,
+          assistantCharacterId: roleCharacter?.id,
+        }];
+        onUpdateRelationshipChat(selectedBook.id, {
+          messages: nextMessages,
+          scopeLabel: relationshipChats[selectedBook.id]?.scopeLabel || readingScopeLabel,
+        });
+        return nextMessages;
+      });
+    } catch (error: any) {
+      setChatMessages(prev => {
+        const nextMessages = [...prev, {
+          role: 'assistant' as const,
+          content: error?.message || '对话失败，请稍后重试。',
+          assistantMode: roleCharacter ? 'character' as const : 'companion' as const,
+          assistantCharacterId: roleCharacter?.id,
+        }];
+        onUpdateRelationshipChat(selectedBook.id, {
+          messages: nextMessages,
+          scopeLabel: relationshipChats[selectedBook.id]?.scopeLabel || readingScopeLabel,
+        });
+        return nextMessages;
+      });
+    } finally {
+      setIsChatting(false);
+    }
+  };
+
+  const handleClearChat = () => {
+    const initialMessages = [
+      {
+        role: 'assistant' as const,
+        assistantMode: 'companion' as const,
+        content: selectedBookId === 'all'
+          ? '先选择一本书，我再结合这本书的角色设定和关系与你聊天。'
+          : '可以问我剧情理解、人物关系，也可以切换成书中角色和你对话。'
+      }
+    ];
+
+    setChatMessages(initialMessages);
+    setChatInput('');
+
+    if (selectedBookId !== 'all') {
+      onUpdateRelationshipChat(selectedBookId, {
+        messages: initialMessages,
+        scopeLabel: relationshipChats[selectedBookId]?.scopeLabel,
+      });
+    }
+  };
+
   // Node position constant
   const RADIUS = 220;
 
@@ -118,8 +297,22 @@ export const SocialNetwork: React.FC<SocialNetworkProps> = ({
         <div>
             <h2 className="text-2xl font-bold text-slate-900">角色社会关系图</h2>
             <p className="text-slate-500">追踪角色之间的羁绊、冲突与成长轨迹。</p>
+            {selectedBookId !== 'all' && (
+              <p className="text-xs text-slate-500 mt-2">
+                {relationshipChats[selectedBookId]?.scopeLabel || '可根据已生图章节，让 LLM 从书籍开头读到当前进度并重建关系图。'}
+              </p>
+            )}
         </div>
         <div className="flex items-center gap-3">
+          <button
+            onClick={handleGenerateByLlm}
+            disabled={selectedBookId === 'all' || isGeneratingByLlm}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-bold shadow-sm hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title={selectedBook ? `从《${selectedBook.title}》开头读到已生图章节，生成当前阶段关系图` : '请先选择一本书'}
+          >
+            {isGeneratingByLlm ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+            {isGeneratingByLlm ? '正在阅读并生成' : 'AI 生成关系图'}
+          </button>
           <button 
             onClick={() => {
               setIsAddingRel(true);
@@ -134,6 +327,7 @@ export const SocialNetwork: React.FC<SocialNetworkProps> = ({
             onChange={(e) => {
               setSelectedBookId(e.target.value);
               setFocusedCharId(null);
+              setGenerationHint('');
             }} 
             className="px-3 py-2 rounded-lg border bg-white text-sm focus:ring-2 focus:ring-brand-500"
           >
@@ -142,6 +336,16 @@ export const SocialNetwork: React.FC<SocialNetworkProps> = ({
           </select>
         </div>
       </div>
+
+      {generationHint && (
+        <div className={`mb-4 rounded-xl border px-4 py-3 text-sm ${
+          generationHint.includes('失败') || generationHint.includes('请先选择') || generationHint.includes('无法')
+            ? 'bg-amber-50 border-amber-200 text-amber-700'
+            : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+        }`}>
+          {generationHint}
+        </div>
+      )}
 
       <div className="flex flex-1 gap-6 overflow-hidden min-h-[600px]">
         {/* Left: Character List */}
@@ -327,6 +531,137 @@ export const SocialNetwork: React.FC<SocialNetworkProps> = ({
                     <p className="text-xs italic">尚未定义该角色的任何关系。</p>
                   </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        <div className="w-[360px] bg-white rounded-xl border border-slate-200 overflow-hidden flex flex-col shrink-0">
+          <div className="px-4 py-3 border-b bg-slate-50">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-sm font-bold text-slate-800">
+                <MessageCircle size={16} />
+                AI 对话
+              </div>
+              <button
+                onClick={handleClearChat}
+                disabled={isChatting}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <RotateCcw size={12} />
+                清空对话
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              {selectedBook ? `当前作品：《${selectedBook.title}》` : '请先选择一本书'}
+            </p>
+            {selectedBook && currentChatCharacter && (
+              <p className="text-xs text-slate-500 mt-1">
+                当前角色可知范围：{readingScopeLabel ? `截至${selectedBook.chapters[latestIllustratedChapterIndex].title}` : '尚未形成阅读进度'}
+              </p>
+            )}
+          </div>
+
+          <div className="p-4 border-b space-y-3">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5">对话角色</label>
+              <select
+                value={chatRole}
+                onChange={(e) => setChatRole(e.target.value)}
+                disabled={!selectedBook}
+                className="w-full px-3 py-2 rounded-lg border bg-white text-sm focus:ring-2 focus:ring-brand-500 disabled:bg-slate-50 disabled:text-slate-400"
+              >
+                <option value="companion">AI 伴读</option>
+                {bookCharacters.map(character => (
+                  <option key={character.id} value={character.id}>{`扮演：${character.name}`}</option>
+                ))}
+              </select>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 leading-relaxed">
+              {currentChatCharacter
+                ? `当前将以“${currentChatCharacter.name}”的身份回答，并仅读取${readingScopeLabel || '当前阅读进度之前'}的剧情、角色设定与相关社会关系。`
+                : '当前将以伴读身份回答，可以解释剧情、梳理关系、陪你阅读。'}
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/70">
+            {chatMessages.map((message, index) => (
+              <div
+                key={`${message.role}-${index}`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                {message.role === 'assistant' ? (
+                  <div className="flex items-start gap-3 max-w-[92%]">
+                    <div className="w-9 h-9 rounded-full overflow-hidden bg-slate-900 text-white flex items-center justify-center shrink-0 border border-slate-200 shadow-sm">
+                      {(() => {
+                        const avatarCharacter = getAssistantAvatar(message);
+                        return avatarCharacter?.imageUrl
+                          ? <img src={avatarCharacter.imageUrl} alt={avatarCharacter.name} className="w-full h-full object-cover" />
+                          : <Bot size={18} />;
+                      })()}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[11px] font-medium text-slate-500 mb-1">
+                        {(() => {
+                          const avatarCharacter = getAssistantAvatar(message);
+                          return avatarCharacter ? avatarCharacter.name : 'AI 伴读';
+                        })()}
+                      </div>
+                      <div className="rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm bg-white border border-slate-200 text-slate-700">
+                        {message.content}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm bg-brand-600 text-white">
+                    {message.content}
+                  </div>
+                )}
+              </div>
+            ))}
+            {isChatting && (
+              <div className="flex justify-start">
+                <div className="flex items-start gap-3 max-w-[92%]">
+                  <div className="w-9 h-9 rounded-full overflow-hidden bg-slate-900 text-white flex items-center justify-center shrink-0 border border-slate-200 shadow-sm">
+                    {currentChatCharacter?.imageUrl
+                      ? <img src={currentChatCharacter.imageUrl} alt={currentChatCharacter.name} className="w-full h-full object-cover" />
+                      : <Bot size={18} />}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[11px] font-medium text-slate-500 mb-1">
+                      {currentChatCharacter?.name || 'AI 伴读'}
+                    </div>
+                    <div className="rounded-2xl px-4 py-3 text-sm bg-white border border-slate-200 text-slate-500 shadow-sm flex items-center gap-2">
+                      <Loader2 size={14} className="animate-spin" />
+                      正在思考...
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="p-4 border-t bg-white">
+            <div className="flex gap-2">
+              <textarea
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    void handleSendChat();
+                  }
+                }}
+                disabled={!selectedBook || isChatting}
+                placeholder={selectedBook ? '输入问题，按 Enter 发送...' : '请先选择一本书'}
+                className="flex-1 min-h-[88px] resize-none px-3 py-2 rounded-xl border text-sm focus:ring-2 focus:ring-brand-500 outline-none disabled:bg-slate-50 disabled:text-slate-400"
+              />
+              <button
+                onClick={() => void handleSendChat()}
+                disabled={!selectedBook || !chatInput.trim() || isChatting}
+                className="self-end h-11 w-11 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Send size={16} />
+              </button>
             </div>
           </div>
         </div>

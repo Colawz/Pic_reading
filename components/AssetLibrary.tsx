@@ -12,7 +12,7 @@ interface AssetLibraryProps {
   imageModels: Array<{ id: ImageGenerationModelId; label: string; description: string }>;
   setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
   setLocations: React.Dispatch<React.SetStateAction<Location[]>>;
-  onGenerateAssetVisual: (description: string, type: 'character' | 'location', bookId: string, entityId: string, specOverride?: VisualSpec) => Promise<{ localUrl: string; remoteUrl: string }>;
+  onGenerateAssetVisual: (description: string, type: 'character' | 'location', bookId: string, fileStem: string, specOverride?: VisualSpec) => Promise<{ localUrl: string; remoteUrl: string }>;
   onDeleteCharacter: (characterId: string) => Promise<void>;
   onDeleteLocation: (locationId: string) => Promise<void>;
   onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
@@ -57,13 +57,15 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
     }
 
     try {
-      const targetBookId = type === 'character'
-        ? characters.find(c => c.id === id)?.bookId
-        : locations.find(l => l.id === id)?.bookId;
+      const targetItem = type === 'character'
+        ? characters.find(c => c.id === id)
+        : locations.find(l => l.id === id);
+      const targetBookId = targetItem?.bookId;
+      const itemName = targetItem?.name || id;
 
       if (!targetBookId) throw new Error('未找到图片所属书籍');
 
-      const { localUrl, remoteUrl } = await onGenerateAssetVisual(desc, type, targetBookId, id, visualSpec);
+      const { localUrl, remoteUrl } = await onGenerateAssetVisual(desc, type, targetBookId, itemName, visualSpec);
       if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : c));
       else setLocations(prev => prev.map(l => l.id === id ? { ...l, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : l));
     } catch (e) {

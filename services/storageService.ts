@@ -1,4 +1,4 @@
-import { Book, Character, Illustration, Location, Relationship, VisualSpec, ImageGenerationModelId, ImageGenerationStats, StoredImageRecord } from "../types";
+import { Book, Character, Illustration, Location, Relationship, VisualSpec, ImageGenerationModelId, ImageGenerationStats, StoredImageRecord, RelationshipChatState } from "../types";
 
 const DB_NAME = "zhihui-reading-db";
 const DB_VERSION = 2;
@@ -13,6 +13,7 @@ export interface PersistedAppState {
   characters: Character[];
   locations: Location[];
   relationships: Relationship[];
+  relationshipChats?: Record<string, RelationshipChatState>;
   illustrations: Record<string, Illustration>;
   currentBookId: string | null;
   preferredVisualSpecId: string | null;
