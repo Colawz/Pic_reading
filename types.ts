@@ -48,7 +48,8 @@ export interface Character {
   name: string;
   description: string;
   visualSummary: string; 
-  imageUrl?: string; 
+  imageUrl?: string;
+  referenceImageUrl?: string;
   locked: boolean;
   generationStatus?: 'idle' | 'generating' | 'success' | 'failed';
 }
@@ -69,6 +70,7 @@ export interface Location {
   description: string;
   visualSummary: string;
   imageUrl?: string;
+  referenceImageUrl?: string;
   locked: boolean;
   generationStatus?: 'idle' | 'generating' | 'success' | 'failed';
 }
@@ -81,6 +83,18 @@ export interface Illustration {
   promptUsed?: string;
   extractedFacts?: NarrativeFacts;
   error?: string;
+}
+
+export interface StoredImageRecord {
+  id: string;
+  bookId: string;
+  sourceType: 'character' | 'location' | 'illustration';
+  sourceId: string;
+  localUrl?: string;
+  remoteUrl?: string;
+  status: 'pending' | 'generating' | 'completed' | 'failed';
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface NarrativeFacts {

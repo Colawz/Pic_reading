@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Book, Character, Location, Illustration, VisualSpec, ViewMode, Relationship, ImageGenerationModelId, ImageGenerationStats, NarrativeFacts } from './types';
+import { Book, Character, Location, Illustration, VisualSpec, ViewMode, Relationship, ImageGenerationModelId, ImageGenerationStats, NarrativeFacts, StoredImageRecord } from './types';
 import { VISUAL_PRESETS, SAMPLE_BOOKS, createBook, IMAGE_GENERATION_MODELS } from './constants';
 import { Layout } from './components/Layout';
 import { Reader } from './components/Reader';
@@ -8,7 +8,8 @@ import { AssetLibrary } from './components/AssetLibrary';
 import { BookShelf } from './components/BookShelf';
 import { SocialNetwork } from './components/SocialNetwork';
 import { generateAssetVisual, generateIllustration } from './services/aiService';
-import { loadPersistedAppState, savePersistedAppState } from './services/storageService';
+import { checkGeneratedImageLocally, deleteGeneratedImageLocally, isLocalPicDbUrl, saveGeneratedImageLocally } from './services/localImageService';
+import { loadPersistedAppState, savePersistedAppState, saveStoredImageRecords } from './services/storageService';
 import { Plus, Trash2, Sparkles, Wand2 } from 'lucide-react';
 
 const INITIAL_CHARACTERS: Character[] = [
@@ -229,6 +230,70 @@ const DEFAULT_IMAGE_GENERATION_STATS: ImageGenerationStats = {
   lastGeneratedAt: null,
 };
 
+const findBookIdByParagraphId = (books: Book[], paragraphId: string) => {
+  for (const book of books) {
+    for (const chapter of book.chapters) {
+      if (chapter.paragraphs.some(paragraph => paragraph.id === paragraphId)) {
+        return book.id;
+      }
+    }
+  }
+
+  return undefined;
+};
+
+const buildStoredImageRecords = (
+  books: Book[],
+  characters: Character[],
+  locations: Location[],
+  illustrations: Record<string, Illustration>
+): StoredImageRecord[] => {
+  const now = new Date().toISOString();
+
+  const characterRecords = characters
+    .filter(character => character.imageUrl || character.referenceImageUrl)
+    .map<StoredImageRecord>(character => ({
+      id: `character:${character.id}`,
+      bookId: character.bookId,
+      sourceType: 'character',
+      sourceId: character.id,
+      localUrl: character.imageUrl,
+      remoteUrl: character.referenceImageUrl,
+      status: character.generationStatus === 'success' ? 'completed' : (character.generationStatus || 'pending'),
+      createdAt: now,
+      updatedAt: now,
+    }));
+
+  const locationRecords = locations
+    .filter(location => location.imageUrl || location.referenceImageUrl)
+    .map<StoredImageRecord>(location => ({
+      id: `location:${location.id}`,
+      bookId: location.bookId,
+      sourceType: 'location',
+      sourceId: location.id,
+      localUrl: location.imageUrl,
+      remoteUrl: location.referenceImageUrl,
+      status: location.generationStatus === 'success' ? 'completed' : (location.generationStatus || 'pending'),
+      createdAt: now,
+      updatedAt: now,
+    }));
+
+  const illustrationRecords = Object.values(illustrations)
+    .filter(illustration => illustration.imageUrl)
+    .map<StoredImageRecord>(illustration => ({
+      id: `illustration:${illustration.id}`,
+      bookId: findBookIdByParagraphId(books, illustration.paragraphId) || 'unknown-book',
+      sourceType: 'illustration',
+      sourceId: illustration.paragraphId,
+      localUrl: illustration.imageUrl,
+      status: illustration.status,
+      createdAt: now,
+      updatedAt: now,
+    }));
+
+  return [...characterRecords, ...locationRecords, ...illustrationRecords];
+};
+
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('home');
   const [books, setBooks] = useState<Book[]>(SAMPLE_BOOKS);
@@ -249,6 +314,7 @@ const App: React.FC = () => {
     negatives: 'text, watermark, logo, blur'
   });
   const hasHydratedRef = useRef(false);
+  const hasReconciledImagesRef = useRef(false);
 
   const currentBook = books.find(b => b.id === currentBookId) || null;
   const currentImageModel = IMAGE_GENERATION_MODELS.find(model => model.id === imageModelId) || IMAGE_GENERATION_MODELS[0];
@@ -316,18 +382,22 @@ const App: React.FC = () => {
 
     const persist = async () => {
       try {
-        await savePersistedAppState({
-          books,
-          availableSpecs,
-          characters,
-          locations,
-          relationships,
-          illustrations,
-          currentBookId,
-          preferredVisualSpecId: visualSpec.id,
-          imageModelId,
-          imageGenerationStats,
-        });
+        const imageRecords = buildStoredImageRecords(books, characters, locations, illustrations);
+        await Promise.all([
+          savePersistedAppState({
+            books,
+            availableSpecs,
+            characters,
+            locations,
+            relationships,
+            illustrations,
+            currentBookId,
+            preferredVisualSpecId: visualSpec.id,
+            imageModelId,
+            imageGenerationStats,
+          }),
+          saveStoredImageRecords(imageRecords),
+        ]);
       } catch (error) {
         console.error("Failed to persist app state to IndexedDB:", error);
       }
@@ -335,6 +405,134 @@ const App: React.FC = () => {
 
     void persist();
   }, [books, availableSpecs, characters, locations, relationships, illustrations, currentBookId, visualSpec.id, imageModelId, imageGenerationStats]);
+
+  useEffect(() => {
+    if (!hasHydratedRef.current || hasReconciledImagesRef.current) return;
+    hasReconciledImagesRef.current = true;
+
+    const reconcilePersistedImages = async () => {
+      try {
+        const characterUpdates = await Promise.all(characters.map(async (character) => {
+          const remoteUrl = character.referenceImageUrl || (!isLocalPicDbUrl(character.imageUrl) ? character.imageUrl : undefined);
+          if (!remoteUrl) {
+            return null;
+          }
+
+          const localExists = isLocalPicDbUrl(character.imageUrl)
+            ? await checkGeneratedImageLocally({ localUrl: character.imageUrl! }).catch(() => false)
+            : false;
+
+          if (localExists) {
+            return null;
+          }
+
+          const { localUrl } = await saveGeneratedImageLocally({
+            remoteUrl,
+            bookId: character.bookId,
+            category: 'assets',
+            subcategory: 'characters',
+            fileStem: character.id,
+          });
+
+          return { id: character.id, localUrl, remoteUrl };
+        }));
+
+        if (characterUpdates.some(Boolean)) {
+          setCharacters(prev => prev.map(character => {
+            const update = characterUpdates.find(item => item?.id === character.id);
+            return update ? { ...character, imageUrl: update.localUrl, referenceImageUrl: update.remoteUrl } : character;
+          }));
+        }
+
+        const locationUpdates = await Promise.all(locations.map(async (location) => {
+          const remoteUrl = location.referenceImageUrl || (!isLocalPicDbUrl(location.imageUrl) ? location.imageUrl : undefined);
+          if (!remoteUrl) {
+            return null;
+          }
+
+          const localExists = isLocalPicDbUrl(location.imageUrl)
+            ? await checkGeneratedImageLocally({ localUrl: location.imageUrl! }).catch(() => false)
+            : false;
+
+          if (localExists) {
+            return null;
+          }
+
+          const { localUrl } = await saveGeneratedImageLocally({
+            remoteUrl,
+            bookId: location.bookId,
+            category: 'assets',
+            subcategory: 'locations',
+            fileStem: location.id,
+          });
+
+          return { id: location.id, localUrl, remoteUrl };
+        }));
+
+        if (locationUpdates.some(Boolean)) {
+          setLocations(prev => prev.map(location => {
+            const update = locationUpdates.find(item => item?.id === location.id);
+            return update ? { ...location, imageUrl: update.localUrl, referenceImageUrl: update.remoteUrl } : location;
+          }));
+        }
+
+        const illustrationEntries = Object.values(illustrations);
+        const illustrationUpdates = await Promise.all(illustrationEntries.map(async (illustration) => {
+          const currentUrl = illustration.imageUrl;
+          if (!currentUrl) {
+            return null;
+          }
+
+          const isLocalUrl = isLocalPicDbUrl(currentUrl);
+          const localExists = isLocalPicDbUrl(currentUrl)
+            ? await checkGeneratedImageLocally({ localUrl: currentUrl }).catch(() => false)
+            : false;
+
+          if (isLocalUrl && localExists) {
+            return null;
+          }
+
+          if (isLocalUrl) {
+            return null;
+          }
+
+          const bookId = findBookIdByParagraphId(books, illustration.paragraphId);
+          if (!bookId) {
+            return null;
+          }
+
+          const { localUrl } = await saveGeneratedImageLocally({
+            remoteUrl: currentUrl,
+            bookId,
+            category: 'illustrations',
+            subcategory: 'paragraphs',
+            fileStem: illustration.paragraphId,
+          });
+
+          return { paragraphId: illustration.paragraphId, localUrl };
+        }));
+
+        if (illustrationUpdates.some(Boolean)) {
+          setIllustrations(prev => {
+            const next = { ...prev };
+            illustrationUpdates.forEach(update => {
+              if (update && next[update.paragraphId]) {
+                next[update.paragraphId] = {
+                  ...next[update.paragraphId],
+                  imageUrl: update.localUrl,
+                };
+              }
+            });
+            return next;
+          });
+        }
+      } catch (error) {
+        console.error('Failed to reconcile persisted local images:', error);
+      }
+    };
+
+    void reconcilePersistedImages();
+  }, [books, characters, locations, illustrations]);
 
   const incrementImageGenerationStats = (category: 'asset' | 'illustration', modelId: ImageGenerationModelId) => {
     setImageGenerationStats(prev => ({
@@ -352,21 +550,32 @@ const App: React.FC = () => {
   const handleGenerateAssetVisual = async (
     description: string,
     type: 'character' | 'location',
+    bookId: string,
+    entityId: string,
     specOverride?: VisualSpec
   ) => {
-    const imageUrl = await generateAssetVisual(description, type, specOverride || visualSpec, imageModelId);
+    const remoteUrl = await generateAssetVisual(description, type, specOverride || visualSpec, imageModelId);
+    const { localUrl } = await saveGeneratedImageLocally({
+      remoteUrl,
+      bookId,
+      category: 'assets',
+      subcategory: type === 'character' ? 'characters' : 'locations',
+      fileStem: entityId,
+    });
     incrementImageGenerationStats('asset', imageModelId);
-    return imageUrl;
+    return { localUrl, remoteUrl };
   };
 
   const handleGenerateIllustration = async (
+    bookId: string,
+    paragraphId: string,
     facts: NarrativeFacts,
     spec: VisualSpec,
     illustrationCharacters: Character[],
     illustrationLocations: Location[],
     originalText?: string
   ) => {
-    const imageUrl = await generateIllustration(
+    const remoteUrl = await generateIllustration(
       facts,
       spec,
       illustrationCharacters,
@@ -374,8 +583,15 @@ const App: React.FC = () => {
       imageModelId,
       originalText
     );
+    const { localUrl } = await saveGeneratedImageLocally({
+      remoteUrl,
+      bookId,
+      category: 'illustrations',
+      subcategory: 'paragraphs',
+      fileStem: paragraphId,
+    });
     incrementImageGenerationStats('illustration', imageModelId);
-    return imageUrl;
+    return localUrl;
   };
 
   const handleSelectBook = (book: Book) => {
@@ -410,6 +626,28 @@ const App: React.FC = () => {
   };
 
   const handleAddIllustration = (ill: Illustration) => setIllustrations(prev => ({ ...prev, [ill.paragraphId]: ill }));
+
+  const cleanupLocalImage = async (localUrl?: string) => {
+    if (!localUrl || !localUrl.startsWith('/pic_db/')) {
+      return;
+    }
+
+    try {
+      await deleteGeneratedImageLocally({ localUrl });
+    } catch (error) {
+      console.error('Failed to delete local generated image:', error);
+    }
+  };
+
+  const handleDeleteIllustration = async (paragraphId: string) => {
+    const target = illustrations[paragraphId];
+    await cleanupLocalImage(target?.imageUrl);
+    setIllustrations(prev => {
+      const next = { ...prev };
+      delete next[paragraphId];
+      return next;
+    });
+  };
   
   const handleUpdateIllustration = (paragraphId: string, updates: Partial<Illustration>) => setIllustrations(prev => {
       const existing = prev[paragraphId];
@@ -443,9 +681,9 @@ const App: React.FC = () => {
 
       try {
         const visualSummary = existing ? (existing.visualSummary || existing.description) : char.visualSummary!;
-        const imageUrl = await handleGenerateAssetVisual(visualSummary, 'character');
-        setCharacters(prev => prev.map(c => c.id === targetId ? { ...c, imageUrl, locked: true, generationStatus: 'success' } : c));
-        return imageUrl;
+        const { localUrl, remoteUrl } = await handleGenerateAssetVisual(visualSummary, 'character', char.bookId!, targetId);
+        setCharacters(prev => prev.map(c => c.id === targetId ? { ...c, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : c));
+        return localUrl;
       } catch (e) {
         setCharacters(prev => prev.map(c => c.id === targetId ? { ...c, generationStatus: 'failed' } : c));
       }
@@ -477,8 +715,8 @@ const App: React.FC = () => {
 
       try {
         const visualSummary = existing ? (existing.visualSummary || existing.description) : loc.visualSummary!;
-        const imageUrl = await handleGenerateAssetVisual(visualSummary, 'location');
-        setLocations(prev => prev.map(l => l.id === targetId ? { ...l, imageUrl, locked: true, generationStatus: 'success' } : l));
+        const { localUrl, remoteUrl } = await handleGenerateAssetVisual(visualSummary, 'location', loc.bookId!, targetId);
+        setLocations(prev => prev.map(l => l.id === targetId ? { ...l, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : l));
       } catch (e) {
         setLocations(prev => prev.map(l => l.id === targetId ? { ...l, generationStatus: 'failed' } : l));
       }
@@ -500,6 +738,18 @@ const App: React.FC = () => {
   const handleAddRelationship = (rel: Relationship) => setRelationships(prev => [...prev, rel]);
   const handleUpdateRelationship = (id: string, updates: Partial<Relationship>) => setRelationships(prev => prev.map(r => r.id === id ? { ...r, ...updates } : r));
   const handleDeleteRelationship = (id: string) => setRelationships(prev => prev.filter(r => r.id !== id));
+
+  const handleDeleteCharacter = async (characterId: string) => {
+    const target = characters.find(character => character.id === characterId);
+    await cleanupLocalImage(target?.imageUrl);
+    setCharacters(prev => prev.filter(character => character.id !== characterId));
+  };
+
+  const handleDeleteLocation = async (locationId: string) => {
+    const target = locations.find(location => location.id === locationId);
+    await cleanupLocalImage(target?.imageUrl);
+    setLocations(prev => prev.filter(location => location.id !== locationId));
+  };
 
   const handleAddCustomStyle = (e: React.FormEvent) => {
     e.preventDefault();
@@ -541,6 +791,7 @@ const App: React.FC = () => {
           imageModels={IMAGE_GENERATION_MODELS}
           illustrations={illustrations}
           onAddIllustration={handleAddIllustration}
+          onDeleteIllustration={handleDeleteIllustration}
           onUpdateIllustration={handleUpdateIllustration}
           onDiscoverCharacter={handleDiscoverCharacter}
           onDiscoverLocation={handleDiscoverLocation}
@@ -562,6 +813,8 @@ const App: React.FC = () => {
           setCharacters={setCharacters}
           setLocations={setLocations}
           onGenerateAssetVisual={handleGenerateAssetVisual}
+          onDeleteCharacter={handleDeleteCharacter}
+          onDeleteLocation={handleDeleteLocation}
           onUpdateImageModel={setImageModelId}
           focusedBookId={currentBookId}
         />

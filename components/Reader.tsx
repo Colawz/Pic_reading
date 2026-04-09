@@ -4,7 +4,7 @@ import { Book, Character, Location, Illustration, VisualSpec, Relationship, Read
 import { analyzeNarrative, scanChapterForAssets, analyzeRelationships } from '../services/aiService';
 import { exportBookToHtml, exportBookToPdf } from '../services/exportService';
 import { BatchActionsModal } from './BatchActionsModal';
-import { Wand2, AlertCircle, Settings2, PlayCircle, Loader2, ChevronLeft, ChevronRight, ScanSearch, CheckCircle2, Circle, Layers, Palette, X, UserPlus, Info, Type } from 'lucide-react';
+import { Wand2, AlertCircle, Settings2, PlayCircle, Loader2, ChevronLeft, ChevronRight, ScanSearch, CheckCircle2, Circle, Layers, Palette, X, UserPlus, Info, Type, Trash2 } from 'lucide-react';
 
 interface ReaderProps {
   book: Book;
@@ -16,19 +16,20 @@ interface ReaderProps {
   imageModels: Array<{ id: ImageGenerationModelId; label: string; description: string }>;
   illustrations: Record<string, Illustration>;
   onAddIllustration: (ill: Illustration) => void;
+  onDeleteIllustration: (paragraphId: string) => void;
   onUpdateIllustration: (paragraphId: string, updates: Partial<Illustration>) => void;
   onDiscoverCharacter: (char: Character) => Promise<string | undefined>;
   onDiscoverLocation: (loc: Location) => Promise<void>;
   onDiscoverRelationships: (rels: Relationship[]) => void;
   onUpdateBookStyle: (bookId: string, styleId: string) => void;
   onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
-  onGenerateIllustration: (facts: NarrativeFacts, spec: VisualSpec, illustrationCharacters: Character[], illustrationLocations: Location[], originalText?: string) => Promise<string>;
+  onGenerateIllustration: (bookId: string, paragraphId: string, facts: NarrativeFacts, spec: VisualSpec, illustrationCharacters: Character[], illustrationLocations: Location[], originalText?: string) => Promise<string>;
   onOpenAssetsView: (bookId?: string) => void;
 }
 
 export const Reader: React.FC<ReaderProps> = ({
   book, characters, locations, visualSpec, availableSpecs, imageModelId, imageModels, illustrations,
-  onAddIllustration, onUpdateIllustration, onDiscoverCharacter, onDiscoverLocation, onDiscoverRelationships, onUpdateBookStyle, onUpdateImageModel, onGenerateIllustration, onOpenAssetsView
+  onAddIllustration, onDeleteIllustration, onUpdateIllustration, onDiscoverCharacter, onDiscoverLocation, onDiscoverRelationships, onUpdateBookStyle, onUpdateImageModel, onGenerateIllustration, onOpenAssetsView
 }) => {
   const BATCH_CONCURRENCY = 3;
   const [activeParagraphId, setActiveParagraphId] = useState<string | null>(null);
@@ -189,6 +190,8 @@ export const Reader: React.FC<ReaderProps> = ({
     locationPool: Location[]
   ) => {
     const imageUrl = await onGenerateIllustration(
+      book.id,
+      task.paragraph.id,
       task.facts,
       visualSpec,
       characterPool,
@@ -638,12 +641,21 @@ export const Reader: React.FC<ReaderProps> = ({
                       {ill.status === 'completed' && ill.imageUrl && (
                         <div className="relative">
                           <img src={ill.imageUrl} className="w-full h-auto object-cover max-h-[550px] transition-transform duration-700 group-hover/ill:scale-[1.02]" />
-                          <button
-                            onClick={() => handleGenerate(currentChapterIndex, pIdx)}
-                            className="absolute top-4 right-4 px-3 py-1.5 bg-white/90 backdrop-blur text-slate-700 rounded-lg text-xs font-bold shadow-sm hover:bg-white hover:text-brand-600 transition-colors"
-                          >
-                            重生成
-                          </button>
+                          <div className="absolute top-4 right-4 flex items-center gap-2">
+                            <button
+                              onClick={() => handleGenerate(currentChapterIndex, pIdx)}
+                              className="px-3 py-1.5 bg-white/90 backdrop-blur text-slate-700 rounded-lg text-xs font-bold shadow-sm hover:bg-white hover:text-brand-600 transition-colors"
+                            >
+                              重生成
+                            </button>
+                            <button
+                              onClick={() => onDeleteIllustration(paragraph.id)}
+                              className="p-2 bg-white/90 backdrop-blur text-slate-700 rounded-lg shadow-sm hover:bg-white hover:text-red-500 transition-colors"
+                              title="删除图片"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 opacity-0 group-hover/ill:opacity-100 transition-opacity">
                              {ill.extractedFacts && <p className="text-white text-xs italic">场景: {ill.extractedFacts.location} | 氛围: {ill.extractedFacts.mood}</p>}
                           </div>

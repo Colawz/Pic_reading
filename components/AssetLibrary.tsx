@@ -12,7 +12,9 @@ interface AssetLibraryProps {
   imageModels: Array<{ id: ImageGenerationModelId; label: string; description: string }>;
   setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
   setLocations: React.Dispatch<React.SetStateAction<Location[]>>;
-  onGenerateAssetVisual: (description: string, type: 'character' | 'location', specOverride?: VisualSpec) => Promise<string>;
+  onGenerateAssetVisual: (description: string, type: 'character' | 'location', bookId: string, entityId: string, specOverride?: VisualSpec) => Promise<{ localUrl: string; remoteUrl: string }>;
+  onDeleteCharacter: (characterId: string) => Promise<void>;
+  onDeleteLocation: (locationId: string) => Promise<void>;
   onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
   focusedBookId: string | null;
 }
@@ -27,6 +29,8 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
   setCharacters,
   setLocations,
   onGenerateAssetVisual,
+  onDeleteCharacter,
+  onDeleteLocation,
   onUpdateImageModel,
   focusedBookId,
 }) => {
@@ -53,13 +57,32 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
     }
 
     try {
-      const imageUrl = await onGenerateAssetVisual(desc, type, visualSpec);
-      if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, imageUrl, locked: true, generationStatus: 'success' } : c));
-      else setLocations(prev => prev.map(l => l.id === id ? { ...l, imageUrl, locked: true, generationStatus: 'success' } : l));
+      const targetBookId = type === 'character'
+        ? characters.find(c => c.id === id)?.bookId
+        : locations.find(l => l.id === id)?.bookId;
+
+      if (!targetBookId) throw new Error('未找到图片所属书籍');
+
+      const { localUrl, remoteUrl } = await onGenerateAssetVisual(desc, type, targetBookId, id, visualSpec);
+      if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : c));
+      else setLocations(prev => prev.map(l => l.id === id ? { ...l, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : l));
     } catch (e) {
       if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, generationStatus: 'failed' } : c));
       else setLocations(prev => prev.map(l => l.id === id ? { ...l, generationStatus: 'failed' } : l));
       alert("生成失败。");
+    }
+  };
+
+  const handleDeleteAsset = async (id: string, type: 'character' | 'location') => {
+    try {
+      if (type === 'character') {
+        await onDeleteCharacter(id);
+      } else {
+        await onDeleteLocation(id);
+      }
+    } catch (error) {
+      console.error(error);
+      alert('删除失败，请稍后重试。');
     }
   };
 
@@ -135,7 +158,7 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
                 {item.generationStatus === 'success' && item.imageUrl && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold"><Sparkles size={12} /> 已完成</span>}
               </div>
               <p className="text-xs text-slate-500 line-clamp-3 mb-3">{item.visualSummary || item.description}</p>
-              <div className="flex justify-end border-t pt-2"><button onClick={() => activeTab === 'characters' ? setCharacters(p => p.filter(c => c.id !== item.id)) : setLocations(p => p.filter(l => l.id !== item.id))} className="text-red-400 hover:text-red-600"><Trash2 size={14} /></button></div>
+              <div className="flex justify-end border-t pt-2"><button onClick={() => void handleDeleteAsset(item.id, activeTab === 'characters' ? 'character' : 'location')} className="text-red-400 hover:text-red-600"><Trash2 size={14} /></button></div>
             </div>
           </div>
         ))}
