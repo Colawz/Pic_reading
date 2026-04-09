@@ -1,20 +1,164 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 智绘阅读
 
-# Run and deploy your AI Studio app
+智绘阅读是一个面向小说、寓言和科普文本的 AI 阅读配图工具。它把“阅读器 + 世界观设定库 + 关系网 + 批量生图 + 导出”放在同一个前端应用里，目标是让用户在读文本的同时，快速得到风格统一的角色设定图、场景图和段落插图。
 
-This contains everything you need to run your app locally.
+当前项目是一个纯前端单页应用，技术栈为 React 19 + TypeScript + Vite 6。
 
-View your app in AI Studio: https://ai.studio/apps/drive/1cEcdPjwnOytjUtOKsNOakBwe2ufafQ8H
+## 当前能力
 
-## Run Locally
+- 导入 `.txt` 文本并生成书籍条目
+- 在阅读器中分页阅读，并按段落触发 AI 生图
+- 扫描章节，自动发现角色与地点
+- 为新发现的角色、地点自动生成形象图
+- 建立和维护角色关系网
+- 批量生图，支持当前章节、后续章节、整本书范围
+- 导出图文 HTML
+- 通过浏览器打印导出 PDF
 
-**Prerequisites:**  Node.js
+## 界面结构
 
+- `书架`
+  负责导入文本、选择书籍、更新封面
+- `阅读器`
+  负责扫描设定、单段生图、批量生图、风格切换、导出
+- `世界观`
+  展示角色卡和地点卡，并支持单独重绘
+- `关系网`
+  维护角色之间的关系
+- `风格设置`
+  管理内置风格和自定义风格
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 技术栈
+
+- `React 19`
+- `TypeScript`
+- `Vite 6`
+- `lucide-react`
+
+AI 服务当前直接由前端请求火山方舟接口：
+
+- 文本分析：`DeepSeek`
+- 图像生成：`豆包 Seedream`
+
+## 本地运行
+
+前提：
+
+- Node.js 18+
+- npm
+
+安装依赖：
+
+```bash
+npm install
+```
+
+启动开发环境：
+
+```bash
+npm run dev
+```
+
+构建生产包：
+
+```bash
+npm run build
+```
+
+本地预览：
+
+```bash
+npm run preview
+```
+
+默认开发端口见 [vite.config.ts](./vite.config.ts)，当前配置为 `3000`。
+
+## 项目结构
+
+```text
+zhihui-reading/
+├── App.tsx                     # 顶层状态与视图切换
+├── index.tsx                   # 应用入口
+├── constants.ts                # 示例书籍、风格预设
+├── types.ts                    # 核心类型定义
+├── components/
+│   ├── BookShelf.tsx           # 书架页
+│   ├── Reader.tsx              # 阅读器主流程
+│   ├── AssetLibrary.tsx        # 世界观页
+│   ├── SocialNetwork.tsx       # 关系网页
+│   ├── BatchActionsModal.tsx   # 批量生图 / 导出弹窗
+│   └── Layout.tsx              # 全局布局
+├── services/
+│   ├── geminiService.ts        # AI 分析与生图调用
+│   └── exportService.ts        # HTML / PDF 导出
+├── docs/                       # 项目文档
+├── public/                     # 封面等静态资源
+└── pics/                       # 示例图片
+```
+
+## 核心数据流
+
+1. 用户在书架导入文本或选择样例书
+2. 阅读器按段落展示内容
+3. 扫描章节，提取角色、地点、关系
+4. 世界观页生成角色卡和地点卡
+5. 阅读器对段落做叙事分析，拼装 prompt
+6. 调用图像模型生成插图并回填到段落下方
+7. 用户可批量生成、导出图文内容
+
+## 关键实现说明
+
+### 1. 状态管理
+
+项目目前没有引入 Redux、Zustand 或路由库。绝大多数应用状态由 [App.tsx](./App.tsx) 持有，并通过 props 下发给各页面组件。
+
+### 2. 单段生图与批量生图
+
+[components/Reader.tsx](./components/Reader.tsx) 已将单段生图和批量生图统一到同一套任务流程里，核心步骤包括：
+
+- 分析段落叙事事实
+- 判断缺失角色形象
+- 自动补齐角色资产
+- 调用图像模型生成段落插图
+
+批量模式已经重构为安全的并发队列，不再是简单串行。
+
+### 3. 世界观页反馈
+
+扫描资产并确认生成后，会自动跳转到世界观页。世界观卡片会显示：
+
+- `生成中`
+- `失败`
+- `已完成`
+
+生成中的卡片会有明显的遮罩和加载提示。
+
+### 4. 导出方式
+
+PDF 导出不是服务端生成 PDF 文件，而是先生成 HTML，再通过浏览器打印导出。因此它更适合本地保存和轻量分享，不适合高保真出版流程。
+
+## 当前已知限制
+
+- 目前是纯前端应用，没有后端代理层
+- AI 接口调用仍在前端侧完成，安全性不适合直接公网生产
+- 数据暂未持久化到数据库，刷新页面后状态不会长期保存
+- 书籍章节模型仍偏简单，导入文本后默认按单章处理
+- PDF 导出依赖浏览器打印能力
+
+## 后续适合继续演进的方向
+
+- 增加后端代理层，隐藏模型密钥
+- 增加本地持久化或数据库存储
+- 支持更完整的章节切分与目录管理
+- 提升批量任务的任务面板与取消控制
+- 增加更多风格模板与资产编辑能力
+
+## 相关文档
+
+- [docs/INTRODUCTION.md](./docs/INTRODUCTION.md)
+- [docs/PROJECT_PLAN.md](./docs/PROJECT_PLAN.md)
+- [docs/调用方法.md](./docs/调用方法.md)
+
+## 说明
+
+这份 README 以当前仓库实际代码为准，而不是早期 AI Studio 模板信息。如果后续替换模型供应商、加入后端或持久化层，建议同步更新本文件。
