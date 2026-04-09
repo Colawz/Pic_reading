@@ -251,6 +251,13 @@ const App: React.FC = () => {
       if (newSpec) setVisualSpec(newSpec);
   };
 
+  const handleOpenAssetsView = (bookId?: string) => {
+      if (bookId) {
+        setCurrentBookId(bookId);
+      }
+      setView('assets');
+  };
+
   const handleImportBook = (title: string, content: string, coverUrl?: string) => {
       const newBook = createBook(`imported-${Date.now()}`, title, "未知作者", "自定义", "📚", availableSpecs[0].id, content);
       if (coverUrl) newBook.coverUrl = coverUrl;
@@ -381,9 +388,10 @@ const App: React.FC = () => {
           onDiscoverLocation={handleDiscoverLocation}
           onDiscoverRelationships={handleDiscoverRelationships}
           onUpdateBookStyle={handleUpdateBookStyle}
+          onOpenAssetsView={handleOpenAssetsView}
         />
       )}
-      {view === 'assets' && <AssetLibrary books={books} characters={characters} locations={locations} visualSpec={visualSpec} setCharacters={setCharacters} setLocations={setLocations} />}
+      {view === 'assets' && <AssetLibrary books={books} characters={characters} locations={locations} visualSpec={visualSpec} setCharacters={setCharacters} setLocations={setLocations} focusedBookId={currentBookId} />}
       {view === 'relationships' && (
         <SocialNetwork 
           books={books} 

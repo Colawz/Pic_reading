@@ -16,20 +16,24 @@ interface ReaderProps {
   onAddIllustration: (ill: Illustration) => void;
   onUpdateIllustration: (paragraphId: string, updates: Partial<Illustration>) => void;
   onDiscoverCharacter: (char: Character) => Promise<string | undefined>;
-  onDiscoverLocation: (loc: Location) => void;
+  onDiscoverLocation: (loc: Location) => Promise<void>;
   onDiscoverRelationships: (rels: Relationship[]) => void;
   onUpdateBookStyle: (bookId: string, styleId: string) => void;
+  onOpenAssetsView: (bookId?: string) => void;
 }
 
 export const Reader: React.FC<ReaderProps> = ({
   book, characters, locations, visualSpec, availableSpecs, illustrations,
-  onAddIllustration, onUpdateIllustration, onDiscoverCharacter, onDiscoverLocation, onDiscoverRelationships, onUpdateBookStyle
+  onAddIllustration, onUpdateIllustration, onDiscoverCharacter, onDiscoverLocation, onDiscoverRelationships, onUpdateBookStyle, onOpenAssetsView
 }) => {
+  const BATCH_CONCURRENCY = 3;
   const [activeParagraphId, setActiveParagraphId] = useState<string | null>(null);
   const [settings, setSettings] = useState<ReaderSettings>({ wordInterval: 300, preGenerate: false });
   const [showSettings, setShowSettings] = useState(false);
   const [showStylePicker, setShowStylePicker] = useState(false);
   const processingRef = useRef(false);
+  const latestCharactersRef = useRef(characters);
+  const latestLocationsRef = useRef(locations);
   const [currentPage, setCurrentPage] = useState(0);
   const PARAGRAPHS_PER_PAGE = 5;
 
@@ -37,6 +41,7 @@ export const Reader: React.FC<ReaderProps> = ({
   const [showScanModal, setShowScanModal] = useState(false);
   const [scanResults, setScanResults] = useState<{characters: Partial<Character>[], locations: Partial<Location>[]}>({ characters: [], locations: [] });
   const [selectedScanItems, setSelectedScanItems] = useState<Record<string, boolean>>({});
+  const [isCreatingAssets, setIsCreatingAssets] = useState(false);
 
   const [showBatchModal, setShowBatchModal] = useState(false);
   const [batchProgress, setBatchProgress] = useState({ current: 0, total: 0 });
@@ -60,98 +65,295 @@ export const Reader: React.FC<ReaderProps> = ({
 
   const totalPages = Math.ceil(currentChapter.paragraphs.length / PARAGRAPHS_PER_PAGE);
   const currentParagraphs = currentChapter.paragraphs.slice(currentPage * PARAGRAPHS_PER_PAGE, (currentPage + 1) * PARAGRAPHS_PER_PAGE);
+  const isScienceBook = book.genre.includes("科普") || book.genre.includes("科学");
+
+  useEffect(() => {
+    latestCharactersRef.current = characters;
+  }, [characters]);
+
+  useEffect(() => {
+    latestLocationsRef.current = locations;
+  }, [locations]);
 
   useEffect(() => {
     const hasAssets = characters.length > 0;
     if (!hasAssets && !isScanning && !showScanModal && currentPage === 0) handleScanAssets();
   }, [book.id]);
 
-  const handleScanAssets = async () => {
-      setIsScanning(true);
-      const text = currentChapter.paragraphs.map(p => p.text).join("\n");
-      const results = await scanChapterForAssets(text);
-      
-      // 只要库中已有该名称的角色，即便没图，也不再将其列为“扫描发现的新世界观”
-      const filteredCharacters = (results.characters || []).filter(sc => {
-          const scName = (sc.name || "").trim().toLowerCase();
-          return !characters.some(c => c.name.trim().toLowerCase() === scName);
-      });
-      const filteredLocations = (results.locations || []).filter(sl => {
-          const slName = (sl.name || "").trim().toLowerCase();
-          return !locations.some(l => l.name.trim().toLowerCase() === slName);
-      });
+  const normalizeName = (value: string) => value.trim().toLowerCase();
 
-      setScanResults({ characters: filteredCharacters, locations: filteredLocations });
-      
-      const sel: Record<string, boolean> = {};
-      filteredCharacters.forEach(c => sel[`char-${c.name}`] = true);
-      filteredLocations.forEach(l => sel[`loc-${l.name}`] = true);
-      setSelectedScanItems(sel);
-
-      const foundRels = await analyzeRelationships(text, characters);
-      if (foundRels.length > 0) onDiscoverRelationships(foundRels.map(r => ({ ...r, id: `rel-${Date.now()}`, bookId: book.id } as Relationship)));
-      
-      setIsScanning(false);
-      if (filteredCharacters.length > 0 || filteredLocations.length > 0) setShowScanModal(true);
+  const findCharacterMatch = (pool: Character[], name: string) => {
+    const normalizedSearch = normalizeName(name);
+    return pool.find(c => {
+      const normalizedTarget = normalizeName(c.name);
+      return normalizedSearch === normalizedTarget || normalizedSearch.includes(normalizedTarget) || normalizedTarget.includes(normalizedSearch);
+    });
   };
 
-  const executeGeneration = async (chapterIndex: number, paragraphIndex: number, skipCharCheck = false) => {
+  const getParagraphContext = (chapterIndex: number, paragraphIndex: number) => {
     const chapter = book.chapters[chapterIndex];
-    const paragraph = chapter.paragraphs[paragraphIndex];
-    
-    if (!illustrations[paragraph.id]) {
-      onAddIllustration({ id: `ill-${Date.now()}`, paragraphId: paragraph.id, status: 'generating' });
+    return chapter.paragraphs
+      .slice(Math.max(0, paragraphIndex - 5), paragraphIndex + 3)
+      .map(p => p.text)
+      .join("\n");
+  };
+
+  const upsertIllustrationAsGenerating = (paragraphId: string) => {
+    if (!illustrations[paragraphId]) {
+      onAddIllustration({ id: `ill-${Date.now()}-${Math.random()}`, paragraphId, status: 'generating' });
     } else {
-      onUpdateIllustration(paragraph.id, { status: 'generating', error: undefined });
+      onUpdateIllustration(paragraphId, { status: 'generating', error: undefined });
     }
+  };
 
-    try {
-      const facts = await analyzeNarrative(paragraph.text, currentChapter.paragraphs.slice(Math.max(0, paragraphIndex-5), paragraphIndex+3).map(p => p.text).join("\n"), characters, locations);
-      onUpdateIllustration(paragraph.id, { extractedFacts: facts });
+  const getMissingCharacterNames = (facts: { characters: string[] }, pool: Character[]) => {
+    return Array.from(new Set(facts.characters.filter(name => {
+      const match = findCharacterMatch(pool, name);
+      return !match || !match.imageUrl;
+    })));
+  };
 
-      if (!skipCharCheck) {
-        // 健壮匹配检测
-        const detectedButNoAsset = facts.characters.filter(name => {
-          const normalizedSearch = name.trim().toLowerCase();
-          const match = characters.find(c => {
-            const normalizedTarget = c.name.trim().toLowerCase();
-            return normalizedSearch === normalizedTarget || normalizedSearch.includes(normalizedTarget) || normalizedTarget.includes(normalizedSearch);
-          });
-          return !match || !match.imageUrl;
-        });
+  const mergeGeneratedCharacters = (
+    pool: Character[],
+    generated: Array<{ name: string; imageUrl?: string }>
+  ) => {
+    return pool.map(char => {
+      const match = generated.find(item => normalizeName(item.name) === normalizeName(char.name) && item.imageUrl);
+      return match ? { ...char, imageUrl: match.imageUrl, locked: true, generationStatus: 'success' } : char;
+    });
+  };
 
-        if (detectedButNoAsset.length > 0) {
-          onUpdateIllustration(paragraph.id, { status: 'pending' });
-          setMissingChars(detectedButNoAsset);
-          setPendingGenParams({ chIdx: chapterIndex, pIdx: paragraphIndex });
-          return;
-        }
+  type GenerationTask = {
+    chIdx: number;
+    pIdx: number;
+    paragraph: Book['chapters'][number]['paragraphs'][number];
+  };
+
+  type AnalyzedTask = GenerationTask & {
+    facts: Awaited<ReturnType<typeof analyzeNarrative>>;
+    missingCharacterNames: string[];
+  };
+
+  const createGenerationTask = (chIdx: number, pIdx: number): GenerationTask => ({
+    chIdx,
+    pIdx,
+    paragraph: book.chapters[chIdx].paragraphs[pIdx],
+  });
+
+  const analyzeGenerationTask = async (
+    task: GenerationTask,
+    characterPool: Character[],
+    locationPool: Location[]
+  ): Promise<AnalyzedTask> => {
+    upsertIllustrationAsGenerating(task.paragraph.id);
+    const facts = await analyzeNarrative(
+      task.paragraph.text,
+      getParagraphContext(task.chIdx, task.pIdx),
+      characterPool,
+      locationPool
+    );
+    onUpdateIllustration(task.paragraph.id, { extractedFacts: facts });
+
+    return {
+      ...task,
+      facts,
+      missingCharacterNames: getMissingCharacterNames(facts, characterPool),
+    };
+  };
+
+  const renderGenerationTask = async (
+    task: AnalyzedTask,
+    characterPool: Character[],
+    locationPool: Location[]
+  ) => {
+    const imageUrl = await generateIllustration(
+      task.facts,
+      visualSpec,
+      characterPool,
+      locationPool,
+      isScienceBook ? task.paragraph.text : undefined
+    );
+    onUpdateIllustration(task.paragraph.id, { status: 'completed', imageUrl });
+  };
+
+  const runWithConcurrency = async <T,>(
+    items: T[],
+    limit: number,
+    worker: (item: T, index: number) => Promise<void>
+  ) => {
+    let cursor = 0;
+    const workerCount = Math.min(limit, items.length);
+
+    await Promise.all(Array.from({ length: workerCount }, async () => {
+      while (true) {
+        const index = cursor++;
+        if (index >= items.length) return;
+        await worker(items[index], index);
+      }
+    }));
+  };
+
+  const ensureCharacterAssets = async (names: string[], characterPool: Character[]) => {
+    const uniqueNames = Array.from(new Set(names.map(name => name.trim()).filter(Boolean)));
+    const tasks = uniqueNames.map(async (name) => {
+      const existing = findCharacterMatch(characterPool, name);
+      if (existing?.imageUrl) {
+        return { name: existing.name, imageUrl: existing.imageUrl };
       }
 
-      const isScience = book.genre.includes("科普") || book.genre.includes("科学");
-      const imageUrl = await generateIllustration(facts, visualSpec, characters, locations, isScience ? paragraph.text : undefined);
-      onUpdateIllustration(paragraph.id, { status: 'completed', imageUrl: imageUrl });
-    } catch (error: any) {
-      onUpdateIllustration(paragraph.id, { status: 'failed', error: error.message || "生成失败" });
+      const imageUrl = await onDiscoverCharacter(
+        existing || {
+          id: `char-${Date.now()}-${Math.random()}`,
+          bookId: book.id,
+          name,
+          description: "新发现角色",
+          visualSummary: `${name}的样貌`,
+          locked: false
+        } as Character
+      );
+
+      return { name: existing?.name || name, imageUrl };
+    });
+
+    const settled = await Promise.allSettled(tasks);
+    const generated = settled.flatMap(result => result.status === 'fulfilled' ? [result.value] : []);
+    return mergeGeneratedCharacters(characterPool, generated);
+  };
+
+  const runGenerationTask = async (
+    task: GenerationTask,
+    options?: {
+      characterPool?: Character[];
+      locationPool?: Location[];
+      interactive?: boolean;
+      skipCharCheck?: boolean;
     }
-  }
+  ) => {
+    const characterPool = options?.characterPool || latestCharactersRef.current;
+    const locationPool = options?.locationPool || latestLocationsRef.current;
+    const interactive = options?.interactive !== false;
+
+    try {
+      const analyzedTask = await analyzeGenerationTask(task, characterPool, locationPool);
+
+      if (!options?.skipCharCheck && analyzedTask.missingCharacterNames.length > 0) {
+        if (interactive) {
+          onUpdateIllustration(task.paragraph.id, { status: 'pending' });
+          setMissingChars(analyzedTask.missingCharacterNames);
+          setPendingGenParams({ chIdx: task.chIdx, pIdx: task.pIdx });
+          return;
+        }
+
+        const nextCharacterPool = await ensureCharacterAssets(analyzedTask.missingCharacterNames, characterPool);
+        await renderGenerationTask(analyzedTask, nextCharacterPool, locationPool);
+        return;
+      }
+
+      await renderGenerationTask(analyzedTask, characterPool, locationPool);
+    } catch (error: any) {
+      onUpdateIllustration(task.paragraph.id, { status: 'failed', error: error.message || "生成失败" });
+    }
+  };
+
+  const handleScanAssets = async () => {
+      setIsScanning(true);
+      try {
+        const text = currentChapter.paragraphs.map(p => p.text).join("\n");
+        const [results, foundRels] = await Promise.all([
+          scanChapterForAssets(text),
+          analyzeRelationships(text, characters),
+        ]);
+        
+        // 只要库中已有该名称的角色，即便没图，也不再将其列为“扫描发现的新世界观”
+        const filteredCharacters = (results.characters || []).filter(sc => {
+            const scName = (sc.name || "").trim().toLowerCase();
+            return !characters.some(c => c.name.trim().toLowerCase() === scName);
+        });
+        const filteredLocations = (results.locations || []).filter(sl => {
+            const slName = (sl.name || "").trim().toLowerCase();
+            return !locations.some(l => l.name.trim().toLowerCase() === slName);
+        });
+
+        setScanResults({ characters: filteredCharacters, locations: filteredLocations });
+        
+        const sel: Record<string, boolean> = {};
+        filteredCharacters.forEach(c => sel[`char-${c.name}`] = true);
+        filteredLocations.forEach(l => sel[`loc-${l.name}`] = true);
+        setSelectedScanItems(sel);
+
+        if (foundRels.length > 0) {
+          onDiscoverRelationships(foundRels.map(r => ({ ...r, id: `rel-${Date.now()}`, bookId: book.id } as Relationship)));
+        }
+        
+        if (filteredCharacters.length > 0 || filteredLocations.length > 0) {
+          setShowScanModal(true);
+        }
+      } finally {
+        setIsScanning(false);
+      }
+  };
 
   const handleGenerate = async (chIdx: number, pIdx: number) => {
       if (processingRef.current) return;
       processingRef.current = true;
-      await executeGeneration(chIdx, pIdx);
+      await runGenerationTask(createGenerationTask(chIdx, pIdx));
       processingRef.current = false;
   };
 
-  const handleStartBatch = async (interval: number, scope: any, nValue: number) => {
+  const handleStartBatch = async (interval: number, scope: 'chapter' | 'next_n' | 'all', nValue: number) => {
     setIsBatchProcessing(true);
-    const targets: { chIdx: number; pIdx: number }[] = [];
-    book.chapters[currentChapterIndex].paragraphs.forEach((p, idx) => {
-        if ((idx + 1) % interval === 0 && (!illustrations[p.id] || illustrations[p.id].status === 'failed')) targets.push({ chIdx: currentChapterIndex, pIdx: idx });
-    });
-    setBatchProgress({ current: 0, total: targets.length });
-    for (const t of targets) { await executeGeneration(t.chIdx, t.pIdx); setBatchProgress(prev => ({ ...prev, current: prev.current + 1 })); }
-    setIsBatchProcessing(false); setShowBatchModal(false);
+
+    try {
+      const chapterIndexes =
+        scope === 'all'
+          ? book.chapters.map((_, idx) => idx)
+          : scope === 'next_n'
+            ? book.chapters
+                .map((_, idx) => idx)
+                .slice(currentChapterIndex, Math.min(book.chapters.length, currentChapterIndex + nValue))
+            : [currentChapterIndex];
+
+      const targets = chapterIndexes.flatMap(chIdx =>
+        book.chapters[chIdx].paragraphs
+          .map((paragraph, pIdx) => ({ paragraph, task: createGenerationTask(chIdx, pIdx), pIdx }))
+          .filter(({ pIdx, paragraph }) => (pIdx + 1) % interval === 0 && (!illustrations[paragraph.id] || illustrations[paragraph.id].status === 'failed'))
+          .map(({ task }) => task)
+      );
+
+      setBatchProgress({ current: 0, total: targets.length });
+
+      if (targets.length === 0) {
+        setShowBatchModal(false);
+        return;
+      }
+
+      const analyzedTargets: AnalyzedTask[] = [];
+
+      await runWithConcurrency(targets, BATCH_CONCURRENCY, async (task) => {
+        const analyzedTask = await analyzeGenerationTask(task, latestCharactersRef.current, latestLocationsRef.current);
+        analyzedTargets.push(analyzedTask);
+      });
+
+      const missingNames = Array.from(new Set(analyzedTargets.flatMap(target => target.missingCharacterNames)));
+      const batchCharacters = missingNames.length > 0
+        ? await ensureCharacterAssets(missingNames, latestCharactersRef.current)
+        : latestCharactersRef.current;
+      const batchLocations = latestLocationsRef.current;
+
+      await runWithConcurrency(analyzedTargets, BATCH_CONCURRENCY, async (task) => {
+        try {
+          await renderGenerationTask(task, batchCharacters, batchLocations);
+        } catch (error: any) {
+          onUpdateIllustration(task.paragraph.id, { status: 'failed', error: error.message || "生成失败" });
+        } finally {
+          setBatchProgress(prev => ({ ...prev, current: prev.current + 1 }));
+        }
+      });
+
+      setShowBatchModal(false);
+    } finally {
+      setIsBatchProcessing(false);
+    }
   };
 
   const handleExport = (mode: 'full' | 'generated_chapters', format: 'html' | 'pdf') => {
@@ -163,23 +365,48 @@ export const Reader: React.FC<ReaderProps> = ({
     if (!pendingGenParams) return;
     const charNames = [...missingChars];
     setMissingChars([]); 
-    
-    for (const name of charNames) {
-      const existing = characters.find(c => c.name.trim().toLowerCase() === name.trim().toLowerCase());
-      if (!existing) {
-        await onDiscoverCharacter({ id: `char-${Date.now()}-${Math.random()}`, bookId: book.id, name: name.trim(), description: "新发现角色", visualSummary: `${name.trim()}的样貌`, locked: false } as Character);
-      } else if (!existing.imageUrl) {
-        await onDiscoverCharacter(existing);
-      }
-    }
-    
-    executeGeneration(pendingGenParams.chIdx, pendingGenParams.pIdx, true);
+
+    const refreshedCharacters = await ensureCharacterAssets(charNames, latestCharactersRef.current);
+    await runGenerationTask(createGenerationTask(pendingGenParams.chIdx, pendingGenParams.pIdx), {
+      skipCharCheck: true,
+      characterPool: refreshedCharacters,
+      locationPool: latestLocationsRef.current
+    });
     setPendingGenParams(null);
+  };
+
+  const handleConfirmScanResults = async () => {
+    setIsCreatingAssets(true);
+    const characterTasks = scanResults.characters
+      .filter(c => selectedScanItems[`char-${c.name}`])
+      .map(c => onDiscoverCharacter({
+        id: `char-${Date.now()}-${Math.random()}`,
+        bookId: book.id,
+        name: c.name!,
+        description: "AI扫描发现",
+        visualSummary: c.visualSummary!,
+        locked: false
+      } as Character));
+
+    const locationTasks = scanResults.locations
+      .filter(l => selectedScanItems[`loc-${l.name}`])
+      .map(l => onDiscoverLocation({
+        id: `loc-${Date.now()}-${Math.random()}`,
+        bookId: book.id,
+        name: l.name!,
+        description: "AI扫描发现",
+        visualSummary: l.visualSummary!,
+        locked: false
+      } as Location));
+
+    setShowScanModal(false);
+    onOpenAssetsView(book.id);
+    void Promise.allSettled([...characterTasks, ...locationTasks]);
   };
 
   const handleSkipMissingChars = () => {
     if (!pendingGenParams) return;
-    executeGeneration(pendingGenParams.chIdx, pendingGenParams.pIdx, true);
+    runGenerationTask(createGenerationTask(pendingGenParams.chIdx, pendingGenParams.pIdx), { skipCharCheck: true });
     setMissingChars([]);
     setPendingGenParams(null);
   };
@@ -272,12 +499,11 @@ export const Reader: React.FC<ReaderProps> = ({
                     )}
                   </div>
                   <div className="p-4 border-t bg-slate-50 flex justify-end gap-3">
-                      <button onClick={() => setShowScanModal(false)} className="px-4 py-2 font-medium text-slate-600">忽略</button>
-                      <button onClick={() => { 
-                        scanResults.characters.forEach(c => { if (selectedScanItems[`char-${c.name}`]) onDiscoverCharacter({ id: `char-${Date.now()}-${Math.random()}`, bookId: book.id, name: c.name!, description: "AI扫描发现", visualSummary: c.visualSummary!, locked: false }); });
-                        scanResults.locations.forEach(l => { if (selectedScanItems[`loc-${l.name}`]) onDiscoverLocation({ id: `loc-${Date.now()}-${Math.random()}`, bookId: book.id, name: l.name!, description: "AI扫描发现", visualSummary: l.visualSummary!, locked: false }); });
-                        setShowScanModal(false);
-                      }} className="px-6 py-2 bg-brand-600 text-white rounded-lg font-bold shadow-md hover:bg-brand-700 transition-colors">确认并建立设定库</button>
+                      <button onClick={() => setShowScanModal(false)} disabled={isCreatingAssets} className="px-4 py-2 font-medium text-slate-600 disabled:opacity-50">忽略</button>
+                      <button onClick={handleConfirmScanResults} disabled={isCreatingAssets} className="px-6 py-2 bg-brand-600 text-white rounded-lg font-bold shadow-md hover:bg-brand-700 transition-colors disabled:bg-brand-300 disabled:cursor-not-allowed flex items-center gap-2">
+                        {isCreatingAssets && <Loader2 size={16} className="animate-spin" />}
+                        {isCreatingAssets ? '正在跳转到世界观...' : '确认并建立设定库'}
+                      </button>
                   </div>
               </div>
           </div>
