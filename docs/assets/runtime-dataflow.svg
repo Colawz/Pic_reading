@@ -1,0 +1,90 @@
+<svg width="1400" height="920" viewBox="0 0 1400 920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4b5e78"/>
+    </marker>
+    <style>
+      .title { font: 700 34px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #132238; }
+      .text { font: 500 16px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #425166; }
+      .boxTitle { font: 700 18px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #132238; }
+      .boxText { font: 500 14px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #516074; }
+    </style>
+  </defs>
+  <rect width="1400" height="920" fill="#f7faff"/>
+  <text x="70" y="72" class="title">智绘阅读运行时数据流图</text>
+  <text x="70" y="104" class="text">覆盖“导入书籍 -> 阅读器分析 -> 生图 -> 本地保存 -> 关系页继续理解”的主链路</text>
+
+  <rect x="70" y="170" width="190" height="92" rx="22" fill="#ffffff" stroke="#cfd9e5"/>
+  <text x="98" y="206" class="boxTitle">1. 导入 TXT / 选择书籍</text>
+  <text x="98" y="232" class="boxText">标题、正文、封面信息进入主状态</text>
+
+  <rect x="330" y="170" width="210" height="92" rx="22" fill="#ffffff" stroke="#cfd9e5"/>
+  <text x="358" y="206" class="boxTitle">2. 阅读器分页展示</text>
+  <text x="358" y="232" class="boxText">按段落进入阅读与生成流程</text>
+
+  <rect x="610" y="170" width="220" height="92" rx="22" fill="#ffffff" stroke="#cfd9e5"/>
+  <text x="638" y="206" class="boxTitle">3. 章节扫描</text>
+  <text x="638" y="232" class="boxText">提取角色、地点、关系候选</text>
+
+  <rect x="900" y="170" width="220" height="92" rx="22" fill="#ffffff" stroke="#cfd9e5"/>
+  <text x="928" y="206" class="boxTitle">4. 建立世界观资产</text>
+  <text x="928" y="232" class="boxText">角色图、地点图进入资产库</text>
+
+  <rect x="1190" y="170" width="150" height="92" rx="22" fill="#ffffff" stroke="#cfd9e5"/>
+  <text x="1216" y="206" class="boxTitle">5. 关系页</text>
+  <text x="1216" y="232" class="boxText">关系图与聊天</text>
+
+  <line x1="260" y1="216" x2="330" y2="216" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="540" y1="216" x2="610" y2="216" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="830" y1="216" x2="900" y2="216" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1120" y1="216" x2="1190" y2="216" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="140" y="360" width="260" height="110" rx="24" fill="#eef6ff" stroke="#bdd0e5"/>
+  <text x="172" y="398" class="boxTitle">段落生图任务</text>
+  <text x="172" y="425" class="boxText">叙事分析 -> 缺失角色检查 -> 正式出图</text>
+  <text x="172" y="448" class="boxText">支持单段与批量分批并发</text>
+
+  <rect x="470" y="360" width="240" height="110" rx="24" fill="#fff7ed" stroke="#efc99c"/>
+  <text x="502" y="398" class="boxTitle">图片模型</text>
+  <text x="502" y="425" class="boxText">封面 / 角色 / 地点 / 段落插图</text>
+  <text x="502" y="448" class="boxText">Seedream 4.5 / Seedream 5.0</text>
+
+  <rect x="780" y="360" width="240" height="110" rx="24" fill="#eefcf4" stroke="#b8dcc5"/>
+  <text x="812" y="398" class="boxTitle">本地图片保存</text>
+  <text x="812" y="425" class="boxText">远程 URL 抓取到 pic_db</text>
+  <text x="812" y="448" class="boxText">命名归一化与旧图清理</text>
+
+  <rect x="1090" y="360" width="220" height="110" rx="24" fill="#f8f3ff" stroke="#d8c5ef"/>
+  <text x="1122" y="398" class="boxTitle">页面回写展示</text>
+  <text x="1122" y="425" class="boxText">阅读器 / 世界观 / 书架封面</text>
+  <text x="1122" y="448" class="boxText">优先显示本地路径</text>
+
+  <line x1="400" y1="415" x2="470" y2="415" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="710" y1="415" x2="780" y2="415" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1020" y1="415" x2="1090" y2="415" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="160" y="580" width="270" height="124" rx="24" fill="#ffffff" stroke="#cfd9e5"/>
+  <text x="192" y="620" class="boxTitle">关系图生成</text>
+  <text x="192" y="647" class="boxText">只读取到最后一个已生图章节</text>
+  <text x="192" y="670" class="boxText">输出“这是到 XX 章节为止的关系图”</text>
+
+  <rect x="520" y="580" width="300" height="124" rx="24" fill="#ffffff" stroke="#cfd9e5"/>
+  <text x="552" y="620" class="boxTitle">AI 伴读 / 角色扮演聊天</text>
+  <text x="552" y="647" class="boxText">伴读模式可解释全书</text>
+  <text x="552" y="670" class="boxText">角色模式只知道当前阅读进度之前剧情</text>
+
+  <rect x="910" y="580" width="330" height="124" rx="24" fill="#ffffff" stroke="#cfd9e5"/>
+  <text x="942" y="620" class="boxTitle">持久化层</text>
+  <text x="942" y="647" class="boxText">IndexedDB 保存 books / relationships / chats / image_records</text>
+  <text x="942" y="670" class="boxText">pic_db 保存封面、资产图和章节插图</text>
+
+  <line x1="430" y1="640" x2="520" y2="640" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="820" y1="640" x2="910" y2="640" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <line x1="1010" y1="262" x2="1010" y2="360" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1230" y1="262" x2="1230" y2="360" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1230" y1="470" x2="1230" y2="580" stroke="#4b5e78" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="70" y="790" width="1260" height="88" rx="22" fill="#132238"/>
+  <text x="102" y="844" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="18" font-weight="600" fill="#dbe6f3">核心结论：系统已经形成“文本理解、视觉生成、关系分析、对话交互、本地归档”五条数据链的统一闭环。</text>
+</svg>

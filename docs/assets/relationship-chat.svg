@@ -1,0 +1,64 @@
+<svg width="1400" height="860" viewBox="0 0 1400 860" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f6179"/>
+    </marker>
+    <style>
+      .title { font: 700 34px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #132238; }
+      .text { font: 500 16px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #54657d; }
+      .boxTitle { font: 700 18px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #132238; }
+      .boxText { font: 500 14px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #516074; }
+    </style>
+  </defs>
+  <rect width="1400" height="860" fill="#f7faff"/>
+  <text x="70" y="72" class="title">关系页 AI 关系图与聊天流程图</text>
+  <text x="70" y="104" class="text">说明关系页如何读取当前阅读进度、生成关系图，并在伴读/角色模式中继续对话</text>
+
+  <rect x="90" y="170" width="250" height="108" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="122" y="210" class="boxTitle">选中书籍</text>
+  <text x="122" y="237" class="boxText">进入关系页后指定当前作品</text>
+
+  <rect x="410" y="170" width="280" height="108" rx="24" fill="#eef6ff" stroke="#bed1e6"/>
+  <text x="442" y="210" class="boxTitle">计算阅读进度</text>
+  <text x="442" y="237" class="boxText">定位最后一个已生图章节</text>
+
+  <rect x="760" y="170" width="250" height="108" rx="24" fill="#fff7ed" stroke="#efc99c"/>
+  <text x="792" y="210" class="boxTitle">关系图生成</text>
+  <text x="792" y="237" class="boxText">只读取到当前已读范围的正文</text>
+
+  <rect x="1080" y="170" width="230" height="108" rx="24" fill="#eefcf4" stroke="#b8dcc5"/>
+  <text x="1112" y="210" class="boxTitle">范围提示</text>
+  <text x="1112" y="237" class="boxText">这是到 XX 章节为止的关系图</text>
+
+  <line x1="340" y1="224" x2="410" y2="224" stroke="#4f6179" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="690" y1="224" x2="760" y2="224" stroke="#4f6179" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1010" y1="224" x2="1080" y2="224" stroke="#4f6179" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="120" y="390" width="270" height="138" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="152" y="430" class="boxTitle">聊天模式选择</text>
+  <text x="152" y="457" class="boxText">AI 伴读</text>
+  <text x="152" y="480" class="boxText">扮演书中角色</text>
+
+  <rect x="470" y="390" width="290" height="138" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="502" y="430" class="boxTitle">伴读模式</text>
+  <text x="502" y="457" class="boxText">读取整本书的剧情信息</text>
+  <text x="502" y="480" class="boxText">解释剧情、人物与关系</text>
+
+  <rect x="840" y="390" width="300" height="138" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="872" y="430" class="boxTitle">角色模式</text>
+  <text x="872" y="457" class="boxText">读取角色设定与相关社会关系</text>
+  <text x="872" y="480" class="boxText">只知道当前阅读进度之前剧情</text>
+
+  <rect x="1180" y="390" width="170" height="138" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="1212" y="430" class="boxTitle">消息持久化</text>
+  <text x="1212" y="457" class="boxText">按书籍保存</text>
+  <text x="1212" y="480" class="boxText">刷新后恢复</text>
+
+  <line x1="390" y1="459" x2="470" y2="459" stroke="#4f6179" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="390" y1="481" x2="840" y2="481" stroke="#4f6179" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1140" y1="459" x2="1180" y2="459" stroke="#4f6179" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="170" y="620" width="1060" height="126" rx="28" fill="#132238"/>
+  <text x="206" y="668" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="20" font-weight="700" fill="#ffffff">设计亮点</text>
+  <text x="206" y="702" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="16" fill="#dbe6f3">关系页不再只是静态结果页，而是“关系生成 + 阅读理解 + 角色对话”的综合工作区。角色扮演聊天通过阅读进度限制减少剧透，聊天消息按书籍持久化并带回复者头像。</text>
+</svg>

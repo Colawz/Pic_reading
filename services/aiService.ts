@@ -165,6 +165,8 @@ async function callVolcImage(
     }
 }
 
+const isRemoteImageUrl = (value?: string) => Boolean(value && /^https?:\/\//i.test(value));
+
 export const scanChapterForAssets = async (chapterText: string): Promise<{ characters: Partial<Character>[], locations: Partial<Location>[] }> => {
     const textToAnalyze = chapterText.slice(0, 15000);
     const prompt = `
@@ -347,8 +349,11 @@ export const generateIllustration = async (
     const match = characters.find(c => name.includes(c.name) || c.name.includes(name));
     if (match) {
       charDesc += `${match.name}: ${match.visualSummary}. `;
-      if (match.referenceImageUrl || match.imageUrl) {
-        referenceImages.push(match.referenceImageUrl || match.imageUrl!);
+      const referenceUrl = isRemoteImageUrl(match.referenceImageUrl)
+        ? match.referenceImageUrl
+        : (isRemoteImageUrl(match.imageUrl) ? match.imageUrl : undefined);
+      if (referenceUrl) {
+        referenceImages.push(referenceUrl);
       }
     } else {
       charDesc += `${name}. `;
@@ -356,8 +361,13 @@ export const generateIllustration = async (
   });
 
   const locationMatch = locations.find(l => facts.location.includes(l.name) || l.name.includes(facts.location));
-  if (locationMatch && (locationMatch.referenceImageUrl || locationMatch.imageUrl)) {
-      referenceImages.push(locationMatch.referenceImageUrl || locationMatch.imageUrl!);
+  if (locationMatch) {
+      const referenceUrl = isRemoteImageUrl(locationMatch.referenceImageUrl)
+        ? locationMatch.referenceImageUrl
+        : (isRemoteImageUrl(locationMatch.imageUrl) ? locationMatch.imageUrl : undefined);
+      if (referenceUrl) {
+        referenceImages.push(referenceUrl);
+      }
   }
 
   let prompt = `生成画面: 地点: ${facts.location} | 角色: ${charDesc} | 动作: ${facts.action} | 氛围: ${facts.mood} | 风格: ${visualSpec.promptStyle} | 镜头: ${visualSpec.cameraLanguage}｜禁止出现文字`;

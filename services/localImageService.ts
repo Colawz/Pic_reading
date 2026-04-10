@@ -38,6 +38,24 @@ interface NormalizeGeneratedImageParams {
   fileStem: string;
 }
 
+export interface BootstrapLocalLibraryResult {
+  txtBooks: Array<{
+    title: string;
+    content: string;
+  }>;
+  books: Array<{
+    bookFolder: string;
+    coverUrl: string | null;
+    characters: Array<{ name: string; localUrl: string }>;
+    locations: Array<{ name: string; localUrl: string }>;
+    illustrations: Array<{ fileStem: string; localUrl: string }>;
+  }>;
+}
+
+interface SaveAppSnapshotParams {
+  snapshot: unknown;
+}
+
 export const saveGeneratedImageLocally = async ({
   remoteUrl,
   bookId,
@@ -187,3 +205,36 @@ export const normalizeGeneratedImageLocally = async ({
 };
 
 export const isLocalPicDbUrl = (url?: string) => Boolean(url && url.startsWith('/pic_db/'));
+
+export const bootstrapLocalLibrary = async (): Promise<BootstrapLocalLibraryResult | null> => {
+  const response = await fetch('/api/bootstrap-local-library').catch(() => null);
+  if (!response || !response.ok) {
+    return null;
+  }
+
+  return response.json() as Promise<BootstrapLocalLibraryResult>;
+};
+
+export const saveAppSnapshotLocally = async ({ snapshot }: SaveAppSnapshotParams): Promise<void> => {
+  const response = await fetch('/api/save-app-snapshot', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ snapshot }),
+  }).catch(() => null);
+
+  if (!response || !response.ok) {
+    return;
+  }
+};
+
+export const loadAppSnapshotLocally = async <T = unknown>(): Promise<T | null> => {
+  const response = await fetch('/api/load-app-snapshot').catch(() => null);
+  if (!response || !response.ok) {
+    return null;
+  }
+
+  const data = await response.json() as { snapshot?: T | null };
+  return data.snapshot ?? null;
+};

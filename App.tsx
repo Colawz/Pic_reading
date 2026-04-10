@@ -8,8 +8,8 @@ import { AssetLibrary } from './components/AssetLibrary';
 import { BookShelf } from './components/BookShelf';
 import { SocialNetwork } from './components/SocialNetwork';
 import { analyzeRelationshipsFromReadingProgress, generateAssetVisual, generateBookCover, generateIllustration } from './services/aiService';
-import { checkGeneratedImageLocally, deleteGeneratedImageLocally, findGeneratedImageLocally, isLocalPicDbUrl, normalizeGeneratedImageLocally, saveGeneratedImageLocally } from './services/localImageService';
-import { loadPersistedAppState, savePersistedAppState, saveStoredImageRecords } from './services/storageService';
+import { bootstrapLocalLibrary, checkGeneratedImageLocally, deleteGeneratedImageLocally, findGeneratedImageLocally, isLocalPicDbUrl, loadAppSnapshotLocally, normalizeGeneratedImageLocally, saveAppSnapshotLocally, saveGeneratedImageLocally } from './services/localImageService';
+import { PersistedAppState, loadPersistedAppState, savePersistedAppState, saveStoredImageRecords } from './services/storageService';
 import { Plus, Trash2, Sparkles, Wand2 } from 'lucide-react';
 
 const INITIAL_CHARACTERS: Character[] = [
@@ -318,6 +318,169 @@ const isUsableLocalUrl = async (localUrl?: string) => {
   return checkGeneratedImageLocally({ localUrl }).catch(() => false);
 };
 
+const normalizeBookKey = (value: string) =>
+  value.replace(/[：:]/g, ' ').replace(/\s+/g, ' ').trim();
+
+const buildImportedBookId = (title: string) => {
+  const hex = Array.from(title.trim())
+    .map(char => char.codePointAt(0)?.toString(16) || '')
+    .join('')
+    .slice(0, 24);
+  return `imported-${hex || Date.now().toString(16)}`;
+};
+
+const mergeLocalBootstrapState = (baseBooks: Book[]) => async () => {
+  const bootstrap = await bootstrapLocalLibrary();
+  if (!bootstrap) {
+    return {
+      books: baseBooks,
+      characters: INITIAL_CHARACTERS,
+      locations: INITIAL_LOCATIONS,
+      illustrations: {} as Record<string, Illustration>,
+    };
+  }
+
+  const nextBooks = [...baseBooks];
+  const titleToBook = new Map(nextBooks.map(book => [normalizeBookKey(book.title), book]));
+
+  bootstrap.txtBooks.forEach((txtBook) => {
+    const titleKey = normalizeBookKey(txtBook.title);
+    if (!titleToBook.has(titleKey)) {
+      const newBook = createBook(
+        buildImportedBookId(txtBook.title),
+        txtBook.title,
+        '导入文本',
+        '童话故事',
+        '📘',
+        DEFAULT_VISUAL_SPEC.id,
+        txtBook.content
+      );
+      nextBooks.push(newBook);
+      titleToBook.set(titleKey, newBook);
+    }
+  });
+
+  const nextCharacters = [...INITIAL_CHARACTERS];
+  const nextLocations = [...INITIAL_LOCATIONS];
+  const nextIllustrations: Record<string, Illustration> = {};
+
+  bootstrap.books.forEach((libraryBook) => {
+    const book = titleToBook.get(normalizeBookKey(libraryBook.bookFolder));
+    if (!book) {
+      return;
+    }
+
+    if (libraryBook.coverUrl) {
+      const targetBook = nextBooks.find(item => item.id === book.id);
+      if (targetBook) {
+        targetBook.coverUrl = libraryBook.coverUrl;
+      }
+    }
+
+    libraryBook.characters.forEach((item) => {
+      const existing = nextCharacters.find(character => character.bookId === book.id && character.name === item.name);
+      if (existing) {
+        existing.imageUrl = item.localUrl;
+        existing.generationStatus = 'success';
+        existing.locked = true;
+        return;
+      }
+
+      nextCharacters.push({
+        id: `bootstrap-char-${book.id}-${item.name}`,
+        bookId: book.id,
+        name: item.name,
+        description: `${item.name}的角色设定。`,
+        visualSummary: `${item.name}的视觉设定图。`,
+        imageUrl: item.localUrl,
+        locked: true,
+        generationStatus: 'success',
+      });
+    });
+
+    libraryBook.locations.forEach((item) => {
+      const existing = nextLocations.find(location => location.bookId === book.id && location.name === item.name);
+      if (existing) {
+        existing.imageUrl = item.localUrl;
+        existing.generationStatus = 'success';
+        existing.locked = true;
+        return;
+      }
+
+      nextLocations.push({
+        id: `bootstrap-loc-${book.id}-${item.name}`,
+        bookId: book.id,
+        name: item.name,
+        description: `${item.name}的场景设定。`,
+        visualSummary: `${item.name}的视觉设定图。`,
+        imageUrl: item.localUrl,
+        locked: true,
+        generationStatus: 'success',
+      });
+    });
+
+    libraryBook.illustrations.forEach((item) => {
+      for (const chapter of book.chapters) {
+        const paragraphIndex = chapter.paragraphs.findIndex((paragraph, index) => `${chapter.title}-第${index + 1}段` === item.fileStem);
+        if (paragraphIndex >= 0) {
+          const paragraph = chapter.paragraphs[paragraphIndex];
+          nextIllustrations[paragraph.id] = {
+            id: `bootstrap-ill-${paragraph.id}`,
+            paragraphId: paragraph.id,
+            status: 'completed',
+            imageUrl: item.localUrl,
+          };
+          break;
+        }
+      }
+    });
+  });
+
+  return {
+    books: nextBooks,
+    characters: nextCharacters,
+    locations: nextLocations,
+    illustrations: nextIllustrations,
+  };
+};
+
+const applyPersistedStateToApp = (
+  persistedState: PersistedAppState,
+  setBooks: React.Dispatch<React.SetStateAction<Book[]>>,
+  setAvailableSpecs: React.Dispatch<React.SetStateAction<VisualSpec[]>>,
+  setCharacters: React.Dispatch<React.SetStateAction<Character[]>>,
+  setLocations: React.Dispatch<React.SetStateAction<Location[]>>,
+  setRelationships: React.Dispatch<React.SetStateAction<Relationship[]>>,
+  setRelationshipChats: React.Dispatch<React.SetStateAction<Record<string, RelationshipChatState>>>,
+  setIllustrations: React.Dispatch<React.SetStateAction<Record<string, Illustration>>>,
+  setCurrentBookId: React.Dispatch<React.SetStateAction<string | null>>,
+  setVisualSpec: React.Dispatch<React.SetStateAction<VisualSpec>>,
+  setImageModelId: React.Dispatch<React.SetStateAction<ImageGenerationModelId>>,
+  setImageGenerationStats: React.Dispatch<React.SetStateAction<ImageGenerationStats>>,
+) => {
+  const nextBooks = persistedState.books?.length ? persistedState.books : SAMPLE_BOOKS;
+  const nextSpecs = persistedState.availableSpecs?.length ? persistedState.availableSpecs : VISUAL_PRESETS;
+  const nextCurrentBookId = persistedState.currentBookId ?? null;
+  const preferredVisualSpecId = persistedState.preferredVisualSpecId ?? nextBooks[0]?.visualSpecId ?? DEFAULT_VISUAL_SPEC.id;
+  const resolvedSpec =
+    nextSpecs.find(spec => spec.id === preferredVisualSpecId) ||
+    nextSpecs.find(spec => spec.id === nextBooks.find(book => book.id === nextCurrentBookId)?.visualSpecId) ||
+    nextSpecs[0] ||
+    DEFAULT_VISUAL_SPEC;
+
+  setBooks(nextBooks);
+  setAvailableSpecs(nextSpecs);
+  setCharacters(persistedState.characters || INITIAL_CHARACTERS);
+  setLocations(persistedState.locations || INITIAL_LOCATIONS);
+  setRelationships(persistedState.relationships || INITIAL_RELATIONSHIPS);
+  setRelationshipChats(persistedState.relationshipChats || {});
+  setIllustrations(persistedState.illustrations || {});
+  setCurrentBookId(nextCurrentBookId);
+  setVisualSpec(resolvedSpec);
+  setImageModelId(persistedState.imageModelId || DEFAULT_IMAGE_MODEL_ID);
+  setImageGenerationStats(persistedState.imageGenerationStats || DEFAULT_IMAGE_GENERATION_STATS);
+};
+
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('home');
   const [books, setBooks] = useState<Book[]>(SAMPLE_BOOKS);
@@ -353,35 +516,52 @@ const App: React.FC = () => {
         if (cancelled) return;
 
         if (persistedState) {
-          const nextBooks = persistedState.books?.length ? persistedState.books : SAMPLE_BOOKS;
-          const nextSpecs = persistedState.availableSpecs?.length ? persistedState.availableSpecs : VISUAL_PRESETS;
-          const nextCurrentBookId = persistedState.currentBookId ?? null;
-          const preferredVisualSpecId = persistedState.preferredVisualSpecId ?? nextBooks[0]?.visualSpecId ?? DEFAULT_VISUAL_SPEC.id;
-          const resolvedSpec =
-            nextSpecs.find(spec => spec.id === preferredVisualSpecId) ||
-            nextSpecs.find(spec => spec.id === nextBooks.find(book => book.id === nextCurrentBookId)?.visualSpecId) ||
-            nextSpecs[0] ||
-            DEFAULT_VISUAL_SPEC;
-
-          setBooks(nextBooks);
-          setAvailableSpecs(nextSpecs);
-          setCharacters(persistedState.characters || INITIAL_CHARACTERS);
-          setLocations(persistedState.locations || INITIAL_LOCATIONS);
-          setRelationships(persistedState.relationships || INITIAL_RELATIONSHIPS);
-          setRelationshipChats(persistedState.relationshipChats || {});
-          setIllustrations(persistedState.illustrations || {});
-          setCurrentBookId(nextCurrentBookId);
-          setVisualSpec(resolvedSpec);
-          setImageModelId(persistedState.imageModelId || DEFAULT_IMAGE_MODEL_ID);
-          setImageGenerationStats(persistedState.imageGenerationStats || DEFAULT_IMAGE_GENERATION_STATS);
+          applyPersistedStateToApp(
+            persistedState,
+            setBooks,
+            setAvailableSpecs,
+            setCharacters,
+            setLocations,
+            setRelationships,
+            setRelationshipChats,
+            setIllustrations,
+            setCurrentBookId,
+            setVisualSpec,
+            setImageModelId,
+            setImageGenerationStats
+          );
         } else {
-          setBooks(SAMPLE_BOOKS);
+          const snapshotState = await loadAppSnapshotLocally<PersistedAppState>();
+          if (cancelled) return;
+
+          if (snapshotState) {
+            applyPersistedStateToApp(
+              snapshotState,
+              setBooks,
+              setAvailableSpecs,
+              setCharacters,
+              setLocations,
+              setRelationships,
+              setRelationshipChats,
+              setIllustrations,
+              setCurrentBookId,
+              setVisualSpec,
+              setImageModelId,
+              setImageGenerationStats
+            );
+            return;
+          }
+
+          const bootstrappedState = await mergeLocalBootstrapState(SAMPLE_BOOKS)();
+          if (cancelled) return;
+
+          setBooks(bootstrappedState.books);
           setAvailableSpecs(VISUAL_PRESETS);
-          setCharacters(INITIAL_CHARACTERS);
-          setLocations(INITIAL_LOCATIONS);
+          setCharacters(bootstrappedState.characters);
+          setLocations(bootstrappedState.locations);
           setRelationships(INITIAL_RELATIONSHIPS);
           setRelationshipChats({});
-          setIllustrations({});
+          setIllustrations(bootstrappedState.illustrations);
           setCurrentBookId(null);
           setVisualSpec(DEFAULT_VISUAL_SPEC);
           setImageModelId(DEFAULT_IMAGE_MODEL_ID);
@@ -410,21 +590,23 @@ const App: React.FC = () => {
     const persist = async () => {
       try {
         const imageRecords = buildStoredImageRecords(books, characters, locations, illustrations);
+        const snapshotState: PersistedAppState = {
+          books,
+          availableSpecs,
+          characters,
+          locations,
+          relationships,
+          relationshipChats,
+          illustrations,
+          currentBookId,
+          preferredVisualSpecId: visualSpec.id,
+          imageModelId,
+          imageGenerationStats,
+        };
         await Promise.all([
-          savePersistedAppState({
-            books,
-            availableSpecs,
-            characters,
-            locations,
-            relationships,
-            relationshipChats,
-            illustrations,
-            currentBookId,
-            preferredVisualSpecId: visualSpec.id,
-            imageModelId,
-            imageGenerationStats,
-          }),
+          savePersistedAppState(snapshotState),
           saveStoredImageRecords(imageRecords),
+          saveAppSnapshotLocally({ snapshot: snapshotState }),
         ]);
       } catch (error) {
         console.error("Failed to persist app state to IndexedDB:", error);

@@ -1,0 +1,1536 @@
+{
+  "exportedAt": "2026-04-10T06:48:05.378Z",
+  "snapshot": {
+    "books": [
+      {
+        "id": "imported-1775747701883",
+        "title": "狼来了",
+        "author": "未知作者",
+        "genre": "自定义",
+        "coverEmoji": "📚",
+        "visualSpecId": "watercolor_storybook",
+        "coverUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/covers/books/%E5%B0%81%E9%9D%A2.jpg",
+        "chapters": [
+          {
+            "id": "imported-1775747701883-ch1",
+            "title": "第一章",
+            "paragraphs": [
+              {
+                "id": "imported-1775747701883-p-0",
+                "text": "从前，有个放羊娃，每天都去山上放羊。",
+                "chapterId": "imported-1775747701883-ch1"
+              },
+              {
+                "id": "imported-1775747701883-p-1",
+                "text": "一天，他觉得十分无聊，就想了个捉弄大家寻开心的主意。他向着山下正在种田的农夫们大声喊：“狼来了！狼来了！救命啊！”农夫们听到喊声急忙拿着锄头和镰刀往山上跑，他们边跑边喊：“不要怕，孩子，我们来帮你打恶狼！”",
+                "chapterId": "imported-1775747701883-ch1"
+              },
+              {
+                "id": "imported-1775747701883-p-2",
+                "text": "农夫们气喘吁吁地赶到山上一看，连狼的影子也没有！放羊娃哈哈大笑：“真有意思，你们上当了！”农夫们生气地走了。",
+                "chapterId": "imported-1775747701883-ch1"
+              },
+              {
+                "id": "imported-1775747701883-p-3",
+                "text": "第二天，放羊娃故伎重演，善良的农夫们又冲上来帮他打狼，可还是没有见到狼的影子。放羊娃笑得直不起腰：“哈哈！你们又上当了！哈哈！”",
+                "chapterId": "imported-1775747701883-ch1"
+              },
+              {
+                "id": "imported-1775747701883-p-4",
+                "text": "大伙儿对放羊娃一而再再而三地说谎十分生气，从此再也不相信他的话了。过了几天，狼真的来了，一下子闯进了羊群。放羊娃害怕极了，拼命地向农夫们喊：“狼来了！狼来了！快救命呀！狼真的来了！”",
+                "chapterId": "imported-1775747701883-ch1"
+              },
+              {
+                "id": "imported-1775747701883-p-5",
+                "text": "农夫们听到他的喊声，以为他又在说谎，大家都不理睬他，没有人去帮他，结果放羊娃的许多羊都被狼咬死了。",
+                "chapterId": "imported-1775747701883-ch1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "imported-1775739901213",
+        "title": "小红帽",
+        "author": "未知作者",
+        "genre": "自定义",
+        "coverEmoji": "📚",
+        "visualSpecId": "watercolor_storybook",
+        "coverUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/covers/books/%E5%B0%81%E9%9D%A2.jpg",
+        "chapters": [
+          {
+            "id": "imported-1775739901213-ch1",
+            "title": "第一章",
+            "paragraphs": [
+              {
+                "id": "imported-1775739901213-p-0",
+                "text": "从前有个可爱的小姑娘，谁见了都喜欢，但最喜欢她的是她的奶奶，简直是她要什么就给她什么。一次，奶奶送给小姑娘一顶用丝绒做的小红帽，戴在她的头上正好合适。从此，姑娘再也不愿意戴任何别的帽子，于是大家便叫她“小红帽”。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-1",
+                "text": "一天，妈妈对小红帽说：“来，小红帽，这里有一块蛋糕和一瓶葡萄酒，快给奶奶送去，奶奶生病了，身子很虚弱，吃了这些就会好一些的。趁着现在天还没有热，赶紧动身吧。在路上要好好走，不要跑，也不要离开大路，否则你会摔跤的，那样奶奶就什么也吃不上了。到奶奶家的时候，别忘了说‘早上好’，也不要一进屋就东瞧西瞅。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-2",
+                "text": "“我会小心的。”小红帽对妈妈说，并且还和妈妈拉手作保证。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-3",
+                "text": "奶奶住在村子外面的森林里，离小红帽家有很长一段路。小红帽刚走进森林就碰到了一条狼。小红帽不知道狼是坏家伙，所以一点也不怕它。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-4",
+                "text": "“你好，小红帽，”狼说。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-5",
+                "text": "“谢谢你，狼先生。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-6",
+                "text": "“小红帽，这么早要到哪里去呀？”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-7",
+                "text": "“我要到奶奶家去。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-8",
+                "text": "“你那围裙下面有什么呀？”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-9",
+                "text": "“蛋糕和葡萄酒。昨天我们家烤了一些蛋糕，可怜的奶奶生了病，要吃一些好东西才能恢复过来。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-10",
+                "text": "“你奶奶住在哪里呀，小红帽？”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-11",
+                "text": "“进了林子还有一段路呢。她的房子就在三棵大橡树下，低处围着核桃树篱笆。你一定知道的。”小红帽说。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-12",
+                "text": "狼在心中盘算着：“这小东西细皮嫩肉的，味道肯定比那老太婆要好。我要讲究一下策略，让她俩都逃不出我的手心。”于是它陪着小红帽走了一会儿，然后说：“小红帽，你看周围这些花多么美丽啊！干吗不回头看一看呢？还有这些小鸟，它们唱得多么动听啊！你大概根本没有听到吧？林子里的一切多么美好啊，而你却只管往前走，就像是去上学一样。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-13",
+                "text": "小红帽抬起头来，看到阳光在树木间来回跳荡，美丽的鲜花在四周开放，便想：“也许我该摘一把鲜花给奶奶，让她高兴高兴。现在天色还早，我不会去迟的。”她于是离开大路，走进林子去采花。她每采下一朵花，总觉得前面还有更美丽的花朵，便又向前走去，结果一直走到了林子深处。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-14",
+                "text": "就在此时，狼却直接跑到奶奶家，敲了敲门。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-15",
+                "text": "“是谁呀？”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-16",
+                "text": "“是小红帽。”狼回答，“我给你送蛋糕和葡萄酒来了。快开门哪。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-17",
+                "text": "“你拉一下门栓就行了，”奶奶大声说，“我身上没有力气，起不来。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-18",
+                "text": "狼刚拉起门栓，那门就开了。狼二话没说就冲到奶奶的床前，把奶奶吞进了肚子。然后她穿上奶奶的衣服，戴上她的帽子，躺在床上，还拉上了帘子。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-19",
+                "text": "可这时小红帽还在跑来跑去地采花。直到采了许多许多，她都拿不了啦，她才想起奶奶，重新上路去奶奶家。https://www.qigushi.com",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-20",
+                "text": "看到奶奶家的屋门敞开着，她感到很奇怪。她一走进屋子就有一种异样的感觉，心中便想：“天哪！平常我那么喜欢来奶奶家，今天怎么这样害怕？”她大声叫道：“早上好！”，可是没有听到回答。她走到床前拉开帘子，只见奶奶躺在床上，帽子拉得低低的，把脸都遮住了，样子非常奇怪。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-21",
+                "text": "“哎，奶奶，”她说，“你的耳朵怎么这样大呀？”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-22",
+                "text": "“为了更好地听你说话呀，乖乖。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-23",
+                "text": "“可是奶奶，你的眼睛怎么这样大呀？”小红帽又问。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-24",
+                "text": "“为了更清楚地看你呀，乖乖。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-25",
+                "text": "“奶奶，你的手怎么这样大呀？”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-26",
+                "text": "“可以更好地抱着你呀。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-27",
+                "text": "“奶奶，你的嘴巴怎么大得很吓人呀？”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-28",
+                "text": "“可以一口把你吃掉呀！”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-29",
+                "text": "狼刚把话说完，就从床上跳起来，把小红帽吞进了肚子，狼满足了食欲之后便重新躺到床上睡觉，而且鼾声震天。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-30",
+                "text": "一位猎人碰巧从屋前走过，心想：“这老太太鼾打得好响啊！我要进去看看她是不是出什么事了。”猎人进了屋，来到床前时却发现躺在那里的竟是狼。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-31",
+                "text": "“你这老坏蛋，我找了你这么久，真没想到在这里找到你！”他说。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-32",
+                "text": "他正准备向狼开枪，突然又想到，这狼很可能把奶奶吞进了肚子，奶奶也许还活着。猎人就没有开枪，而是操起一把剪刀，动手把呼呼大睡的狼的肚子剪了开来。他刚剪了两下，就看到了红色的小帽子。他又剪了两下，小姑娘便跳了出来，叫道：“真把我吓坏了！狼肚子里黑漆漆的。”接着，奶奶也活着出来了，只是有点喘不过气来。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-33",
+                "text": "小红帽赶紧跑去搬来几块大石头，塞进狼的肚子。狼醒来之后想逃走，可是那些石头太重了，它刚站起来就跌到在地，摔死了。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-34",
+                "text": "三个人高兴极了。猎人剥下狼皮，回家去了；奶奶吃了小红帽带来的蛋糕和葡萄酒，精神好多了；而小红帽却在想：“要是妈妈不允许，我一辈子也不独自离开大路，跑进森林了。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-35",
+                "text": "人们还说，小红帽后来又有一次把蛋糕送给奶奶，而且在路上又有一只狼跟她搭话，想骗她离开大路。可小红帽这次提高了警惕，头也不回地向前走。她告诉奶奶她碰到了狼，那家伙嘴上虽然对她说“你好”，眼睛里却露着凶光，要不是在大路上，它准把她给吃了。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-36",
+                "text": "“那么，”奶奶说，“我们把门关紧，不让它进来。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-37",
+                "text": "不一会儿，狼真的一面敲着门一面叫道：“奶奶，快开门呀。我是小红帽，给你送蛋糕来了。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-38",
+                "text": "但是她们既不说话，也不开门。这长着灰毛的家伙围着房子转了两三圈，最后跳上屋顶，打算等小红帽在傍晚回家时偷偷跟在她的后面，趁天黑把她吃掉。可奶奶看穿了这家伙的坏心思。她想起屋子前有一个大石头槽子，便对小姑娘说：“小红帽，把桶拿来。我昨天做了一些香肠，提些煮香肠的水去倒进石头槽里。”",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-39",
+                "text": "小红帽提了很多很多水，把那个大石头槽子装得满满的。香肠的气味飘进了狼的鼻孔，它使劲地用鼻子闻呀闻，并且朝下张望着，到最后把脖子伸得太长了，身子开始往下滑。它从屋顶上滑了下来，正好落在大石槽中，淹死了。",
+                "chapterId": "imported-1775739901213-ch1"
+              },
+              {
+                "id": "imported-1775739901213-p-40",
+                "text": "小红帽高高兴兴地回了家，从此再也没有谁伤害过她。",
+                "chapterId": "imported-1775739901213-ch1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "book-white-bone",
+        "title": "西游记：三打白骨精",
+        "author": "吴承恩",
+        "genre": "神魔小说",
+        "coverEmoji": "🐵",
+        "visualSpecId": "chinese_line_art",
+        "coverUrl": "/covers/white-bone-demon.png",
+        "chapters": [
+          {
+            "id": "book-white-bone-ch1",
+            "title": "第一章",
+            "paragraphs": [
+              {
+                "id": "book-white-bone-p-0",
+                "text": "唐僧师徒行至白虎岭，孙悟空奉唐僧之命前往南山摘桃解饥。此时白骨精察觉唐僧行踪，欲食其肉以求长生，但因八戒、沙僧护持未敢贸然行动，决定先试探一番。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-1",
+                "text": "白骨精首次化身为一美貌女子，左手提青砂罐，右手持绿磁瓶，谎称为僧人提供斋饭。八戒动了凡心，轻信其言，催促唐僧用斋。唐僧持疑，询问女子来历，白骨精编造身世，称家住山脚，为田中人送饭。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-2",
+                "text": "悟空摘桃归来，识破妖身，举棒便打。白骨精使“解尸法”脱身，留假尸于地。唐僧见女子毙命，怒斥悟空滥杀无辜。八戒趁机挑唆，称悟空使障眼法掩盖罪行。唐僧念紧箍咒惩戒，悟空苦求方止。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-3",
+                "text": "此时罐中现出长蛆、蛤蟆，唐僧半信半疑，但仍责怪悟空行凶。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-4",
+                "text": "白骨精不甘失败，第二次变作八旬老妇，拄杖哭寻“女儿”。八戒惊惶，断言老妇为死者之母，悟空反驳：“八十老妇岂能生十八之女？”近前辨出妖气，挥棒再击。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-5",
+                "text": "白骨精故技重施，元神遁走，假尸倒地。唐僧惊骇坠马，念紧箍咒20遍，悟空头痛欲裂，伏地求饶。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-6",
+                "text": "八戒又进谗言，说：“师父，他要和你分行李哩。”唐僧决意驱逐，悟空以恩情恳求师父不要驱逐他。唐僧心软，暂时饶恕悟空，师徒继续前行。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-7",
+                "text": "白骨精第三次化身为白发老翁，佯装寻妻女骸骨。八戒再称祸事临头，悟空识破老翁真身，暗地里召唤土地、山神作证，不顾唐僧紧箍咒威胁，一棒打死妖精，使其现出白骨本相，白骨的脊梁上刻“白骨夫人”四字。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-8",
+                "text": "唐僧见骷髅稍微相信悟空的话，但是八戒又诬陷悟空伪造证据。唐僧耳软，写下贬书驱逐悟空。",
+                "chapterId": "book-white-bone-ch1"
+              },
+              {
+                "id": "book-white-bone-p-9",
+                "text": "悟空分身四面拜别唐僧，又嘱托沙僧防妖后，含泪拜别，驾云返回花果山，唐僧一行继续西行。自此，取经团队少一主力，前途凶险未卜。",
+                "chapterId": "book-white-bone-ch1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "book-tortoise-hare",
+        "title": "寓言：龟兔赛跑",
+        "author": "伊索",
+        "genre": "寓言故事",
+        "coverEmoji": "🐢",
+        "visualSpecId": "watercolor_storybook",
+        "coverUrl": "/covers/tortoise-hare.png",
+        "chapters": [
+          {
+            "id": "book-tortoise-hare-ch1",
+            "title": "第一章",
+            "paragraphs": [
+              {
+                "id": "book-tortoise-hare-p-0",
+                "text": "兔子长了四条腿，一蹦一跳，跑得可快啦。乌龟也长了四条腿，爬呀，爬呀，爬得真慢。",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-1",
+                "text": "龟兔赛跑，谁才是冠军？",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-2",
+                "text": "有一天，兔子碰见乌龟，看见乌龟爬得这么慢，就想戏弄戏弄他，于是笑眯眯地说：“乌龟，乌龟，咱们来赛跑，好吗？”乌龟知道兔子在开他玩笑，瞪着一双小眼睛，不理也不踩。兔子知道乌龟不敢跟他赛跑，乐得摆着耳朵直蹦跳，还编了一支山歌笑话他：",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-3",
+                "text": "乌龟，乌龟，爬爬爬，",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-4",
+                "text": "一早出门采花；",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-5",
+                "text": "乌龟，乌龟，走走走，",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-6",
+                "text": "傍晚还在门口。",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-7",
+                "text": "乌龟生气了，说：“兔子，兔子，你别神灵活现的，咱们这就来赛跑!”",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-8",
+                "text": "“什么？乌龟，你说什么？”",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-9",
+                "text": "“咱们这就来赛跑。”",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-10",
+                "text": "兔子一听，差点笑破了肚子：“乌龟，你真敢跟我赛跑？那好，咱们从这儿跑起，看谁先跑到那边山脚下的一棵大树。预备！一，二，三，－－－”兔子撒开腿就跑，跑得真快，一会儿就跑得很远了。他回头一看，乌龟才爬了一小段路呢，心心想：乌龟敢跟兔子赛跑，真是天大的笑话！我呀，在这儿睡上一大觉，让他爬到这儿，不，让他爬到前面去吧，我三蹦二跳的就追上他了。",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-11",
+                "text": "“啦啦啦，胜利准是我的嘛。”兔子把身子往地上一躺，合上眼皮，真的睡着了。再说乌龟，爬得也真慢，可是他一个劲儿地爬，爬呀，爬呀，爬，等他爬到兔子身边，已经筋疲力尽了。兔子还在睡觉，乌龟也想休息一会儿，可他知道兔子跑得比他快，只有坚持爬下去才有可能赢。于是，他不停地往前爬、爬、爬。离大树越来越近了，只差几十步了，十几步了，几步了………终于到了。",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-12",
+                "text": "兔子为什么睡着了？",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-13",
+                "text": "兔子呢？他还在睡觉呢。兔子醒来后往后一看，唉，乌龟怎么不见了？再往前一看，哎呀，不得了了。乌龟已经爬到大树底下的。兔子一看可急了，急忙赶上去，可已经晚了，乌龟已经赢了。",
+                "chapterId": "book-tortoise-hare-ch1"
+              },
+              {
+                "id": "book-tortoise-hare-p-14",
+                "text": "兔子跑得快，乌龟跑得慢，为什么这次比赛乌龟反而赢了呢？",
+                "chapterId": "book-tortoise-hare-ch1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "book-water-cycle",
+        "title": "科普：水循环",
+        "author": "科普",
+        "genre": "科普百科",
+        "coverEmoji": "💧",
+        "visualSpecId": "minimalist_lines",
+        "coverUrl": "/covers/water-cycle.png",
+        "chapters": [
+          {
+            "id": "book-water-cycle-ch1",
+            "title": "第一章",
+            "paragraphs": [
+              {
+                "id": "book-water-cycle-p-0",
+                "text": "水循环是地球上水在海洋、陆地与大气之间不断往返的过程，靠的主要是太阳能驱动蒸发与大气运动，外加重力让水回到地表并汇入江河湖海。海洋、湖泊、土壤和植物把水以水汽形式送入空气（蒸发/蒸腾），水汽随气流上升冷却后形成云，并在合适条件下变成雨、雪等降到地面（凝结与降水）。降到陆地的水一部分沿地表流动汇成溪流河流（地表径流），一部分渗入土壤和岩层成为地下水并缓慢流动（下渗与地下径流），最终又回到海洋；同时地表水还会再次蒸发。正是这套循环，持续补给淡水资源、调节气候，也影响着洪涝与干旱的发生。",
+                "chapterId": "book-water-cycle-ch1"
+              },
+              {
+                "id": "book-water-cycle-p-1",
+                "text": "水循环可以按“海洋/陆地 → 大气 → 陆地/海洋 → 回到海洋”这条闭环来理解。首先，太阳加热海面、湖泊、河流和湿润地表，使水变成水汽上升（蒸发）；植物通过叶片把水分释放到空气中（蒸腾），两者合起来常写作“蒸散”。水汽被风带走并抬升到更高处，温度降低后在尘埃等凝结核上形成小水滴或冰晶，聚集成云（凝结/成云）。当云滴长大到空气托不住，就会落到地面或海面，形成雨、雪、冰雹等（降水）。降到陆地的水有几条去路：一部分顺坡流入沟渠、溪流、江河，最后入海（地表径流）；一部分渗入土壤成为土壤水，被植物吸收后再蒸腾回到空气（入渗—植物吸收—蒸腾）；还有一部分继续下渗到更深处形成含水层中的地下水，缓慢流动并在泉、河道或海岸处补给地表水/海洋（地下径流与出露）。在寒冷地区，降水会暂时以积雪、冰川的形式储存，气温回升后融化补给河流（冻结—融化）。这样，水不断在各“水库”（海洋、大气、河流湖泊、土壤、地下水、冰雪）之间转移，构成一张用箭头就能清晰表达的循环流程图。",
+                "chapterId": "book-water-cycle-ch1"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "availableSpecs": [
+      {
+        "id": "watercolor_storybook",
+        "label": "水彩绘本风",
+        "promptStyle": "soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art",
+        "cameraLanguage": "cinematic composition, shallow depth of field",
+        "negatives": "text, watermark, logo, modern objects, photograph, realism, distorted face"
+      },
+      {
+        "id": "anime_cel_shaded",
+        "label": "日系赛璐珞",
+        "promptStyle": "anime style, cel shaded, vibrant colors, clean lines, studio ghibli inspired",
+        "cameraLanguage": "dynamic angle, emotional lighting",
+        "negatives": "3d render, realistic, sketch, messy, text, watermark"
+      },
+      {
+        "id": "cute_pixel_art",
+        "label": "可爱像素风",
+        "promptStyle": "cute pixel art style, 16-bit, vibrant colors, clean pixels, game boy advance aesthetic, retro gaming, isometric perspective",
+        "cameraLanguage": "orthographic view, flat 2D perspective",
+        "negatives": "photograph, blur, noisy, gradient, realistic, 3d render, text, watermark, sloppy pixels"
+      },
+      {
+        "id": "ink_illustration",
+        "label": "古典水墨/版画",
+        "promptStyle": "traditional Chinese ink wash painting style, black and white ink illustration, brush strokes, elegant atmosphere",
+        "cameraLanguage": "centered composition, detailed background",
+        "negatives": "color, photograph, digital painting, blur"
+      },
+      {
+        "id": "chinese_line_art",
+        "label": "工笔白描/年画风",
+        "promptStyle": "traditional chinese line art, gongbi style, new year picture aesthetic, flat coloring, large color blocks, ink line outlines, decorative lines, retro color palette, low saturation, earthy background, chinese opera character styling, exaggerated poses, strong narrative, lianhuanhua style",
+        "cameraLanguage": "flat perspective, 2D composition, narrative framing",
+        "negatives": "volumetric lighting, gradient, 3d render, realistic, photograph, oil painting, impasto, thick paint, modern, shiny"
+      },
+      {
+        "id": "minimalist_lines",
+        "label": "简约线条风",
+        "promptStyle": "minimalist line art, continuous line drawing, abstract style, clean background, high contrast, monochrome or limited color palette, vector art style, simple shapes, modern aesthetic",
+        "cameraLanguage": "flat lay, 2D perspective, plenty of negative space",
+        "negatives": "detailed, complex, realistic, 3d, shading, gradient, cluttered, messy, photograph, texture"
+      }
+    ],
+    "characters": [
+      {
+        "id": "char-wukong",
+        "bookId": "book-white-bone",
+        "name": "孙悟空",
+        "description": "齐天大圣，火眼金睛，忠心耿耿但性格刚烈。",
+        "visualSummary": "猴王形象，身穿虎皮裙，手持金箍棒，头戴紧箍儿，目光如炬。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%AD%99%E6%82%9F%E7%A9%BA.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717378648dd8ef7af441b125f2150dd3f48013f2a14e727_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064949Z&X-Tos-Expires=86400&X-Tos-Signature=5f7fc06c7fcd6da0a21728854f0b2768a5f8ec301d408b69c73315c763c0a383&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-tangseng",
+        "bookId": "book-white-bone",
+        "name": "唐僧",
+        "description": "一心取经的僧人，慈悲但有时肉眼凡胎，易听谗言。",
+        "visualSummary": "身披锦襴袈裟，头戴毗卢帽，骑着白龙马，面容慈祥却带着愁容。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%94%90%E5%83%A7.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717379272dd8ef7af441b125f2150dd3f48013f2a85f9b3_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064952Z&X-Tos-Expires=86400&X-Tos-Signature=1a75fce23735d80fec930c2a2544364afdd3ea03891e045ac166d7bbe633ff0d&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-bajie",
+        "bookId": "book-white-bone",
+        "name": "猪八戒",
+        "description": "贪吃懒做，常在师父面前搬弄是非。",
+        "visualSummary": "猪头人身，挺着大肚子，手持九齿钉耙，穿着黑色僧衣。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%8C%AA%E5%85%AB%E6%88%92.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717380034dd8ef7af441b125f2150dd3f48013f2a577b8c_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064952Z&X-Tos-Expires=86400&X-Tos-Signature=9c4cc1b026cb7d01742b61cf6bdbd54e92291fec2079d590c59a9157ee07f740&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-shaseng",
+        "bookId": "book-white-bone",
+        "name": "沙和尚",
+        "description": "诚恳老实，挑担牵马，是师徒中的调和剂。",
+        "visualSummary": "身材高大，络腮胡须，项挂骷髅念珠，手持降妖宝杖，神情憨厚。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E6%B2%99%E5%92%8C%E5%B0%9A.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717380784dd8ef7af441b125f2150dd3f48013f2aef72e6_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064952Z&X-Tos-Expires=86400&X-Tos-Signature=c0fac4d20174f500effea9e23895430d358e5bd38d647c8013bf34f3a96cd0c1&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-white-bone",
+        "bookId": "book-white-bone",
+        "name": "白骨精",
+        "description": "诡计多端的尸魔，能变幻各种形态迷惑人心。",
+        "visualSummary": "美貌女子/老妪/老翁三变，本相是一具刻有“白骨夫人”字样的骷髅，妖气森森。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%99%BD%E9%AA%A8%E7%B2%BE.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717382053dd8ef7af441b125f2150dd3f48013f2a59943e_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064952Z&X-Tos-Expires=86400&X-Tos-Signature=29cf9a0533f0c14f01a0f2a79023a1e1db1d0719fe3ec96bc3ad31ff6f0e8b7d&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-rabbit",
+        "bookId": "book-tortoise-hare",
+        "name": "兔子",
+        "description": "骄傲自大，跑得飞快但缺乏毅力。",
+        "visualSummary": "一只活泼好动的兔子，拟人化，长耳朵，神气活现。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E5%85%94%E5%AD%90.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739238546df6479734761ee7b3ca927c635915b31438122_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125412Z&X-Tos-Expires=86400&X-Tos-Signature=371352f373180ce4fd2b8f5cd357cb3a5ad49159d4c8443111c966cc775a1369&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-turtle",
+        "bookId": "book-tortoise-hare",
+        "name": "乌龟",
+        "description": "踏实稳重，虽然跑得慢但持之以恒。",
+        "visualSummary": "一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E4%B9%8C%E9%BE%9F.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739239202df6479734761ee7b3ca927c635915b3151b69a_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125413Z&X-Tos-Expires=86400&X-Tos-Signature=496ed19c4dff58b3ee7d4317d35b23e3c312fa565d1e4d628202d32a5ed384b0&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775719034451-0.2669581808692705",
+        "bookId": "book-white-bone",
+        "name": "土地",
+        "description": "新发现角色",
+        "visualSummary": "土地的样貌",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%9C%9F%E5%9C%B0.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/0217757190368744d725e50adb936741e457920f0acab3c5844c3_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T071730Z&X-Tos-Expires=86400&X-Tos-Signature=ec1d9e9889b6e1d389306b08519e0bbc3d44a847722347b828dcc87d9015271e&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775719034452-0.789633387111427",
+        "bookId": "book-white-bone",
+        "name": "山神",
+        "description": "新发现角色",
+        "visualSummary": "山神的样貌",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%B1%B1%E7%A5%9E.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/0217757190380974d725e50adb936741e457920f0acab3ca21f69_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T071730Z&X-Tos-Expires=86400&X-Tos-Signature=1a316e66f2682dbc9bf8595ef774faaf5d9d0f67c567117fc4c7adcf0ff22d7b&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775739924420-0.8734374142212918",
+        "bookId": "imported-1775739901213",
+        "name": "小红帽",
+        "description": "AI扫描发现",
+        "visualSummary": "戴着一顶用丝绒做的红色帽子的小姑娘",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%B0%8F%E7%BA%A2%E5%B8%BD.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924831e09d61fd7b21547d0c39b37ac387b5825478d8_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130534Z&X-Tos-Expires=86400&X-Tos-Signature=e5e4a6a77c05b9366d0f17d8657e795d54cfd4fd052e74521b4485c6010ebb8a&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775739924421-0.010390314170476533",
+        "bookId": "imported-1775739901213",
+        "name": "妈妈",
+        "description": "AI扫描发现",
+        "visualSummary": "小红帽的母亲，故事开始时叮嘱小红帽",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A6%88%E5%A6%88.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924831e09d61fd7b21547d0c39b37ac387b582517421_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130535Z&X-Tos-Expires=86400&X-Tos-Signature=84460ca11352d5399db25868b9430eb8b3c378de8d4ac89b0b5302534c336c96&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775739924421-0.5938871332650079",
+        "bookId": "imported-1775739901213",
+        "name": "奶奶",
+        "description": "AI扫描发现",
+        "visualSummary": "生病在床，住在森林里的老妇人",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A5%B6%E5%A5%B6.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924831e09d61fd7b21547d0c39b37ac387b58276c05a_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130537Z&X-Tos-Expires=86400&X-Tos-Signature=a4ccffbbfb502fa5678261e8a0d6e11c7c8b3aa7c3e38a86f212790aea89c3bd&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775739924421-0.6250970107236709",
+        "bookId": "imported-1775739901213",
+        "name": "狼",
+        "description": "AI扫描发现",
+        "visualSummary": "森林里遇到的、会说话的狼，最终伪装成奶奶",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8B%BC.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924832e09d61fd7b21547d0c39b37ac387b58290f364_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130536Z&X-Tos-Expires=86400&X-Tos-Signature=0055357ce89626d5c08342b0deda38136699ef89837d31227b7308535084b848&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775739924421-0.6931096876918382",
+        "bookId": "imported-1775739901213",
+        "name": "猎人",
+        "description": "AI扫描发现",
+        "visualSummary": "带着枪和剪刀，路过奶奶家并救出小红帽和奶奶的男子",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8C%8E%E4%BA%BA.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739956037e09d61fd7b21547d0c39b37ac387b5822952b6_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130607Z&X-Tos-Expires=86400&X-Tos-Signature=f312a5e794d87fac4a41a58da33a8c9ec9426a9ec6aa3637af94c86f1ebef9ad&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775747724057-0.5800651146793451",
+        "bookId": "imported-1775747701883",
+        "name": "放羊娃",
+        "description": "AI扫描发现",
+        "visualSummary": "一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E6%94%BE%E7%BE%8A%E5%A8%83.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724401282dd6b0400b132890dfb41291202ffb9a1c5b_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151536Z&X-Tos-Expires=86400&X-Tos-Signature=8fe1bf0c70ce80133e1355c553ffdab8d2076e3c8de9bc31271c2636ef973364&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775747724058-0.22687423865663847",
+        "bookId": "imported-1775747701883",
+        "name": "农夫们",
+        "description": "AI扫描发现",
+        "visualSummary": "一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E5%86%9C%E5%A4%AB%E4%BB%AC.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724402282dd6b0400b132890dfb41291202ffb8f154b_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151536Z&X-Tos-Expires=86400&X-Tos-Signature=0aaab03ee50ebddde8854e851c4b869f4c89e13970820fb3739ad168c40763cc&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "char-1775747724059-0.9412958141219245",
+        "bookId": "imported-1775747701883",
+        "name": "狼",
+        "description": "AI扫描发现",
+        "visualSummary": "一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E7%8B%BC.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724402282dd6b0400b132890dfb41291202ffba0be1f_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151535Z&X-Tos-Expires=86400&X-Tos-Signature=0079fc765d62839310dfbe6859f0f027d750d6706bcd6e135d1f2d954c42700f&X-Tos-SignedHeaders=host"
+      }
+    ],
+    "locations": [
+      {
+        "id": "loc-tiger-ridge",
+        "bookId": "book-white-bone",
+        "name": "白虎岭",
+        "description": "荒山野岭，地势险峻，妖气弥漫。",
+        "visualSummary": "怪石嶙峋的山岭，枯木横生，阴云密布，透着一股杀气。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/locations/%E7%99%BD%E8%99%8E%E5%B2%AD.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717389968dd8ef7af441b125f2150dd3f48013f2ac7e45a_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T065003Z&X-Tos-Expires=86400&X-Tos-Signature=e19918d6b964b7541568442042c3dbe0e3c318d5c47098a0d5cc278db4cb220f&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "loc-forest-track",
+        "bookId": "book-tortoise-hare",
+        "name": "森林赛道",
+        "description": "森林中的小路，终点是一棵大树。",
+        "visualSummary": "阳光明媚的森林小径，路边长满野花，尽头是一棵枝繁叶茂的大槐树。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E6%A3%AE%E6%9E%97%E8%B5%9B%E9%81%93.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739241165df6479734761ee7b3ca927c635915b31cdafe7_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125413Z&X-Tos-Expires=86400&X-Tos-Signature=1132e1992fa74457b48ab86e12f491d2e2be09e245e9f19a373775070a09a2fd&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "loc-1775739328858-0.8152861886302005",
+        "bookId": "book-tortoise-hare",
+        "name": "赛跑起点",
+        "description": "AI扫描发现",
+        "visualSummary": "故事开始的地方，可能是一片开阔地",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E8%B5%9B%E8%B7%91%E8%B5%B7%E7%82%B9.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739329176df6479734761ee7b3ca927c635915b31e8f67f_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125541Z&X-Tos-Expires=86400&X-Tos-Signature=5f0dc4d8935835f7f3de0c5bda30f66a42504ded150037cf63311425ed79d2c7&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "loc-1775739328861-0.6867293794731226",
+        "bookId": "book-tortoise-hare",
+        "name": "山脚下的大树",
+        "description": "AI扫描发现",
+        "visualSummary": "赛跑的终点，一棵位于山脚下的大树",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E5%B1%B1%E8%84%9A%E4%B8%8B%E7%9A%84%E5%A4%A7%E6%A0%91.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739329176df6479734761ee7b3ca927c635915b31a17059_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125544Z&X-Tos-Expires=86400&X-Tos-Signature=3d4592db3572cead8b9be45740c7f984a191b5d8b2fdcc5e76ea496381d4ef44&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "loc-1775739924422-0.8922986201092508",
+        "bookId": "imported-1775739901213",
+        "name": "小红帽的家",
+        "description": "AI扫描发现",
+        "visualSummary": "故事开始的地方，小红帽从这里出发去奶奶家",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%B0%8F%E7%BA%A2%E5%B8%BD%E7%9A%84%E5%AE%B6.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924993e09d61fd7b21547d0c39b37ac387b582f17277_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130535Z&X-Tos-Expires=86400&X-Tos-Signature=45d0c607f93817e4d1e23b29ed016359e508da3bdbee54f85d5b04dd4138e063&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "loc-1775739924422-0.9385975427346704",
+        "bookId": "imported-1775739901213",
+        "name": "森林",
+        "description": "AI扫描发现",
+        "visualSummary": "连接小红帽家和奶奶家的大路及周边区域，树木茂密，有阳光、鲜花和小鸟",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E6%A3%AE%E6%9E%97.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924993e09d61fd7b21547d0c39b37ac387b5829e434a_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130535Z&X-Tos-Expires=86400&X-Tos-Signature=3a5b092c0c11c6fd2f3cd9df827b8f7a6b75c98e03c2c39e466456342697ad84&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "loc-1775739924422-0.17177610250174735",
+        "bookId": "imported-1775739901213",
+        "name": "奶奶的房子",
+        "description": "AI扫描发现",
+        "visualSummary": "位于森林深处，三棵大橡树下，低处围着核桃树篱笆的小屋，屋前有一个大石头槽子",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%A5%B6%E5%A5%B6%E7%9A%84%E6%88%BF%E5%AD%90.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924993e09d61fd7b21547d0c39b37ac387b58217ac1f_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130534Z&X-Tos-Expires=86400&X-Tos-Signature=48854e1bbd48227fd2ced854f5bdb024b3fd71ee8405a6f3c12ae7268a7e5cac&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "loc-1775747724059-0.530433944004928",
+        "bookId": "imported-1775747701883",
+        "name": "山上",
+        "description": "AI扫描发现",
+        "visualSummary": "一个放羊娃放羊的山坡或山顶，有草地供羊群吃草，视野开阔，可以俯瞰山下的农田。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8A.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724402282dd6b0400b132890dfb41291202ffb214e6f_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151537Z&X-Tos-Expires=86400&X-Tos-Signature=ed74712c68c417bedda606fdb002ff9c056f69d0a317f81feba1560d676626af&X-Tos-SignedHeaders=host"
+      },
+      {
+        "id": "loc-1775747724060-0.8532256384396684",
+        "bookId": "imported-1775747701883",
+        "name": "山下农田",
+        "description": "AI扫描发现",
+        "visualSummary": "山脚下的农田区域，农夫们在此耕种，环境较为平坦，有种植的庄稼。",
+        "locked": true,
+        "generationStatus": "success",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8B%E5%86%9C%E7%94%B0.jpg",
+        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724402282dd6b0400b132890dfb41291202ffb8c8e5c_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151536Z&X-Tos-Expires=86400&X-Tos-Signature=9fda9a62def9129536fa76e98a57aee4021b766fc54064bc091fc7fd73ae39e0&X-Tos-SignedHeaders=host"
+      }
+    ],
+    "relationships": [
+      {
+        "id": "rel-wb-1",
+        "bookId": "book-white-bone",
+        "sourceId": "char-wukong",
+        "targetId": "char-tangseng",
+        "type": "师徒",
+        "description": "悟空尽力保护师父，唐僧却因误会和八戒的挑拨而多次责罚甚至驱逐他。"
+      },
+      {
+        "id": "rel-wb-2",
+        "bookId": "book-white-bone",
+        "sourceId": "char-wukong",
+        "targetId": "char-bajie",
+        "type": "师兄弟",
+        "description": "八戒多次在唐僧面前诬陷悟空，导致师徒关系破裂，悟空对八戒既气愤又无奈。"
+      },
+      {
+        "id": "rel-wb-3",
+        "bookId": "book-white-bone",
+        "sourceId": "char-wukong",
+        "targetId": "char-white-bone",
+        "type": "死敌",
+        "description": "悟空三次识破并打击白骨精的变化，最终将其消灭。"
+      },
+      {
+        "id": "rel-wb-4",
+        "bookId": "book-white-bone",
+        "sourceId": "char-wukong",
+        "targetId": "char-shaseng",
+        "type": "师兄弟",
+        "description": "沙僧在悟空被驱逐时虽未极力挽留，但平日里悟空对沙僧较为信任。"
+      },
+      {
+        "id": "rel-wb-5",
+        "bookId": "book-white-bone",
+        "sourceId": "char-tangseng",
+        "targetId": "char-bajie",
+        "type": "师徒",
+        "description": "唐僧偏听偏信八戒的谗言，认为八戒憨厚老实。"
+      },
+      {
+        "id": "rel-wb-6",
+        "bookId": "book-white-bone",
+        "sourceId": "char-tangseng",
+        "targetId": "char-shaseng",
+        "type": "师徒",
+        "description": "唐僧认为沙僧忠厚老实，是值得信赖的徒弟。"
+      },
+      {
+        "id": "rel-wb-7",
+        "bookId": "book-white-bone",
+        "sourceId": "char-tangseng",
+        "targetId": "char-white-bone",
+        "type": "猎物",
+        "description": "唐僧肉眼凡胎，被白骨精变化的假象所迷惑，将其视为无辜百姓。"
+      },
+      {
+        "id": "rel-wb-8",
+        "bookId": "book-white-bone",
+        "sourceId": "char-bajie",
+        "targetId": "char-shaseng",
+        "type": "师兄弟",
+        "description": "两人平时一起挑担牵马，八戒常把重活推给沙僧。"
+      },
+      {
+        "id": "rel-wb-9",
+        "bookId": "book-white-bone",
+        "sourceId": "char-bajie",
+        "targetId": "char-white-bone",
+        "type": "被诱惑",
+        "description": "八戒见白骨精变化的女子美貌，动了凡心，极力在师父面前为'女子'辩护。"
+      },
+      {
+        "id": "rel-wb-10",
+        "bookId": "book-white-bone",
+        "sourceId": "char-shaseng",
+        "targetId": "char-white-bone",
+        "type": "敌对",
+        "description": "沙僧虽然法力不及悟空，但也站在保护师父的一方，对妖精保持警惕。"
+      },
+      {
+        "id": "rel-wb-11",
+        "bookId": "book-white-bone",
+        "sourceId": "char-white-bone",
+        "targetId": "char-wukong",
+        "type": "忌惮",
+        "description": "白骨精深知孙悟空法力高强，只能通过离间计来对付他。"
+      },
+      {
+        "id": "rel-wb-12",
+        "bookId": "book-white-bone",
+        "sourceId": "char-white-bone",
+        "targetId": "char-tangseng",
+        "type": "贪欲",
+        "description": "白骨精一心想吃唐僧肉以求长生不老。"
+      },
+      {
+        "id": "rel-wb-13",
+        "bookId": "book-white-bone",
+        "sourceId": "char-white-bone",
+        "targetId": "char-bajie",
+        "type": "利用",
+        "description": "白骨精利用八戒的贪吃好色和对悟空的嫉妒，成功离间了师徒关系。"
+      },
+      {
+        "sourceId": "char-rabbit",
+        "targetId": "char-turtle",
+        "type": "对手",
+        "description": "兔子和乌龟是赛跑中的竞争对手。兔子起初轻视并戏弄乌龟，而乌龟则以坚韧的意志接受挑战并最终赢得了比赛。",
+        "id": "rel-1775739319733",
+        "bookId": "book-tortoise-hare"
+      },
+      {
+        "id": "rel-llm-imported-1775747701883-1775749819054-0",
+        "bookId": "imported-1775747701883",
+        "sourceId": "char-1775747724057-0.5800651146793451",
+        "targetId": "char-1775747724058-0.22687423865663847",
+        "type": "欺骗与被欺骗的失信关系",
+        "description": "放羊娃先后两次编造狼来了的谎言捉弄农夫们取乐，导致农夫们对他彻底失去信任，不再相信他的求救。"
+      },
+      {
+        "id": "rel-llm-imported-1775747701883-1775749819054-1",
+        "bookId": "imported-1775747701883",
+        "sourceId": "char-1775747724059-0.9412958141219245",
+        "targetId": "char-1775747724057-0.5800651146793451",
+        "type": "侵害与被侵害的关系",
+        "description": "狼闯入放羊娃看管的羊群，咬死了放羊娃的许多羊，损害了放羊娃的财产利益。"
+      },
+      {
+        "id": "rel-llm-imported-1775739901213-1775749919173-0",
+        "bookId": "imported-1775739901213",
+        "sourceId": "char-1775739924420-0.8734374142212918",
+        "targetId": "char-1775739924421-0.010390314170476533",
+        "type": "母女",
+        "description": "二人是母女关系，妈妈叮嘱小红帽为生病的奶奶送蛋糕和葡萄酒，小红帽向妈妈承诺会遵守出行注意事项。"
+      },
+      {
+        "id": "rel-llm-imported-1775739901213-1775749919173-1",
+        "bookId": "imported-1775739901213",
+        "sourceId": "char-1775739924420-0.8734374142212918",
+        "targetId": "char-1775739924421-0.5938871332650079",
+        "type": "祖孙",
+        "description": "二人是祖孙关系，奶奶十分疼爱小红帽，曾送她丝绒小红帽，小红帽挂念生病的奶奶要为她送补养食物。"
+      },
+      {
+        "id": "rel-llm-imported-1775739901213-1775749919173-2",
+        "bookId": "imported-1775739901213",
+        "sourceId": "char-1775739924421-0.010390314170476533",
+        "targetId": "char-1775739924421-0.5938871332650079",
+        "type": "婆媳",
+        "description": "二人是婆媳关系，妈妈记挂生病的奶奶，特意准备了蛋糕和葡萄酒让小红帽送过去给奶奶补身体。"
+      },
+      {
+        "id": "rel-llm-imported-1775739901213-1775749919173-3",
+        "bookId": "imported-1775739901213",
+        "sourceId": "char-1775739924420-0.8734374142212918",
+        "targetId": "char-1775739924421-0.6250970107236709",
+        "type": "敌对",
+        "description": "二人是敌对关系，狼哄骗小红帽离开大路方便实施捕猎计划，最终将小红帽吞进了腹中。"
+      },
+      {
+        "id": "rel-llm-imported-1775739901213-1775749919173-4",
+        "bookId": "imported-1775739901213",
+        "sourceId": "char-1775739924421-0.6250970107236709",
+        "targetId": "char-1775739924421-0.5938871332650079",
+        "type": "敌对",
+        "description": "二人是敌对关系，狼冒充小红帽闯入奶奶家中，将生病毫无反抗能力的奶奶吞进了腹中。"
+      },
+      {
+        "id": "rel-llm-imported-1775739901213-1775749919173-5",
+        "bookId": "imported-1775739901213",
+        "sourceId": "char-1775739924421-0.6931096876918382",
+        "targetId": "char-1775739924421-0.6250970107236709",
+        "type": "敌对",
+        "description": "二人是敌对关系，猎人发现作恶的狼后，剪开狼肚救出被吞的小红帽和奶奶，最终杀死了狼。"
+      },
+      {
+        "id": "rel-llm-imported-1775739901213-1775749919173-6",
+        "bookId": "imported-1775739901213",
+        "sourceId": "char-1775739924421-0.6931096876918382",
+        "targetId": "char-1775739924420-0.8734374142212918",
+        "type": "施救者与被施救者",
+        "description": "猎人是小红帽的救命恩人，他剪开沉睡的狼的肚子，救出了被狼吞进腹中的小红帽。"
+      },
+      {
+        "id": "rel-llm-imported-1775739901213-1775749919173-7",
+        "bookId": "imported-1775739901213",
+        "sourceId": "char-1775739924421-0.6931096876918382",
+        "targetId": "char-1775739924421-0.5938871332650079",
+        "type": "施救者与被施救者",
+        "description": "猎人是奶奶的救命恩人，他剪开沉睡的狼的肚子，救出了被狼吞进腹中的奶奶。"
+      }
+    ],
+    "relationshipChats": {
+      "imported-1775747701883": {
+        "messages": [
+          {
+            "role": "assistant",
+            "assistantMode": "companion",
+            "content": "可以问我剧情理解、人物关系，也可以切换成书中角色和你对话。"
+          },
+          {
+            "role": "user",
+            "content": "你觉得放羊娃是个怎么样的人"
+          },
+          {
+            "role": "assistant",
+            "content": "从故事里的情节来看，放羊娃一开始是个贪玩、不诚实、不懂得尊重他人善意的孩子哦。\n他觉得放羊无聊，就两次撒谎骗山下辛苦种田的农夫上山来打狼，把大家的关心和帮忙当作捉弄取乐的由头，硬生生耗光了大家对他的信任。等到狼真的来了的时候，已经没有人愿意相信他的话，最终他也付出了许多羊被狼咬死的代价，这个故事也正是借这个角色告诉我们，为人要诚实，绝对不能拿他人的善意开玩笑。",
+            "assistantMode": "companion"
+          },
+          {
+            "role": "user",
+            "content": "你们怎么看放羊娃？"
+          },
+          {
+            "role": "assistant",
+            "content": "哎，这娃可太不地道了！我们天天在山下刨地挣口饭吃，忙得脚不沾地，第一次听见他喊狼来了，怕他和羊出事，撂下手里的活抄起锄头镰刀就往山上冲，累得气喘吁吁的，结果是他编瞎话逗我们玩呢？我们想着说不定他是头一回淘气，没往心里去，结果第二天他又来这么一出！拿我们的好心当取乐的玩意儿，这种撒谎成性的娃，我们可再也不信他说的半个字了。",
+            "assistantMode": "character",
+            "assistantCharacterId": "char-1775747724058-0.22687423865663847"
+          },
+          {
+            "role": "user",
+            "content": "你认识到你的错误了吗？"
+          },
+          {
+            "role": "assistant",
+            "content": "我、我知道错了……我不该闲得无聊撒谎捉弄山下的农夫们，把大家的好心当乐子耍，现在狼真的来了，我的羊被咬死了好多，我喊得嗓子都哑了也没人愿意信我来帮我，我真的后悔死了，以后再也不敢说谎骗人了。",
+            "assistantMode": "character",
+            "assistantCharacterId": "char-1775747724057-0.5800651146793451"
+          }
+        ],
+        "scopeLabel": "这是到第一章为止的阅读进度"
+      }
+    },
+    "illustrations": {
+      "book-white-bone-p-0": {
+        "id": "ill-1775717404385-0.9945693783114187",
+        "paragraphId": "book-white-bone-p-0",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "孙悟空",
+            "唐僧",
+            "猪八戒",
+            "沙和尚",
+            "白骨精"
+          ],
+          "location": "白虎岭",
+          "action": "孙悟空前往南山摘桃，白骨精察觉唐僧行踪并谋划试探",
+          "mood": "平静中暗藏危机、潜伏与谋划",
+          "objects": [
+            "桃子"
+          ]
+        },
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg"
+      },
+      "book-white-bone-p-4": {
+        "id": "ill-1775718405591-0.13950043865364659",
+        "paragraphId": "book-white-bone-p-4",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "白骨精",
+            "猪八戒",
+            "孙悟空"
+          ],
+          "location": "白虎岭",
+          "action": "白骨精变作八旬老妇寻女儿，八戒惊惶断言其身份，悟空反驳并识破妖气后挥棒攻击",
+          "mood": "紧张、惊疑、充满冲突",
+          "objects": [
+            "拐杖"
+          ]
+        },
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg"
+      },
+      "book-white-bone-p-6": {
+        "id": "ill-1775718900738-0.6232728661548878",
+        "paragraphId": "book-white-bone-p-6",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "猪八戒",
+            "唐僧",
+            "孙悟空"
+          ],
+          "location": "白虎岭",
+          "action": "猪八戒进谗言挑拨离间，唐僧一度决意驱逐孙悟空，后因孙悟空恳求而心软，暂时饶恕他，师徒继续前行",
+          "mood": "紧张、猜忌、师徒关系濒临破裂又暂时缓和",
+          "objects": [
+            "行李"
+          ]
+        },
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg"
+      },
+      "book-white-bone-p-9": {
+        "id": "ill-1775718902890-0.06758248711100268",
+        "paragraphId": "book-white-bone-p-9",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "孙悟空",
+            "唐僧",
+            "沙和尚"
+          ],
+          "location": "白虎岭",
+          "action": "悟空分身拜别唐僧、嘱托沙僧、含泪驾云返回花果山；唐僧一行继续西行",
+          "mood": "悲伤、不舍、决绝、前途未卜",
+          "objects": []
+        },
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC10%E6%AE%B5.jpg"
+      },
+      "book-white-bone-p-7": {
+        "id": "ill-1775718986315-0.4478333000470335",
+        "paragraphId": "book-white-bone-p-7",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "孙悟空",
+            "白骨精",
+            "猪八戒",
+            "唐僧",
+            "土地",
+            "山神"
+          ],
+          "location": "白虎岭",
+          "action": "白骨精化身老翁寻亲，悟空识破召唤山神土地作证后将其打死，妖精现出白骨原形",
+          "mood": "紧张、对峙、揭露真相",
+          "objects": [
+            "金箍棒",
+            "紧箍咒",
+            "白骨（脊梁刻有'白骨夫人'）"
+          ]
+        },
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg"
+      },
+      "book-tortoise-hare-p-2": {
+        "id": "ill-1775739223180-0.839971201029128",
+        "paragraphId": "book-tortoise-hare-p-2",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "兔子",
+            "乌龟"
+          ],
+          "location": "森林赛道",
+          "action": "兔子遇见乌龟并提议赛跑，乌龟不理睬，兔子得意地蹦跳并唱歌嘲笑乌龟。",
+          "mood": "戏谑、挑衅、得意",
+          "objects": []
+        },
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC3%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 森林赛道 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子遇见乌龟并提议赛跑，乌龟不理睬，兔子得意地蹦跳并唱歌嘲笑乌龟。 | 氛围: 戏谑、挑衅、得意 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "book-tortoise-hare-p-7": {
+        "id": "ill-1775739487053-0.1547793918016469",
+        "paragraphId": "book-tortoise-hare-p-7",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "兔子",
+            "乌龟"
+          ],
+          "location": "森林赛道起点",
+          "action": "乌龟因被兔子取笑而生气，向兔子发起赛跑挑战",
+          "mood": "紧张、对立、挑衅",
+          "objects": []
+        },
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 森林赛道起点 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 乌龟因被兔子取笑而生气，向兔子发起赛跑挑战 | 氛围: 紧张、对立、挑衅 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "book-tortoise-hare-p-10": {
+        "id": "ill-1775739493570-0.3547736134182471",
+        "paragraphId": "book-tortoise-hare-p-10",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "兔子",
+            "乌龟"
+          ],
+          "location": "赛跑起点",
+          "action": "兔子嘲笑乌龟并提出赛跑，然后快速起跑，将乌龟远远甩在后面并决定睡觉等待",
+          "mood": "轻蔑、傲慢、得意",
+          "objects": []
+        },
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC11%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 赛跑起点 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子嘲笑乌龟并提出赛跑，然后快速起跑，将乌龟远远甩在后面并决定睡觉等待 | 氛围: 轻蔑、傲慢、得意 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "book-tortoise-hare-p-12": {
+        "id": "ill-1775739494667-0.4291713548468664",
+        "paragraphId": "book-tortoise-hare-p-12",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "兔子",
+            "乌龟"
+          ],
+          "location": "森林赛道上（起点到山脚下大树之间的某处）",
+          "action": "兔子因骄傲和轻敌，在赛跑途中躺下睡觉",
+          "mood": "骄傲、轻敌、松懈",
+          "objects": []
+        },
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 森林赛道上（起点到山脚下大树之间的某处） | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子因骄傲和轻敌，在赛跑途中躺下睡觉 | 氛围: 骄傲、轻敌、松懈 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "book-tortoise-hare-p-13": {
+        "id": "ill-1775739500560-0.7319535874751318",
+        "paragraphId": "book-tortoise-hare-p-13",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "兔子",
+            "乌龟"
+          ],
+          "location": "山脚下的大树",
+          "action": "兔子醒来发现乌龟已到达终点，急忙追赶但失败，乌龟赢得比赛",
+          "mood": "惊讶、焦急、懊悔、胜利",
+          "objects": [
+            "大树"
+          ]
+        },
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 山脚下的大树 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子醒来发现乌龟已到达终点，急忙追赶但失败，乌龟赢得比赛 | 氛围: 惊讶、焦急、懊悔、胜利 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775739901213-p-0": {
+        "id": "ill-1775740339594-0.9460989657178813",
+        "paragraphId": "imported-1775739901213-p-0",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "小红帽",
+            "奶奶"
+          ],
+          "location": "未知（可能在小红帽家或奶奶家）",
+          "action": "奶奶送给小红帽一顶丝绒小红帽，她非常喜欢并因此得名。",
+          "mood": "温馨、喜爱",
+          "objects": [
+            "小红帽（丝绒做的帽子）"
+          ]
+        },
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 未知（可能在小红帽家或奶奶家） | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 奶奶送给小红帽一顶丝绒小红帽，她非常喜欢并因此得名。 | 氛围: 温馨、喜爱 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775739901213-p-3": {
+        "id": "ill-1775740353937-0.06789895029135984",
+        "paragraphId": "imported-1775739901213-p-3",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "小红帽",
+            "狼"
+          ],
+          "location": "森林",
+          "action": "小红帽走进森林并遇到了狼",
+          "mood": "平静、天真，略带未知的危险",
+          "objects": []
+        },
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 小红帽走进森林并遇到了狼 | 氛围: 平静、天真，略带未知的危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775739901213-p-6": {
+        "id": "ill-1775740364011-0.2758615648181353",
+        "paragraphId": "imported-1775739901213-p-6",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "小红帽",
+            "狼"
+          ],
+          "location": "森林",
+          "action": "狼向小红帽询问去向",
+          "mood": "看似平静友好，暗藏危险",
+          "objects": []
+        },
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼向小红帽询问去向 | 氛围: 看似平静友好，暗藏危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775739901213-p-12": {
+        "id": "ill-1775740377382-0.6340514939147436",
+        "paragraphId": "imported-1775739901213-p-12",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "小红帽",
+            "狼"
+          ],
+          "location": "森林",
+          "action": "狼在陪伴小红帽走路时，通过言语引诱她欣赏周围的风景和花朵，意图拖延时间并让她偏离大路。",
+          "mood": "表面平静美好但暗藏阴谋",
+          "objects": [
+            "花",
+            "小鸟"
+          ]
+        },
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼在陪伴小红帽走路时，通过言语引诱她欣赏周围的风景和花朵，意图拖延时间并让她偏离大路。 | 氛围: 表面平静美好但暗藏阴谋 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775739901213-p-13": {
+        "id": "ill-1775740380721-0.6434101066654929",
+        "paragraphId": "imported-1775739901213-p-13",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "小红帽"
+          ],
+          "location": "森林",
+          "action": "小红帽离开大路，在森林中采摘鲜花",
+          "mood": "宁静、美好、天真、专注",
+          "objects": [
+            "鲜花",
+            "阳光",
+            "树木"
+          ]
+        },
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘.  | 动作: 小红帽离开大路，在森林中采摘鲜花 | 氛围: 宁静、美好、天真、专注 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775739901213-p-18": {
+        "id": "ill-1775740409759-0.451050915461067",
+        "paragraphId": "imported-1775739901213-p-18",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "狼",
+            "奶奶"
+          ],
+          "location": "奶奶的房子",
+          "action": "狼拉开门栓，冲进房间，将奶奶吞下，然后伪装成奶奶躺在床上",
+          "mood": "紧张、危险、诡异",
+          "objects": [
+            "门栓",
+            "门",
+            "床",
+            "奶奶的衣服",
+            "奶奶的帽子",
+            "帘子"
+          ]
+        },
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC19%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 狼拉开门栓，冲进房间，将奶奶吞下，然后伪装成奶奶躺在床上 | 氛围: 紧张、危险、诡异 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775739901213-p-20": {
+        "id": "ill-1775740415828-0.8621104443411497",
+        "paragraphId": "imported-1775739901213-p-20",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "小红帽",
+            "奶奶"
+          ],
+          "location": "奶奶的房子",
+          "action": "小红帽进入奶奶的房子，发现门开着且无人应答，她走到床前拉开帘子观察躺在床上的奶奶",
+          "mood": "奇怪、害怕、诡异",
+          "objects": [
+            "屋门",
+            "床",
+            "帘子",
+            "帽子"
+          ]
+        },
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC21%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 小红帽进入奶奶的房子，发现门开着且无人应答，她走到床前拉开帘子观察躺在床上的奶奶 | 氛围: 奇怪、害怕、诡异 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "book-water-cycle-p-0": {
+        "id": "ill-1775747394592-0.5744202921114712",
+        "paragraphId": "book-water-cycle-p-0",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [],
+          "location": "地球上的自然系统（包括海洋、陆地、大气）",
+          "action": "水在太阳、重力和大气运动的驱动下，通过蒸发/蒸腾、成云、降水、地表径流、下渗与地下径流等方式，在海洋、陆地与大气之间循环流动。",
+          "mood": "客观、科学、描述性",
+          "objects": [
+            "海洋",
+            "湖泊",
+            "土壤",
+            "植物",
+            "水汽",
+            "云",
+            "雨",
+            "雪",
+            "溪流",
+            "河流",
+            "地下水"
+          ]
+        },
+        "imageUrl": "/pic_db/%E7%A7%91%E6%99%AE%20%E6%B0%B4%E5%BE%AA%E7%8E%AF/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 依据原文: \"水循环是地球上水在海洋、陆地与大气之间不断往返的过程，靠的主要是太阳能驱动蒸发与大气运动，外加重力让水回到地表并汇入江河湖海。海洋、湖泊、土壤和植物把水以水汽形式送入空气（蒸发/蒸腾），水汽随气流上升冷却后形成云，并在合适条件下变成雨、雪等降到地面（凝结与降水）。降到陆地的水一部分沿地表流动汇成溪流河流（地表径流），一部分渗入土壤和岩层成为地下水并缓慢流动（下渗与地下径流），最终又回到海洋；同时地表水还会再次蒸发。正是这套循环，持续补给淡水资源、调节气候，也影响着洪涝与干旱的发生。\" | 地点: 地球上的自然系统（包括海洋、陆地、大气） | 角色:  | 动作: 水在太阳、重力和大气运动的驱动下，通过蒸发/蒸腾、成云、降水、地表径流、下渗与地下径流等方式，在海洋、陆地与大气之间循环流动。 | 氛围: 客观、科学、描述性 | 风格: minimalist line art, continuous line drawing, abstract style, clean background, high contrast, monochrome or limited color palette, vector art style, simple shapes, modern aesthetic | 镜头: flat lay, 2D perspective, plenty of negative space｜禁止出现文字"
+      },
+      "book-water-cycle-p-1": {
+        "id": "ill-1775747395400-0.5420431852702824",
+        "paragraphId": "book-water-cycle-p-1",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [],
+          "location": "地球自然环境",
+          "action": "太阳加热水体导致蒸发和蒸腾，水汽上升形成云并最终以降水的形式返回地表，随后通过地表径流、下渗、地下径流等方式流动，构成一个完整的循环过程。",
+          "mood": "客观、科学、动态",
+          "objects": [
+            "太阳",
+            "海洋",
+            "湖泊",
+            "河流",
+            "湿润地表",
+            "植物",
+            "水汽",
+            "风",
+            "尘埃",
+            "云",
+            "雨",
+            "雪",
+            "冰雹",
+            "沟渠",
+            "溪流",
+            "江河",
+            "土壤",
+            "地下水",
+            "含水层",
+            "泉",
+            "海岸",
+            "积雪",
+            "冰川"
+          ]
+        },
+        "imageUrl": "/pic_db/%E7%A7%91%E6%99%AE%20%E6%B0%B4%E5%BE%AA%E7%8E%AF/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC2%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 依据原文: \"水循环可以按“海洋/陆地 → 大气 → 陆地/海洋 → 回到海洋”这条闭环来理解。首先，太阳加热海面、湖泊、河流和湿润地表，使水变成水汽上升（蒸发）；植物通过叶片把水分释放到空气中（蒸腾），两者合起来常写作“蒸散”。水汽被风带走并抬升到更高处，温度降低后在尘埃等凝结核上形成小水滴或冰晶，聚集成云（凝结/成云）。当云滴长大到空气托不住，就会落到地面或海面，形成雨、雪、冰雹等（降水）。降到陆地的水有几条去路：一部分顺坡流入沟渠、溪流、江河，最后入海（地表径流）；一部分渗入土壤成为土壤水，被植物吸收后再蒸腾回到空气（入渗—植物吸收—蒸腾）；还有一部分继续下渗到更深处形成含水层中的地下水，缓慢流动并在泉、河道或海岸处补给地表水/海洋（地下径流与出露）。在寒冷地区，降水会暂时以积雪、冰川的形式储存，气温回升后融化补给河流（冻结—融化）。这样，水不断在各“水库”（海洋、大气、河流湖泊、土壤、地下水、冰雪）之间转移，构成一张用箭头就能清晰表达的循环流程图。\" | 地点: 地球自然环境 | 角色:  | 动作: 太阳加热水体导致蒸发和蒸腾，水汽上升形成云并最终以降水的形式返回地表，随后通过地表径流、下渗、地下径流等方式流动，构成一个完整的循环过程。 | 氛围: 客观、科学、动态 | 风格: minimalist line art, continuous line drawing, abstract style, clean background, high contrast, monochrome or limited color palette, vector art style, simple shapes, modern aesthetic | 镜头: flat lay, 2D perspective, plenty of negative space｜禁止出现文字"
+      },
+      "imported-1775747701883-p-1": {
+        "id": "ill-1775747818307-0.28040423748075094",
+        "paragraphId": "imported-1775747701883-p-1",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "放羊娃",
+            "农夫们"
+          ],
+          "location": "山上（放羊娃所在处）和山下农田（农夫们初始位置）",
+          "action": "放羊娃为寻开心，向山下农夫们谎报狼来了；农夫们听到呼救后，急忙拿着农具从农田跑向山上准备打狼。",
+          "mood": "紧张、急迫（农夫们的反应），但源于欺骗（放羊娃的动机）",
+          "objects": [
+            "锄头",
+            "镰刀"
+          ]
+        },
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC2%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 山上（放羊娃所在处）和山下农田（农夫们初始位置） | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。.  | 动作: 放羊娃为寻开心，向山下农夫们谎报狼来了；农夫们听到呼救后，急忙拿着农具从农田跑向山上准备打狼。 | 氛围: 紧张、急迫（农夫们的反应），但源于欺骗（放羊娃的动机） | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775747701883-p-4": {
+        "id": "ill-1775747823003-0.5017297055288632",
+        "paragraphId": "imported-1775747701883-p-4",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "放羊娃",
+            "农夫们",
+            "狼"
+          ],
+          "location": "山上",
+          "action": "狼闯入羊群，放羊娃惊慌失措地向山下的农夫们呼救",
+          "mood": "紧张、恐惧、绝望",
+          "objects": [
+            "羊群"
+          ]
+        },
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。. 狼: 一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。.  | 动作: 狼闯入羊群，放羊娃惊慌失措地向山下的农夫们呼救 | 氛围: 紧张、恐惧、绝望 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 图中不要出现农民"
+      },
+      "imported-1775747701883-p-5": {
+        "id": "ill-1775747826111-0.002951324556810575",
+        "paragraphId": "imported-1775747701883-p-5",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "放羊娃",
+            "农夫们",
+            "狼"
+          ],
+          "location": "山上",
+          "action": "放羊娃呼救，农夫们因他之前说谎而不予理睬，狼咬死了许多羊",
+          "mood": "紧张、无助、悲剧",
+          "objects": [
+            "羊"
+          ]
+        },
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC6%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。. 狼: 一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。.  | 动作: 放羊娃呼救，农夫们因他之前说谎而不予理睬，狼咬死了许多羊 | 氛围: 紧张、无助、悲剧 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 放羊娃的眼神要惊恐；体现出狼撕咬羊的场面"
+      },
+      "imported-1775747701883-p-3": {
+        "id": "ill-1775747927139-0.9854580341045859",
+        "paragraphId": "imported-1775747701883-p-3",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "放羊娃",
+            "农夫们"
+          ],
+          "location": "山上",
+          "action": "放羊娃再次大喊狼来了欺骗农夫们，农夫们冲上山帮忙却发现没有狼，放羊娃大笑",
+          "mood": "戏谑、紧张后的滑稽、愤怒",
+          "objects": [
+            "羊群",
+            "锄头",
+            "镰刀"
+          ]
+        },
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。.  | 动作: 放羊娃再次大喊狼来了欺骗农夫们，农夫们冲上山帮忙却发现没有狼，放羊娃大笑 | 氛围: 戏谑、紧张后的滑稽、愤怒 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
+      },
+      "imported-1775739901213-p-29": {
+        "id": "ill-1775748102801-0.4772708195249463",
+        "paragraphId": "imported-1775739901213-p-29",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "小红帽",
+            "狼"
+          ],
+          "location": "奶奶的房子",
+          "action": "狼从床上跳起来吞掉了小红帽，然后躺下睡觉并打鼾",
+          "mood": "紧张、惊悚、危险",
+          "objects": [
+            "床"
+          ]
+        },
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC30%E6%AE%B5.jpg",
+        "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼从床上跳起来吞掉了小红帽，然后躺下睡觉并打鼾 | 氛围: 紧张、惊悚、危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 狼刚把话说完，就从床上跳起来，把小红帽吞进了肚子，狼满足了食欲之后便重新躺到床上睡觉，而且鼾声震天。"
+      }
+    },
+    "currentBookId": "imported-1775747701883",
+    "preferredVisualSpecId": "watercolor_storybook",
+    "imageModelId": "doubao-seedream-4-5-251128",
+    "imageGenerationStats": {
+      "total": 88,
+      "assets": 39,
+      "illustrations": 49,
+      "byModel": {
+        "doubao-seedream-4-5-251128": 85,
+        "doubao-seedream-5-0-260128": 3
+      },
+      "lastGeneratedAt": "2026-04-09T15:24:02.865Z"
+    }
+  }
+}

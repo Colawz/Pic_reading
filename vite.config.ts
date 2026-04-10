@@ -5,6 +5,7 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 const PIC_DB_DIR = path.resolve(__dirname, 'pic_db');
+const APP_SNAPSHOT_PATH = path.resolve(__dirname, 'app_state_snapshot.json');
 
 const getMimeType = (filePath: string) => {
   const ext = path.extname(filePath).toLowerCase();
@@ -451,6 +452,63 @@ const attachLocalImageMiddlewares = (middlewares: any) => {
     } catch (error: any) {
       res.statusCode = 500;
       res.end(error?.message || 'Failed to relocate generated image');
+    }
+  });
+
+  middlewares.use('/api/save-app-snapshot', async (req: any, res: any, next: any) => {
+    if (req.method !== 'POST') {
+      next();
+      return;
+    }
+
+    try {
+      const chunks: Buffer[] = [];
+      for await (const chunk of req) {
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      }
+
+      const body = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
+      await fsp.writeFile(
+        APP_SNAPSHOT_PATH,
+        JSON.stringify(
+          {
+            exportedAt: new Date().toISOString(),
+            snapshot: body.snapshot ?? null,
+          },
+          null,
+          2
+        ),
+        'utf-8'
+      );
+
+      res.statusCode = 204;
+      res.end();
+    } catch (error: any) {
+      res.statusCode = 500;
+      res.end(error?.message || 'Failed to save app snapshot');
+    }
+  });
+
+  middlewares.use('/api/load-app-snapshot', async (req: any, res: any, next: any) => {
+    if (req.method !== 'GET') {
+      next();
+      return;
+    }
+
+    try {
+      if (!fs.existsSync(APP_SNAPSHOT_PATH)) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ snapshot: null }));
+        return;
+      }
+
+      const content = await fsp.readFile(APP_SNAPSHOT_PATH, 'utf-8');
+      const parsed = JSON.parse(content);
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ snapshot: parsed.snapshot ?? null, exportedAt: parsed.exportedAt ?? null }));
+    } catch (error: any) {
+      res.statusCode = 500;
+      res.end(error?.message || 'Failed to load app snapshot');
     }
   });
 };

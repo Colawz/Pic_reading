@@ -1,0 +1,69 @@
+<svg width="1400" height="860" viewBox="0 0 1400 860" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#50627a"/>
+    </marker>
+    <style>
+      .title { font: 700 34px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #14243a; }
+      .text { font: 500 16px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #54647c; }
+      .boxTitle { font: 700 18px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #14243a; }
+      .boxText { font: 500 14px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #50627a; }
+    </style>
+  </defs>
+  <rect width="1400" height="860" fill="#f8fbfe"/>
+  <text x="70" y="72" class="title">本地存储与图片同步机制图</text>
+  <text x="70" y="104" class="text">解释图片如何从远程 URL 变成本地文件，并与 IndexedDB 状态保持同步</text>
+
+  <rect x="90" y="180" width="220" height="110" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="120" y="220" class="boxTitle">AI 返回远程 URL</text>
+  <text x="120" y="247" class="boxText">封面 / 角色图 / 地点图 / 插图</text>
+
+  <rect x="380" y="180" width="260" height="110" rx="24" fill="#fff7ed" stroke="#efc99c"/>
+  <text x="412" y="220" class="boxTitle">localImageService</text>
+  <text x="412" y="247" class="boxText">保存、查找、删除、重命名归一化</text>
+
+  <rect x="710" y="180" width="250" height="110" rx="24" fill="#eefcf4" stroke="#b8dcc5"/>
+  <text x="742" y="220" class="boxTitle">Vite 本地中间件</text>
+  <text x="742" y="247" class="boxText">下载文件、清理旧图、提供本地访问</text>
+
+  <rect x="1030" y="180" width="280" height="110" rx="24" fill="#eef6ff" stroke="#bfd1e6"/>
+  <text x="1062" y="220" class="boxTitle">pic_db 本地图片库</text>
+  <text x="1062" y="247" class="boxText">封面 / 资产图 / 章节插图</text>
+
+  <line x1="310" y1="235" x2="380" y2="235" stroke="#50627a" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="640" y1="235" x2="710" y2="235" stroke="#50627a" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="960" y1="235" x2="1030" y2="235" stroke="#50627a" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="130" y="420" width="260" height="150" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="162" y="460" class="boxTitle">IndexedDB app_state</text>
+  <text x="162" y="487" class="boxText">books</text>
+  <text x="162" y="510" class="boxText">characters / locations / relationships</text>
+  <text x="162" y="533" class="boxText">illustrations / relationshipChats</text>
+
+  <rect x="450" y="420" width="260" height="150" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="482" y="460" class="boxTitle">IndexedDB image_records</text>
+  <text x="482" y="487" class="boxText">bookId</text>
+  <text x="482" y="510" class="boxText">sourceType / sourceId</text>
+  <text x="482" y="533" class="boxText">localUrl / remoteUrl / status</text>
+
+  <rect x="770" y="420" width="260" height="150" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="802" y="460" class="boxTitle">启动恢复逻辑</text>
+  <text x="802" y="487" class="boxText">查找本地图片</text>
+  <text x="802" y="510" class="boxText">纠正旧路径</text>
+  <text x="802" y="533" class="boxText">规范化文件名</text>
+
+  <rect x="1090" y="420" width="230" height="150" rx="24" fill="#ffffff" stroke="#d5deea"/>
+  <text x="1122" y="460" class="boxTitle">页面展示</text>
+  <text x="1122" y="487" class="boxText">书架封面</text>
+  <text x="1122" y="510" class="boxText">世界观资产卡</text>
+  <text x="1122" y="533" class="boxText">阅读器插图</text>
+
+  <line x1="1170" y1="290" x2="1170" y2="420" stroke="#50627a" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="390" y1="495" x2="450" y2="495" stroke="#50627a" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="710" y1="495" x2="770" y2="495" stroke="#50627a" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1030" y1="495" x2="1090" y2="495" stroke="#50627a" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="100" y="660" width="1220" height="112" rx="26" fill="#132238"/>
+  <text x="136" y="706" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="20" font-weight="700" fill="#ffffff">当前命名规则</text>
+  <text x="136" y="740" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="16" fill="#dbe6f3">资产图：资产名.jpg ｜ 封面：封面.jpg ｜ 章节插图：章节名-第N段.jpg</text>
+</svg>

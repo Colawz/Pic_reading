@@ -1,0 +1,50 @@
+<svg width="1400" height="860" viewBox="0 0 1400 860" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 34px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #132238; }
+      .text { font: 500 16px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #53647b; }
+      .boxTitle { font: 700 18px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #132238; }
+      .boxText { font: 500 14px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #516074; }
+    </style>
+  </defs>
+  <rect width="1400" height="860" fill="#f8fbff"/>
+  <text x="70" y="72" class="title">测试覆盖范围示意图</text>
+  <text x="70" y="104" class="text">从功能、数据、性能、异常恢复和关系页 AI 交互五个维度覆盖当前系统</text>
+
+  <rect x="110" y="180" width="220" height="180" rx="28" fill="#ffffff" stroke="#d5deea"/>
+  <text x="142" y="220" class="boxTitle">功能测试</text>
+  <text x="142" y="248" class="boxText">导入、封面、生图、批量</text>
+  <text x="142" y="271" class="boxText">世界观、关系图、聊天、导出</text>
+
+  <rect x="390" y="180" width="220" height="180" rx="28" fill="#ffffff" stroke="#d5deea"/>
+  <text x="422" y="220" class="boxTitle">数据测试</text>
+  <text x="422" y="248" class="boxText">books / relationships / chats</text>
+  <text x="422" y="271" class="boxText">illustrations / image_records / pic_db</text>
+
+  <rect x="670" y="180" width="220" height="180" rx="28" fill="#ffffff" stroke="#d5deea"/>
+  <text x="702" y="220" class="boxTitle">性能测试</text>
+  <text x="702" y="248" class="boxText">构建体积、启动恢复</text>
+  <text x="702" y="271" class="boxText">单段生成、批量并发、聊天响应</text>
+
+  <rect x="950" y="180" width="220" height="180" rx="28" fill="#ffffff" stroke="#d5deea"/>
+  <text x="982" y="220" class="boxTitle">异常恢复</text>
+  <text x="982" y="248" class="boxText">图片丢失、索引错乱</text>
+  <text x="982" y="271" class="boxText">删除书籍、清空聊天、失败重试</text>
+
+  <rect x="280" y="450" width="320" height="190" rx="28" fill="#eef6ff" stroke="#c2d4e8"/>
+  <text x="316" y="492" class="boxTitle">关系页专项测试</text>
+  <text x="316" y="522" class="boxText">截至已生图章节的关系图生成</text>
+  <text x="316" y="548" class="boxText">AI 伴读问答</text>
+  <text x="316" y="574" class="boxText">角色扮演阅读边界控制</text>
+  <text x="316" y="600" class="boxText">聊天记录持久化与清空</text>
+
+  <rect x="760" y="450" width="360" height="190" rx="28" fill="#eefcf4" stroke="#b8dcc5"/>
+  <text x="796" y="492" class="boxTitle">本地图片专项测试</text>
+  <text x="796" y="522" class="boxText">图片命名归一化</text>
+  <text x="796" y="548" class="boxText">旧路径恢复与索引重建</text>
+  <text x="796" y="574" class="boxText">重生成后旧图清理</text>
+  <text x="796" y="600" class="boxText">封面、资产图、插图显示一致性</text>
+
+  <rect x="100" y="715" width="1200" height="92" rx="24" fill="#132238"/>
+  <text x="136" y="770" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="18" font-weight="600" fill="#dbe6f3">当前测试重点已明显扩展到关系页 AI 和本地图片恢复，这也是当前版本区别于早期生图原型的主要质量保障方向。</text>
+</svg>
