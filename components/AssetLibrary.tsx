@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Character, Location, VisualSpec, Book, ImageGenerationModelId } from '../types';
 import { exportAssetsToHtml, exportAssetsToPdf } from '../services/exportService';
-import { Loader2, Lock, Plus, RefreshCw, Trash2, User, AlertCircle, BookOpen, FileType, Sparkles } from 'lucide-react';
+import { Loader2, Lock, Plus, RefreshCw, Trash2, User, AlertCircle, BookOpen, FileType, Sparkles, Settings2, X } from 'lucide-react';
 
 interface AssetLibraryProps {
   books: Book[];
@@ -12,7 +12,7 @@ interface AssetLibraryProps {
   imageModels: Array<{ id: ImageGenerationModelId; label: string; description: string }>;
   setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
   setLocations: React.Dispatch<React.SetStateAction<Location[]>>;
-  onGenerateAssetVisual: (description: string, type: 'character' | 'location', bookId: string, fileStem: string, specOverride?: VisualSpec) => Promise<{ localUrl: string }>;
+  onGenerateAssetVisual: (description: string, type: 'character' | 'location', bookId: string, fileStem: string, specOverride?: VisualSpec, customRequirement?: string) => Promise<{ localUrl: string }>;
   onDeleteCharacter: (characterId: string) => Promise<void>;
   onDeleteLocation: (locationId: string) => Promise<void>;
   onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
@@ -36,6 +36,8 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'characters' | 'locations'>('characters');
   const [selectedBookId, setSelectedBookId] = useState<string>('all');
+  const [customRequirements, setCustomRequirements] = useState<Record<string, string>>({});
+  const [operationPanelMap, setOperationPanelMap] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (focusedBookId) {
@@ -43,13 +45,23 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
     }
   }, [focusedBookId]);
 
+  useEffect(() => {
+    setOperationPanelMap({});
+  }, [activeTab, selectedBookId]);
+
   const filteredCharacters = useMemo(() => selectedBookId === 'all' ? characters : characters.filter(c => c.bookId === selectedBookId), [characters, selectedBookId]);
   const filteredLocations = useMemo(() => selectedBookId === 'all' ? locations : locations.filter(l => l.bookId === selectedBookId), [locations, selectedBookId]);
   const visibleItems = activeTab === 'characters' ? filteredCharacters : filteredLocations;
   const generatingCount = visibleItems.filter(item => item.generationStatus === 'generating').length;
   const failedCount = visibleItems.filter(item => item.generationStatus === 'failed').length;
 
-  const handleGenerateVisual = async (id: string, type: 'character' | 'location', desc: string) => {
+  const getAssetKey = (id: string, type: 'character' | 'location') => `${type}:${id}`;
+
+  const toggleOperationPanel = (assetKey: string) => {
+    setOperationPanelMap(prev => ({ ...prev, [assetKey]: !prev[assetKey] }));
+  };
+
+  const handleGenerateVisual = async (id: string, type: 'character' | 'location', desc: string, customRequirement?: string) => {
     if (type === 'character') {
       setCharacters(prev => prev.map(c => c.id === id ? { ...c, generationStatus: 'generating' } : c));
     } else {
@@ -65,7 +77,7 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
 
       if (!targetBookId) throw new Error('未找到图片所属书籍');
 
-      const { localUrl } = await onGenerateAssetVisual(desc, type, targetBookId, itemName, visualSpec);
+      const { localUrl } = await onGenerateAssetVisual(desc, type, targetBookId, itemName, visualSpec, customRequirement);
       if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, imageUrl: localUrl, referenceImageUrl: undefined, locked: true, generationStatus: 'success' } : c));
       else setLocations(prev => prev.map(l => l.id === id ? { ...l, imageUrl: localUrl, referenceImageUrl: undefined, locked: true, generationStatus: 'success' } : l));
     } catch (e) {
@@ -82,6 +94,18 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
       } else {
         await onDeleteLocation(id);
       }
+
+      const assetKey = getAssetKey(id, type);
+      setCustomRequirements(prev => {
+        const next = { ...prev };
+        delete next[assetKey];
+        return next;
+      });
+      setOperationPanelMap(prev => {
+        const next = { ...prev };
+        delete next[assetKey];
+        return next;
+      });
     } catch (error) {
       console.error(error);
       alert('删除失败，请稍后重试。');
@@ -129,7 +153,13 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {visibleItems.map((item: any) => (
+        {visibleItems.map((item: any) => {
+          const itemType = activeTab === 'characters' ? 'character' : 'location';
+          const assetKey = getAssetKey(item.id, itemType);
+          const customRequirement = customRequirements[assetKey] || '';
+          const isOperationPanelOpen = !!operationPanelMap[assetKey];
+
+          return (
           <div key={item.id} className="bg-white rounded-xl shadow-sm border overflow-hidden group">
             <div className="aspect-square bg-slate-100 relative">
               {item.imageUrl ? <img src={item.imageUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">{item.generationStatus === 'generating' ? null : <User size={48} />}</div>}
@@ -143,13 +173,15 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
               )}
 
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                {!item.imageUrl && (
                   <button
-                    onClick={() => handleGenerateVisual(item.id, activeTab === 'characters' ? 'character' : 'location', item.visualSummary || item.description)}
+                    onClick={() => void handleGenerateVisual(item.id, itemType, item.visualSummary || item.description)}
                     disabled={item.generationStatus === 'generating'}
                     className="p-2 bg-white rounded-full disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {item.generationStatus === 'generating' ? <Loader2 className="animate-spin" size={20} /> : <RefreshCw size={20} />}
                   </button>
+                )}
               </div>
             </div>
             <div className="p-4">
@@ -160,10 +192,62 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
                 {item.generationStatus === 'success' && item.imageUrl && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold"><Sparkles size={12} /> 已完成</span>}
               </div>
               <p className="text-xs text-slate-500 line-clamp-3 mb-3">{item.visualSummary || item.description}</p>
-              <div className="flex justify-end border-t pt-2"><button onClick={() => void handleDeleteAsset(item.id, activeTab === 'characters' ? 'character' : 'location')} className="text-red-400 hover:text-red-600"><Trash2 size={14} /></button></div>
+              {item.imageUrl && isOperationPanelOpen && (
+                <div className="mb-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+                  <div className="mb-3 flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-semibold text-slate-800">本张生图要求</div>
+                      <div className="text-[11px] text-slate-400">留空则按当前角色/地点设定自动生成</div>
+                    </div>
+                    <button
+                      onClick={() => toggleOperationPanel(assetKey)}
+                      className="rounded-lg p-1 text-slate-400 hover:bg-white hover:text-slate-700 transition-colors"
+                      title="收起"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                  <input
+                    value={customRequirement}
+                    onChange={(e) => setCustomRequirements(prev => ({ ...prev, [assetKey]: e.target.value }))}
+                    placeholder={itemType === 'character' ? '例如：低机位、突出表情、暖光' : '例如：广角、晨雾、增强纵深'}
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-brand-300"
+                  />
+                  <div className="mt-2 text-[11px] text-slate-400">
+                    {customRequirement.trim().length > 0 ? `当前将附加 ${customRequirement.trim().length} 个字的本张要求` : '未填写附加要求'}
+                  </div>
+                  <div className="mt-3 flex items-center justify-end gap-2">
+                    <button
+                      disabled={item.generationStatus === 'generating'}
+                      onClick={() => {
+                        setOperationPanelMap(prev => ({ ...prev, [assetKey]: false }));
+                        void handleGenerateVisual(item.id, itemType, item.visualSummary || item.description, customRequirement);
+                      }}
+                      className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      重生成
+                    </button>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center justify-between border-t pt-2">
+                <div>
+                  {item.imageUrl && (
+                    <button
+                      onClick={() => toggleOperationPanel(assetKey)}
+                      className={`inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${isOperationPanelOpen ? 'bg-slate-100 text-slate-900' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'}`}
+                      title="打开本张图片操作"
+                    >
+                      <Settings2 size={16} />
+                      <span>{customRequirement.trim() ? '本张设置' : '图片操作'}</span>
+                    </button>
+                  )}
+                </div>
+                <button onClick={() => void handleDeleteAsset(item.id, itemType)} className="text-red-400 hover:text-red-600"><Trash2 size={14} /></button>
+              </div>
             </div>
           </div>
-        ))}
+        )})}
         <div className="border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center p-6 text-slate-400 min-h-[300px]">
             <Plus size={32} className="mb-2" />
             <span className="text-xs text-center">阅读新章节时<br/>AI 会自动发现新世界观</span>

@@ -1,5 +1,6 @@
 
 import { NarrativeFacts, VisualSpec, Character, Location, Relationship, ImageGenerationModelId } from "../types";
+import { buildAssetVisualPrompt } from "./assetVisualPrompt";
 import { resolveIllustrationReferenceImages } from "./referenceImageService";
 
 const VOLC_API_KEY = "329e6764-2c64-4a91-9d31-eaa7c1e3609a";
@@ -371,13 +372,10 @@ export const generateAssetVisual = async (
     description: string,
     type: 'character' | 'location',
     visualSpec: VisualSpec,
-    modelId: ImageGenerationModelId
+    modelId: ImageGenerationModelId,
+    customRequirement?: string
 ): Promise<string> => {
-    const prompt = type === 'character' 
-        ? `专业角色设定图: ${description}。
-           要求: 三视图（包含正面、侧面、背面）。
-           风格: ${visualSpec.promptStyle}。背景: 简单的纯色背景。`
-        : `环境概念设计图: ${description}。风格: ${visualSpec.promptStyle}。`;
+    const prompt = buildAssetVisualPrompt(description, type, visualSpec, customRequirement);
     
     return await callVolcImage(prompt, "1:1", modelId);
 }

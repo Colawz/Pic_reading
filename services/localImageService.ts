@@ -56,6 +56,17 @@ interface SaveAppSnapshotParams {
   snapshot: unknown;
 }
 
+export const stripLocalImageVersion = (localUrl: string): string => localUrl.split('#')[0].split('?')[0];
+
+export const appendLocalImageVersion = (localUrl: string, version = Date.now()): string => {
+  if (!localUrl.startsWith('/pic_db/')) {
+    return localUrl;
+  }
+
+  const cleanUrl = stripLocalImageVersion(localUrl);
+  return `${cleanUrl}?v=${version}`;
+};
+
 export const saveGeneratedImageLocally = async ({
   remoteUrl,
   bookId,
@@ -82,13 +93,18 @@ export const saveGeneratedImageLocally = async ({
     throw new Error(text || '保存图片到本地失败');
   }
 
-  return response.json() as Promise<SaveGeneratedImageResult>;
+  const result = await response.json() as SaveGeneratedImageResult;
+  return {
+    localUrl: appendLocalImageVersion(result.localUrl),
+  };
 };
 
 export const deleteGeneratedImageLocally = async ({
   localUrl,
 }: DeleteGeneratedImageParams): Promise<void> => {
-  if (!localUrl.startsWith('/pic_db/')) {
+  const canonicalLocalUrl = stripLocalImageVersion(localUrl);
+
+  if (!canonicalLocalUrl.startsWith('/pic_db/')) {
     return;
   }
 
@@ -97,7 +113,7 @@ export const deleteGeneratedImageLocally = async ({
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ localUrl }),
+    body: JSON.stringify({ localUrl: canonicalLocalUrl }),
   });
 
   if (!response.ok) {
@@ -109,7 +125,9 @@ export const deleteGeneratedImageLocally = async ({
 export const checkGeneratedImageLocally = async ({
   localUrl,
 }: CheckGeneratedImageParams): Promise<boolean> => {
-  if (!localUrl.startsWith('/pic_db/')) {
+  const canonicalLocalUrl = stripLocalImageVersion(localUrl);
+
+  if (!canonicalLocalUrl.startsWith('/pic_db/')) {
     return false;
   }
 
@@ -118,7 +136,7 @@ export const checkGeneratedImageLocally = async ({
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ localUrl }),
+    body: JSON.stringify({ localUrl: canonicalLocalUrl }),
   });
 
   if (!response.ok) {
@@ -134,7 +152,9 @@ export const relocateGeneratedImageLocally = async ({
   localUrl,
   targetBookFolder,
 }: RelocateGeneratedImageParams): Promise<{ localUrl: string }> => {
-  if (!localUrl.startsWith('/pic_db/')) {
+  const canonicalLocalUrl = stripLocalImageVersion(localUrl);
+
+  if (!canonicalLocalUrl.startsWith('/pic_db/')) {
     return { localUrl };
   }
 
@@ -143,7 +163,7 @@ export const relocateGeneratedImageLocally = async ({
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ localUrl, targetBookFolder }),
+    body: JSON.stringify({ localUrl: canonicalLocalUrl, targetBookFolder }),
   });
 
   if (!response.ok) {
@@ -151,7 +171,8 @@ export const relocateGeneratedImageLocally = async ({
     throw new Error(text || '迁移本地图片失败');
   }
 
-  return response.json() as Promise<{ localUrl: string }>;
+  const result = await response.json() as { localUrl: string };
+  return { localUrl: appendLocalImageVersion(result.localUrl) };
 };
 
 export const findGeneratedImageLocally = async ({
@@ -174,7 +195,7 @@ export const findGeneratedImageLocally = async ({
   }
 
   const data = await response.json() as { localUrl: string | null };
-  return data.localUrl;
+  return data.localUrl ? appendLocalImageVersion(data.localUrl) : null;
 };
 
 export const normalizeGeneratedImageLocally = async ({
@@ -184,7 +205,9 @@ export const normalizeGeneratedImageLocally = async ({
   subcategory,
   fileStem,
 }: NormalizeGeneratedImageParams): Promise<{ localUrl: string }> => {
-  if (!localUrl.startsWith('/pic_db/')) {
+  const canonicalLocalUrl = stripLocalImageVersion(localUrl);
+
+  if (!canonicalLocalUrl.startsWith('/pic_db/')) {
     return { localUrl };
   }
 
@@ -193,7 +216,7 @@ export const normalizeGeneratedImageLocally = async ({
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ localUrl, targetBookFolder, category, subcategory, fileStem }),
+    body: JSON.stringify({ localUrl: canonicalLocalUrl, targetBookFolder, category, subcategory, fileStem }),
   });
 
   if (!response.ok) {
@@ -201,10 +224,11 @@ export const normalizeGeneratedImageLocally = async ({
     throw new Error(text || '规范化本地图片命名失败');
   }
 
-  return response.json() as Promise<{ localUrl: string }>;
+  const result = await response.json() as { localUrl: string };
+  return { localUrl: appendLocalImageVersion(result.localUrl) };
 };
 
-export const isLocalPicDbUrl = (url?: string) => Boolean(url && url.startsWith('/pic_db/'));
+export const isLocalPicDbUrl = (url?: string) => Boolean(url && stripLocalImageVersion(url).startsWith('/pic_db/'));
 
 export const bootstrapLocalLibrary = async (): Promise<BootstrapLocalLibraryResult | null> => {
   const response = await fetch('/api/bootstrap-local-library').catch(() => null);

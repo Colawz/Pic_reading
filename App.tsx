@@ -893,9 +893,10 @@ const App: React.FC = () => {
     type: 'character' | 'location',
     bookId: string,
     fileStem: string,
-    specOverride?: VisualSpec
+    specOverride?: VisualSpec,
+    customRequirement?: string
   ) => {
-    const remoteUrl = await generateAssetVisual(description, type, specOverride || visualSpec, imageModelId);
+    const remoteUrl = await generateAssetVisual(description, type, specOverride || visualSpec, imageModelId, customRequirement);
     const { localUrl } = await saveGeneratedImageLocally({
       remoteUrl,
       bookId: getBookStorageFolderName(books, bookId),
