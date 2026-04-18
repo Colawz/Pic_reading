@@ -8,6 +8,8 @@ import { AssetLibrary } from './components/AssetLibrary';
 import { BookShelf } from './components/BookShelf';
 import { SocialNetwork } from './components/SocialNetwork';
 import { analyzeRelationshipsFromReadingProgress, generateAssetVisual, generateBookCover, generateIllustration } from './services/aiService';
+import { createImportedBook, resolveImportVisualSpec } from './services/importBookService';
+import { createGeneratedImportCoverResult } from './services/importCoverService';
 import { bootstrapLocalLibrary, checkGeneratedImageLocally, deleteGeneratedImageLocally, findGeneratedImageLocally, isLocalPicDbUrl, loadAppSnapshotLocally, normalizeGeneratedImageLocally, saveAppSnapshotLocally, saveGeneratedImageLocally } from './services/localImageService';
 import { PersistedAppState, loadPersistedAppState, savePersistedAppState, saveStoredImageRecords } from './services/storageService';
 import { Plus, Trash2, Sparkles, Wand2 } from 'lucide-react';
@@ -242,6 +244,17 @@ const findBookIdByParagraphId = (books: Book[], paragraphId: string) => {
   return undefined;
 };
 
+const stripLegacyReferenceImage = <T extends Character | Location>(item: T): T => {
+  if (!item.referenceImageUrl) {
+    return item;
+  }
+
+  return {
+    ...item,
+    referenceImageUrl: undefined,
+  };
+};
+
 const buildStoredImageRecords = (
   books: Book[],
   characters: Character[],
@@ -251,28 +264,26 @@ const buildStoredImageRecords = (
   const now = new Date().toISOString();
 
   const characterRecords = characters
-    .filter(character => character.imageUrl || character.referenceImageUrl)
+    .filter(character => character.imageUrl)
     .map<StoredImageRecord>(character => ({
       id: `character:${character.id}`,
       bookId: character.bookId,
       sourceType: 'character',
       sourceId: character.id,
       localUrl: character.imageUrl,
-      remoteUrl: character.referenceImageUrl,
       status: character.generationStatus === 'success' ? 'completed' : (character.generationStatus || 'pending'),
       createdAt: now,
       updatedAt: now,
     }));
 
   const locationRecords = locations
-    .filter(location => location.imageUrl || location.referenceImageUrl)
+    .filter(location => location.imageUrl)
     .map<StoredImageRecord>(location => ({
       id: `location:${location.id}`,
       bookId: location.bookId,
       sourceType: 'location',
       sourceId: location.id,
       localUrl: location.imageUrl,
-      remoteUrl: location.referenceImageUrl,
       status: location.generationStatus === 'success' ? 'completed' : (location.generationStatus || 'pending'),
       createdAt: now,
       updatedAt: now,
@@ -460,6 +471,8 @@ const applyPersistedStateToApp = (
 ) => {
   const nextBooks = persistedState.books?.length ? persistedState.books : SAMPLE_BOOKS;
   const nextSpecs = persistedState.availableSpecs?.length ? persistedState.availableSpecs : VISUAL_PRESETS;
+  const nextCharacters = (persistedState.characters || INITIAL_CHARACTERS).map(stripLegacyReferenceImage);
+  const nextLocations = (persistedState.locations || INITIAL_LOCATIONS).map(stripLegacyReferenceImage);
   const nextCurrentBookId = persistedState.currentBookId ?? null;
   const preferredVisualSpecId = persistedState.preferredVisualSpecId ?? nextBooks[0]?.visualSpecId ?? DEFAULT_VISUAL_SPEC.id;
   const resolvedSpec =
@@ -470,8 +483,8 @@ const applyPersistedStateToApp = (
 
   setBooks(nextBooks);
   setAvailableSpecs(nextSpecs);
-  setCharacters(persistedState.characters || INITIAL_CHARACTERS);
-  setLocations(persistedState.locations || INITIAL_LOCATIONS);
+  setCharacters(nextCharacters);
+  setLocations(nextLocations);
   setRelationships(persistedState.relationships || INITIAL_RELATIONSHIPS);
   setRelationshipChats(persistedState.relationshipChats || {});
   setIllustrations(persistedState.illustrations || {});
@@ -690,15 +703,19 @@ const App: React.FC = () => {
             }).catch(() => ({ localUrl: nextLocalUrl! }))).localUrl;
           }
 
-          const remoteUrl = character.referenceImageUrl || (!isLocalPicDbUrl(character.imageUrl) ? character.imageUrl : undefined);
+          const remoteUrl = !isLocalPicDbUrl(character.imageUrl) ? character.imageUrl : undefined;
           if (!remoteUrl) {
-            return nextLocalUrl !== character.imageUrl ? { id: character.id, localUrl: nextLocalUrl } : null;
+            return nextLocalUrl !== character.imageUrl || character.referenceImageUrl
+              ? { id: character.id, localUrl: nextLocalUrl }
+              : null;
           }
 
           const localExists = await isUsableLocalUrl(nextLocalUrl);
 
           if (localExists) {
-            return nextLocalUrl !== character.imageUrl ? { id: character.id, localUrl: nextLocalUrl, remoteUrl } : null;
+            return nextLocalUrl !== character.imageUrl || character.referenceImageUrl
+              ? { id: character.id, localUrl: nextLocalUrl }
+              : null;
           }
 
           const { localUrl } = await saveGeneratedImageLocally({
@@ -709,13 +726,13 @@ const App: React.FC = () => {
             fileStem,
           });
 
-          return { id: character.id, localUrl, remoteUrl };
+          return { id: character.id, localUrl };
         }));
 
         if (characterUpdates.some(Boolean)) {
           setCharacters(prev => prev.map(character => {
             const update = characterUpdates.find(item => item?.id === character.id);
-            return update ? { ...character, imageUrl: update.localUrl, referenceImageUrl: update.remoteUrl } : character;
+            return update ? { ...character, imageUrl: update.localUrl, referenceImageUrl: undefined } : character;
           }));
         }
 
@@ -744,15 +761,19 @@ const App: React.FC = () => {
             }).catch(() => ({ localUrl: nextLocalUrl! }))).localUrl;
           }
 
-          const remoteUrl = location.referenceImageUrl || (!isLocalPicDbUrl(location.imageUrl) ? location.imageUrl : undefined);
+          const remoteUrl = !isLocalPicDbUrl(location.imageUrl) ? location.imageUrl : undefined;
           if (!remoteUrl) {
-            return nextLocalUrl !== location.imageUrl ? { id: location.id, localUrl: nextLocalUrl } : null;
+            return nextLocalUrl !== location.imageUrl || location.referenceImageUrl
+              ? { id: location.id, localUrl: nextLocalUrl }
+              : null;
           }
 
           const localExists = await isUsableLocalUrl(nextLocalUrl);
 
           if (localExists) {
-            return nextLocalUrl !== location.imageUrl ? { id: location.id, localUrl: nextLocalUrl, remoteUrl } : null;
+            return nextLocalUrl !== location.imageUrl || location.referenceImageUrl
+              ? { id: location.id, localUrl: nextLocalUrl }
+              : null;
           }
 
           const { localUrl } = await saveGeneratedImageLocally({
@@ -763,13 +784,13 @@ const App: React.FC = () => {
             fileStem,
           });
 
-          return { id: location.id, localUrl, remoteUrl };
+          return { id: location.id, localUrl };
         }));
 
         if (locationUpdates.some(Boolean)) {
           setLocations(prev => prev.map(location => {
             const update = locationUpdates.find(item => item?.id === location.id);
-            return update ? { ...location, imageUrl: update.localUrl, referenceImageUrl: update.remoteUrl } : location;
+            return update ? { ...location, imageUrl: update.localUrl, referenceImageUrl: undefined } : location;
           }));
         }
 
@@ -883,7 +904,7 @@ const App: React.FC = () => {
       fileStem: getAssetFileStem(fileStem),
     });
     incrementImageGenerationStats('asset', imageModelId);
-    return { localUrl, remoteUrl };
+    return { localUrl };
   };
 
   const handleGenerateIllustration = async (
@@ -916,17 +937,15 @@ const App: React.FC = () => {
     return { imageUrl: localUrl, promptUsed };
   };
 
-  const handleGenerateImportBookCover = async (title: string, content: string) => {
-    const remoteUrl = await generateBookCover(title, content, visualSpec, imageModelId);
-    const { localUrl } = await saveGeneratedImageLocally({
-      remoteUrl,
-      bookId: title.trim() || 'untitled-book',
-      category: 'covers',
-      subcategory: 'books',
-      fileStem: '封面',
-    });
+  const handleGenerateImportBookCover = async (title: string, content: string, styleId: string) => {
+    const importSpec = resolveImportVisualSpec(styleId, availableSpecs, visualSpec);
+    const remoteUrl = await generateBookCover(title, content, importSpec, imageModelId);
     incrementImageGenerationStats('asset', imageModelId);
-    return localUrl;
+    return createGeneratedImportCoverResult({
+      remoteUrl,
+      title,
+      persistRemoteImage: saveGeneratedImageLocally,
+    });
   };
 
   const handleSelectBook = (book: Book) => {
@@ -953,9 +972,16 @@ const App: React.FC = () => {
       setView('assets');
   };
 
-  const handleImportBook = (title: string, content: string, coverUrl?: string) => {
-      const newBook = createBook(`imported-${Date.now()}`, title, "未知作者", "自定义", "📚", availableSpecs[0].id, content);
-      if (coverUrl) newBook.coverUrl = coverUrl;
+  const handleImportBook = (title: string, content: string, styleId: string, coverUrl?: string) => {
+      const newBook = createImportedBook({
+        id: `imported-${Date.now()}`,
+        title,
+        content,
+        coverUrl,
+        styleId,
+        availableSpecs,
+        fallbackSpec: visualSpec,
+      });
       setBooks(prev => [newBook, ...prev]);
       handleSelectBook(newBook);
   };
@@ -1058,8 +1084,8 @@ const App: React.FC = () => {
 
       try {
         const visualSummary = existing ? (existing.visualSummary || existing.description) : char.visualSummary!;
-        const { localUrl, remoteUrl } = await handleGenerateAssetVisual(visualSummary, 'character', char.bookId!, charName);
-        setCharacters(prev => prev.map(c => c.id === targetId ? { ...c, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : c));
+        const { localUrl } = await handleGenerateAssetVisual(visualSummary, 'character', char.bookId!, charName);
+        setCharacters(prev => prev.map(c => c.id === targetId ? { ...c, imageUrl: localUrl, referenceImageUrl: undefined, locked: true, generationStatus: 'success' } : c));
         return localUrl;
       } catch (e) {
         setCharacters(prev => prev.map(c => c.id === targetId ? { ...c, generationStatus: 'failed' } : c));
@@ -1092,8 +1118,8 @@ const App: React.FC = () => {
 
       try {
         const visualSummary = existing ? (existing.visualSummary || existing.description) : loc.visualSummary!;
-        const { localUrl, remoteUrl } = await handleGenerateAssetVisual(visualSummary, 'location', loc.bookId!, locName);
-        setLocations(prev => prev.map(l => l.id === targetId ? { ...l, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : l));
+        const { localUrl } = await handleGenerateAssetVisual(visualSummary, 'location', loc.bookId!, locName);
+        setLocations(prev => prev.map(l => l.id === targetId ? { ...l, imageUrl: localUrl, referenceImageUrl: undefined, locked: true, generationStatus: 'success' } : l));
       } catch (e) {
         setLocations(prev => prev.map(l => l.id === targetId ? { ...l, generationStatus: 'failed' } : l));
       }
@@ -1214,7 +1240,18 @@ const App: React.FC = () => {
 
   return (
     <Layout currentView={view} onNavigate={setView}>
-      {view === 'home' && <BookShelf books={books} onSelectBook={handleSelectBook} onImportBook={handleImportBook} onUpdateBookCover={handleUpdateBookCover} onGenerateBookCover={handleGenerateImportBookCover} onDeleteBook={handleDeleteBook} />}
+      {view === 'home' && (
+        <BookShelf
+          books={books}
+          visualSpecs={availableSpecs}
+          defaultImportStyleId={visualSpec.id}
+          onSelectBook={handleSelectBook}
+          onImportBook={handleImportBook}
+          onUpdateBookCover={handleUpdateBookCover}
+          onGenerateBookCover={handleGenerateImportBookCover}
+          onDeleteBook={handleDeleteBook}
+        />
+      )}
       {view === 'reader' && currentBook && (
         <Reader 
           book={currentBook}

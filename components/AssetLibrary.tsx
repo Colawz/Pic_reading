@@ -12,7 +12,7 @@ interface AssetLibraryProps {
   imageModels: Array<{ id: ImageGenerationModelId; label: string; description: string }>;
   setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
   setLocations: React.Dispatch<React.SetStateAction<Location[]>>;
-  onGenerateAssetVisual: (description: string, type: 'character' | 'location', bookId: string, fileStem: string, specOverride?: VisualSpec) => Promise<{ localUrl: string; remoteUrl: string }>;
+  onGenerateAssetVisual: (description: string, type: 'character' | 'location', bookId: string, fileStem: string, specOverride?: VisualSpec) => Promise<{ localUrl: string }>;
   onDeleteCharacter: (characterId: string) => Promise<void>;
   onDeleteLocation: (locationId: string) => Promise<void>;
   onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
@@ -65,9 +65,9 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
 
       if (!targetBookId) throw new Error('未找到图片所属书籍');
 
-      const { localUrl, remoteUrl } = await onGenerateAssetVisual(desc, type, targetBookId, itemName, visualSpec);
-      if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : c));
-      else setLocations(prev => prev.map(l => l.id === id ? { ...l, imageUrl: localUrl, referenceImageUrl: remoteUrl, locked: true, generationStatus: 'success' } : l));
+      const { localUrl } = await onGenerateAssetVisual(desc, type, targetBookId, itemName, visualSpec);
+      if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, imageUrl: localUrl, referenceImageUrl: undefined, locked: true, generationStatus: 'success' } : c));
+      else setLocations(prev => prev.map(l => l.id === id ? { ...l, imageUrl: localUrl, referenceImageUrl: undefined, locked: true, generationStatus: 'success' } : l));
     } catch (e) {
       if (type === 'character') setCharacters(prev => prev.map(c => c.id === id ? { ...c, generationStatus: 'failed' } : c));
       else setLocations(prev => prev.map(l => l.id === id ? { ...l, generationStatus: 'failed' } : l));

@@ -1,7 +1,82 @@
 
 import { Book, Illustration, Character, Location } from '../types';
+import { localImageUrlToDataUrl } from './referenceImageService';
 
-const generateBookHtml = (book: Book, illustrations: Record<string, Illustration>, mode: 'full' | 'generated_chapters') => {
+const responseToDataUrl = async (response: Response): Promise<string> => {
+  const blob = await response.blob();
+  const mimeType = blob.type || response.headers.get('content-type') || 'image/png';
+  const buffer = await blob.arrayBuffer();
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  let binary = '';
+
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(index, index + chunkSize));
+  }
+
+  return `data:${mimeType};base64,${btoa(binary)}`;
+};
+
+const resolveExportImageSrc = async (
+  imageUrl?: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<string | undefined> => {
+  if (!imageUrl || imageUrl.startsWith('data:')) {
+    return imageUrl;
+  }
+
+  try {
+    if (imageUrl.startsWith('/pic_db/')) {
+      return await localImageUrlToDataUrl(imageUrl, fetchImpl);
+    }
+
+    const response = await fetchImpl(imageUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch export image: ${response.status}`);
+    }
+
+    return await responseToDataUrl(response);
+  } catch (error) {
+    console.warn('Failed to inline export image, falling back to original URL:', imageUrl, error);
+    return imageUrl;
+  }
+};
+
+const resolveIllustrationsForExport = async (
+  illustrations: Record<string, Illustration>,
+  fetchImpl: typeof fetch = fetch,
+): Promise<Record<string, Illustration>> => {
+  const entries = await Promise.all(
+    Object.entries(illustrations).map(async ([paragraphId, illustration]) => [
+      paragraphId,
+      {
+        ...illustration,
+        imageUrl: await resolveExportImageSrc(illustration.imageUrl, fetchImpl),
+      },
+    ] as const),
+  );
+
+  return Object.fromEntries(entries);
+};
+
+const resolveEntitiesForExport = async <T extends Character | Location>(
+  items: T[],
+  fetchImpl: typeof fetch = fetch,
+): Promise<T[]> =>
+  Promise.all(
+    items.map(async (item) => ({
+      ...item,
+      imageUrl: await resolveExportImageSrc(item.imageUrl, fetchImpl),
+    })),
+  );
+
+export const buildBookExportHtml = async (
+  book: Book,
+  illustrations: Record<string, Illustration>,
+  mode: 'full' | 'generated_chapters',
+  fetchImpl: typeof fetch = fetch,
+) => {
+  const resolvedIllustrations = await resolveIllustrationsForExport(illustrations, fetchImpl);
   const date = new Date().toLocaleDateString();
   let htmlContent = `
     <!DOCTYPE html>
@@ -68,7 +143,7 @@ const generateBookHtml = (book: Book, illustrations: Record<string, Illustration
     chapter.paragraphs.forEach(paragraph => {
       htmlContent += `<div class="paragraph">${paragraph.text}</div>`;
       
-      const illustration = illustrations[paragraph.id];
+      const illustration = resolvedIllustrations[paragraph.id];
       if (illustration && illustration.status === 'completed' && illustration.imageUrl) {
         htmlContent += `
           <div class="illustration">
@@ -167,24 +242,43 @@ const printViaIframe = (htmlContent: string) => {
 };
 
 export const exportBookToHtml = (book: Book, illustrations: Record<string, Illustration>, mode: 'full' | 'generated_chapters') => {
-  const htmlContent = generateBookHtml(book, illustrations, mode);
-  const blob = new Blob([htmlContent], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${book.title}_${mode === 'full' ? '完整' : '精选'}.html`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  void (async () => {
+    const htmlContent = await buildBookExportHtml(book, illustrations, mode);
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${book.title}_${mode === 'full' ? '完整' : '精选'}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  })().catch(error => {
+    console.error('导出 HTML 失败:', error);
+    alert('导出 HTML 失败，请稍后重试。');
+  });
 };
 
 export const exportBookToPdf = (book: Book, illustrations: Record<string, Illustration>, mode: 'full' | 'generated_chapters') => {
-  const htmlContent = generateBookHtml(book, illustrations, mode);
-  printViaIframe(htmlContent);
+  void (async () => {
+    const htmlContent = await buildBookExportHtml(book, illustrations, mode);
+    printViaIframe(htmlContent);
+  })().catch(error => {
+    console.error('导出 PDF 失败:', error);
+    alert('导出 PDF 失败，请稍后重试。');
+  });
 };
 
-const generateAssetHtml = (bookTitle: string, characters: Character[], locations: Location[]) => {
+export const buildAssetExportHtml = async (
+  bookTitle: string,
+  characters: Character[],
+  locations: Location[],
+  fetchImpl: typeof fetch = fetch,
+) => {
+  const [resolvedCharacters, resolvedLocations] = await Promise.all([
+    resolveEntitiesForExport(characters, fetchImpl),
+    resolveEntitiesForExport(locations, fetchImpl),
+  ]);
   const date = new Date().toLocaleDateString();
   return `
     <!DOCTYPE html>
@@ -219,7 +313,7 @@ const generateAssetHtml = (bookTitle: string, characters: Character[], locations
         <p style="margin-top: 50px; color: #666;">${date}</p>
       </div>
       <h2 class="section-title">核心角色</h2>
-      <div class="grid">${characters.map(c => `
+      <div class="grid">${resolvedCharacters.map(c => `
         <div class="card">
           ${c.imageUrl ? `<img src="${c.imageUrl}" />` : '<div style="aspect-ratio:1/1; background:#eee;"></div>'}
           <div class="card-content">
@@ -229,7 +323,7 @@ const generateAssetHtml = (bookTitle: string, characters: Character[], locations
           </div>
         </div>`).join('')}</div>
       <h2 class="section-title">核心场景</h2>
-      <div class="grid">${locations.map(l => `
+      <div class="grid">${resolvedLocations.map(l => `
         <div class="card">
           ${l.imageUrl ? `<img src="${l.imageUrl}" />` : '<div style="aspect-ratio:1/1; background:#eee;"></div>'}
           <div class="card-content">
@@ -257,15 +351,26 @@ const generateAssetHtml = (bookTitle: string, characters: Character[], locations
 };
 
 export const exportAssetsToHtml = (bookTitle: string, characters: Character[], locations: Location[]) => {
-  const htmlContent = generateAssetHtml(bookTitle, characters, locations);
-  const blob = new Blob([htmlContent], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `${bookTitle}_世界观.html`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  void (async () => {
+    const htmlContent = await buildAssetExportHtml(bookTitle, characters, locations);
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${bookTitle}_世界观.html`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  })().catch(error => {
+    console.error('导出世界观 HTML 失败:', error);
+    alert('导出世界观 HTML 失败，请稍后重试。');
+  });
 };
 
 export const exportAssetsToPdf = (bookTitle: string, characters: Character[], locations: Location[]) => {
-  const htmlContent = generateAssetHtml(bookTitle, characters, locations);
-  printViaIframe(htmlContent);
+  void (async () => {
+    const htmlContent = await buildAssetExportHtml(bookTitle, characters, locations);
+    printViaIframe(htmlContent);
+  })().catch(error => {
+    console.error('导出世界观 PDF 失败:', error);
+    alert('导出世界观 PDF 失败，请稍后重试。');
+  });
 };

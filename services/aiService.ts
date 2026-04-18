@@ -1,5 +1,6 @@
 
 import { NarrativeFacts, VisualSpec, Character, Location, Relationship, ImageGenerationModelId } from "../types";
+import { resolveIllustrationReferenceImages } from "./referenceImageService";
 
 const VOLC_API_KEY = "329e6764-2c64-4a91-9d31-eaa7c1e3609a";
 
@@ -164,8 +165,6 @@ async function callVolcImage(
         throw e;
     }
 }
-
-const isRemoteImageUrl = (value?: string) => Boolean(value && /^https?:\/\//i.test(value));
 
 export const scanChapterForAssets = async (chapterText: string): Promise<{ characters: Partial<Character>[], locations: Partial<Location>[] }> => {
     const textToAnalyze = chapterText.slice(0, 15000);
@@ -343,32 +342,16 @@ export const generateIllustration = async (
   customRequirement?: string
 ): Promise<{ imageUrl: string; promptUsed: string }> => {
   let charDesc = "";
-  const referenceImages: string[] = [];
+  const referenceImages = await resolveIllustrationReferenceImages(facts, characters, locations);
 
   facts.characters.forEach(name => {
     const match = characters.find(c => name.includes(c.name) || c.name.includes(name));
     if (match) {
       charDesc += `${match.name}: ${match.visualSummary}. `;
-      const referenceUrl = isRemoteImageUrl(match.referenceImageUrl)
-        ? match.referenceImageUrl
-        : (isRemoteImageUrl(match.imageUrl) ? match.imageUrl : undefined);
-      if (referenceUrl) {
-        referenceImages.push(referenceUrl);
-      }
     } else {
       charDesc += `${name}. `;
     }
   });
-
-  const locationMatch = locations.find(l => facts.location.includes(l.name) || l.name.includes(facts.location));
-  if (locationMatch) {
-      const referenceUrl = isRemoteImageUrl(locationMatch.referenceImageUrl)
-        ? locationMatch.referenceImageUrl
-        : (isRemoteImageUrl(locationMatch.imageUrl) ? locationMatch.imageUrl : undefined);
-      if (referenceUrl) {
-        referenceImages.push(referenceUrl);
-      }
-  }
 
   let prompt = `生成画面: 地点: ${facts.location} | 角色: ${charDesc} | 动作: ${facts.action} | 氛围: ${facts.mood} | 风格: ${visualSpec.promptStyle} | 镜头: ${visualSpec.cameraLanguage}｜禁止出现文字`;
   

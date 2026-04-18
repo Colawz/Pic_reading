@@ -1,26 +1,53 @@
 
-import React, { useState, useRef } from 'react';
-import { Book } from '../types';
+import React, { useEffect, useRef, useState } from 'react';
+import { Book, VisualSpec } from '../types';
 import { Book as BookIcon, ChevronRight, Plus, Upload, Image as ImageIcon, Camera, Sparkles, Loader2, Trash2, X } from 'lucide-react';
 
 interface BookShelfProps {
   books: Book[];
+  visualSpecs: VisualSpec[];
+  defaultImportStyleId: string;
   onSelectBook: (book: Book) => void;
-  onImportBook: (title: string, content: string, coverUrl?: string) => void;
+  onImportBook: (title: string, content: string, styleId: string, coverUrl?: string) => void;
   onUpdateBookCover: (bookId: string, coverUrl: string) => void;
-  onGenerateBookCover: (title: string, content: string) => Promise<string>;
+  onGenerateBookCover: (title: string, content: string, styleId: string) => Promise<{ previewUrl: string; persistedUrlPromise: Promise<string> }>;
   onDeleteBook: (bookId: string) => void;
 }
 
-export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImportBook, onUpdateBookCover, onGenerateBookCover, onDeleteBook }) => {
+export const BookShelf: React.FC<BookShelfProps> = ({ books, visualSpecs, defaultImportStyleId, onSelectBook, onImportBook, onUpdateBookCover, onGenerateBookCover, onDeleteBook }) => {
   const [showImportModal, setShowImportModal] = useState(false);
   const [importTitle, setImportTitle] = useState('');
   const [importContent, setImportContent] = useState('');
   const [importCoverUrl, setImportCoverUrl] = useState<string | undefined>(undefined);
+  const [importStyleId, setImportStyleId] = useState(defaultImportStyleId);
   const [isGeneratingCover, setIsGeneratingCover] = useState(false);
+  const [isSyncingGeneratedCover, setIsSyncingGeneratedCover] = useState(false);
+  const [generatedCoverNeedsLocalSync, setGeneratedCoverNeedsLocalSync] = useState(false);
+  const [isSubmittingImport, setIsSubmittingImport] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const updateCoverInputRef = useRef<HTMLInputElement>(null);
+  const pendingGeneratedCoverRef = useRef<Promise<string> | null>(null);
   const [updatingBookId, setUpdatingBookId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!showImportModal) {
+      setImportStyleId(defaultImportStyleId);
+    }
+  }, [defaultImportStyleId, showImportModal]);
+
+  const selectedImportStyle = visualSpecs.find(spec => spec.id === importStyleId) || visualSpecs[0];
+
+  const resetImportForm = () => {
+    pendingGeneratedCoverRef.current = null;
+    setImportTitle('');
+    setImportContent('');
+    setImportCoverUrl(undefined);
+    setImportStyleId(defaultImportStyleId);
+    setIsGeneratingCover(false);
+    setIsSyncingGeneratedCover(false);
+    setGeneratedCoverNeedsLocalSync(false);
+    setIsSubmittingImport(false);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, isUpdate = false) => {
     const file = e.target.files?.[0];
@@ -32,21 +59,51 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
           onUpdateBookCover(updatingBookId, result);
           setUpdatingBookId(null);
         } else {
+          pendingGeneratedCoverRef.current = null;
           setImportCoverUrl(result);
+          setIsSyncingGeneratedCover(false);
+          setGeneratedCoverNeedsLocalSync(false);
         }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleImportSubmit = (e: React.FormEvent) => {
+  const handleImportSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (importTitle && importContent) {
-      onImportBook(importTitle, importContent, importCoverUrl);
-      setImportTitle('');
-      setImportContent('');
-      setImportCoverUrl(undefined);
+    if (!importTitle || !importContent) {
+      return;
+    }
+
+    setIsSubmittingImport(true);
+    try {
+      let nextCoverUrl = importCoverUrl;
+      const pendingGeneratedCover = pendingGeneratedCoverRef.current;
+
+      if (pendingGeneratedCover) {
+        try {
+          nextCoverUrl = await pendingGeneratedCover;
+        } catch (error) {
+          console.error('Failed to finish generated cover sync before import:', error);
+          alert('AI 封面保存到本地失败，请重新生成或手动上传封面后再导入。');
+          return;
+        }
+        if (pendingGeneratedCoverRef.current === pendingGeneratedCover) {
+          pendingGeneratedCoverRef.current = null;
+          setImportCoverUrl(nextCoverUrl);
+          setIsSyncingGeneratedCover(false);
+          setGeneratedCoverNeedsLocalSync(false);
+        }
+      } else if (generatedCoverNeedsLocalSync) {
+        alert('AI 封面还没有成功保存到本地，请重新生成或手动上传封面后再导入。');
+        return;
+      }
+
+      onImportBook(importTitle, importContent, importStyleId, nextCoverUrl);
+      resetImportForm();
       setShowImportModal(false);
+    } finally {
+      setIsSubmittingImport(false);
     }
   };
 
@@ -56,9 +113,38 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
     }
 
     setIsGeneratingCover(true);
+    setIsSyncingGeneratedCover(false);
+    setGeneratedCoverNeedsLocalSync(false);
     try {
-      const coverUrl = await onGenerateBookCover(importTitle.trim(), importContent.trim());
-      setImportCoverUrl(coverUrl);
+      const { previewUrl, persistedUrlPromise } = await onGenerateBookCover(importTitle.trim(), importContent.trim(), importStyleId);
+      setImportCoverUrl(previewUrl);
+      pendingGeneratedCoverRef.current = persistedUrlPromise;
+      setIsSyncingGeneratedCover(true);
+      setGeneratedCoverNeedsLocalSync(true);
+
+      void persistedUrlPromise.then((localUrl) => {
+        if (pendingGeneratedCoverRef.current !== persistedUrlPromise) {
+          return;
+        }
+
+        pendingGeneratedCoverRef.current = null;
+        setImportCoverUrl(localUrl);
+        setIsSyncingGeneratedCover(false);
+        setGeneratedCoverNeedsLocalSync(false);
+      }).catch((error) => {
+        if (pendingGeneratedCoverRef.current !== persistedUrlPromise) {
+          return;
+        }
+
+        console.error('Failed to persist generated cover locally:', error);
+        pendingGeneratedCoverRef.current = null;
+        setIsSyncingGeneratedCover(false);
+        setGeneratedCoverNeedsLocalSync(true);
+        alert('封面预览已生成，但保存到本地失败。请重新生成或手动上传封面。');
+      });
+    } catch (error) {
+      console.error('Failed to generate import cover:', error);
+      alert('封面生成失败，请稍后重试。');
     } finally {
       setIsGeneratingCover(false);
     }
@@ -163,7 +249,7 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                    <h3 className="font-bold text-xl text-slate-800">导入新故事</h3>
-                   <button onClick={() => setShowImportModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors"><X size={24} /></button>
+                   <button onClick={() => { resetImportForm(); setShowImportModal(false); }} className="text-slate-400 hover:text-slate-600 transition-colors"><X size={24} /></button>
                </div>
                <form onSubmit={handleImportSubmit} className="flex flex-col md:flex-row h-[500px]">
                    {/* Left side: Cover Upload */}
@@ -202,8 +288,29 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
                            {isGeneratingCover ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
                            {isGeneratingCover ? '封面生成中...' : 'AI 生成封面'}
                          </button>
+                         {isSyncingGeneratedCover && (
+                           <div className="text-[11px] leading-relaxed text-brand-600 text-center">
+                             已显示封面预览，正在后台保存本地图片...
+                           </div>
+                         )}
+                         {!isSyncingGeneratedCover && generatedCoverNeedsLocalSync && importCoverUrl?.startsWith('http') && (
+                           <div className="text-[11px] leading-relaxed text-amber-600 text-center">
+                             当前仅为临时预览图，请重新生成或手动上传后再导入。
+                           </div>
+                         )}
                          {importCoverUrl && (
-                           <button type="button" onClick={() => setImportCoverUrl(undefined)} className="text-xs text-red-500 font-bold hover:underline">移除封面</button>
+                           <button
+                             type="button"
+                             onClick={() => {
+                               pendingGeneratedCoverRef.current = null;
+                               setImportCoverUrl(undefined);
+                               setIsSyncingGeneratedCover(false);
+                               setGeneratedCoverNeedsLocalSync(false);
+                             }}
+                             className="text-xs text-red-500 font-bold hover:underline"
+                           >
+                             移除封面
+                           </button>
                          )}
                        </div>
                    </div>
@@ -221,6 +328,23 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
                              required
                            />
                        </div>
+                       <div className="mb-4 shrink-0">
+                           <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">绘图风格</label>
+                           <select
+                             value={importStyleId}
+                             onChange={e => setImportStyleId(e.target.value)}
+                             className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none bg-white text-sm font-medium"
+                           >
+                             {visualSpecs.map(spec => (
+                               <option key={spec.id} value={spec.id}>{spec.label}</option>
+                             ))}
+                           </select>
+                           {selectedImportStyle && (
+                             <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                               该风格将用于本书后续插图和 AI 封面生成。当前：{selectedImportStyle.label}
+                             </p>
+                           )}
+                       </div>
                        <div className="flex-1 flex flex-col">
                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">故事内容</label>
                            <textarea 
@@ -232,9 +356,10 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, onSelectBook, onImp
                            />
                        </div>
                        <div className="mt-6 flex justify-end gap-3 shrink-0">
-                           <button type="button" onClick={() => setShowImportModal(false)} className="px-5 py-2.5 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors">取消</button>
-                           <button type="submit" className="px-8 py-2.5 bg-brand-600 text-white font-bold rounded-lg hover:bg-brand-700 shadow-lg shadow-brand-500/20 flex items-center gap-2 transition-all">
-                               <Upload size={18} /> 导入并开始阅读
+                           <button type="button" onClick={() => { resetImportForm(); setShowImportModal(false); }} className="px-5 py-2.5 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors">取消</button>
+                           <button type="submit" disabled={isSubmittingImport || isGeneratingCover} className="px-8 py-2.5 bg-brand-600 text-white font-bold rounded-lg hover:bg-brand-700 shadow-lg shadow-brand-500/20 flex items-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                               {isSubmittingImport ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} />}
+                               {isSubmittingImport ? '正在导入...' : '导入并开始阅读'}
                            </button>
                        </div>
                    </div>
