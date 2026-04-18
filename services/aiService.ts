@@ -2,8 +2,7 @@
 import { NarrativeFacts, VisualSpec, Character, Location, Relationship, ImageGenerationModelId } from "../types";
 import { buildAssetVisualPrompt } from "./assetVisualPrompt";
 import { resolveIllustrationReferenceImages } from "./referenceImageService";
-
-const VOLC_API_KEY = "329e6764-2c64-4a91-9d31-eaa7c1e3609a";
+import { getArkApiKey } from "./runtimeConfig";
 
 // Text Model (DeepSeek)
 const TEXT_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/chat/completions";
@@ -13,14 +12,16 @@ const RELATIONSHIP_READING_MODEL = "doubao-seed-2-0-pro-260215";
 
 const IMAGE_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/images/generations";
 
+const createArkHeaders = () => ({
+    "Authorization": `Bearer ${getArkApiKey()}`,
+    "Content-Type": "application/json"
+});
+
 async function callDeepSeek(prompt: string): Promise<string> {
     try {
         const response = await fetch(TEXT_ENDPOINT, {
             method: "POST",
-            headers: {
-                "Authorization": `Bearer ${VOLC_API_KEY}`,
-                "Content-Type": "application/json"
-            },
+            headers: createArkHeaders(),
             body: JSON.stringify({
                 model: TEXT_MODEL,
                 messages: [
@@ -53,10 +54,7 @@ async function callDoubaoResponsesText(prompt: string): Promise<string> {
     try {
         const response = await fetch(RESPONSES_ENDPOINT, {
             method: "POST",
-            headers: {
-                "Authorization": `Bearer ${VOLC_API_KEY}`,
-                "Content-Type": "application/json"
-            },
+            headers: createArkHeaders(),
             body: JSON.stringify({
                 model: RELATIONSHIP_READING_MODEL,
                 input: [
@@ -136,10 +134,7 @@ async function callVolcImage(
 
         const response = await fetch(IMAGE_ENDPOINT, {
             method: "POST",
-            headers: {
-                "Authorization": `Bearer ${VOLC_API_KEY}`,
-                "Content-Type": "application/json"
-            },
+            headers: createArkHeaders(),
             body: JSON.stringify(body)
         });
 

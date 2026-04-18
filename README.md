@@ -146,6 +146,14 @@ zhihui-reading/
 npm install
 ```
 
+配置本地环境变量：
+
+```bash
+cp .env.example .env.local
+```
+
+然后把 `.env.local` 里的 `VITE_ARK_API_KEY` 改成你自己的火山方舟 key。该文件已加入 `.gitignore`，不会被推到 GitHub。
+
 启动开发环境：
 
 ```bash
