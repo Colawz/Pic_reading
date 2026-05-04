@@ -70,7 +70,7 @@ export const Layout: React.FC<LayoutProps> = ({ currentView, onNavigate, childre
 
       {/* Main Content */}
       <main className="flex-1 h-full overflow-hidden relative">
-        <div className="h-full overflow-y-auto scroll-smooth">
+        <div className={`h-full ${currentView === 'reader' ? 'overflow-hidden' : 'overflow-y-auto scroll-smooth'}`}>
             {children}
         </div>
       </main>

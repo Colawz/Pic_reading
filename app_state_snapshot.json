@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-04-10T06:48:05.378Z",
+  "exportedAt": "2026-05-04T02:09:42.918Z",
   "snapshot": {
     "books": [
       {
@@ -9,7 +9,7 @@
         "genre": "自定义",
         "coverEmoji": "📚",
         "visualSpecId": "watercolor_storybook",
-        "coverUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/covers/books/%E5%B0%81%E9%9D%A2.jpg",
+        "coverUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/covers/books/%E5%B0%81%E9%9D%A2.jpg?v=1777859697969",
         "chapters": [
           {
             "id": "imported-1775747701883-ch1",
@@ -56,7 +56,7 @@
         "genre": "自定义",
         "coverEmoji": "📚",
         "visualSpecId": "watercolor_storybook",
-        "coverUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/covers/books/%E5%B0%81%E9%9D%A2.jpg",
+        "coverUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/covers/books/%E5%B0%81%E9%9D%A2.jpg?v=1777859697969",
         "chapters": [
           {
             "id": "imported-1775739901213-ch1",
@@ -429,33 +429,6 @@
             ]
           }
         ]
-      },
-      {
-        "id": "book-water-cycle",
-        "title": "科普：水循环",
-        "author": "科普",
-        "genre": "科普百科",
-        "coverEmoji": "💧",
-        "visualSpecId": "minimalist_lines",
-        "coverUrl": "/covers/water-cycle.png",
-        "chapters": [
-          {
-            "id": "book-water-cycle-ch1",
-            "title": "第一章",
-            "paragraphs": [
-              {
-                "id": "book-water-cycle-p-0",
-                "text": "水循环是地球上水在海洋、陆地与大气之间不断往返的过程，靠的主要是太阳能驱动蒸发与大气运动，外加重力让水回到地表并汇入江河湖海。海洋、湖泊、土壤和植物把水以水汽形式送入空气（蒸发/蒸腾），水汽随气流上升冷却后形成云，并在合适条件下变成雨、雪等降到地面（凝结与降水）。降到陆地的水一部分沿地表流动汇成溪流河流（地表径流），一部分渗入土壤和岩层成为地下水并缓慢流动（下渗与地下径流），最终又回到海洋；同时地表水还会再次蒸发。正是这套循环，持续补给淡水资源、调节气候，也影响着洪涝与干旱的发生。",
-                "chapterId": "book-water-cycle-ch1"
-              },
-              {
-                "id": "book-water-cycle-p-1",
-                "text": "水循环可以按“海洋/陆地 → 大气 → 陆地/海洋 → 回到海洋”这条闭环来理解。首先，太阳加热海面、湖泊、河流和湿润地表，使水变成水汽上升（蒸发）；植物通过叶片把水分释放到空气中（蒸腾），两者合起来常写作“蒸散”。水汽被风带走并抬升到更高处，温度降低后在尘埃等凝结核上形成小水滴或冰晶，聚集成云（凝结/成云）。当云滴长大到空气托不住，就会落到地面或海面，形成雨、雪、冰雹等（降水）。降到陆地的水有几条去路：一部分顺坡流入沟渠、溪流、江河，最后入海（地表径流）；一部分渗入土壤成为土壤水，被植物吸收后再蒸腾回到空气（入渗—植物吸收—蒸腾）；还有一部分继续下渗到更深处形成含水层中的地下水，缓慢流动并在泉、河道或海岸处补给地表水/海洋（地下径流与出露）。在寒冷地区，降水会暂时以积雪、冰川的形式储存，气温回升后融化补给河流（冻结—融化）。这样，水不断在各“水库”（海洋、大气、河流湖泊、土壤、地下水、冰雪）之间转移，构成一张用箭头就能清晰表达的循环流程图。",
-                "chapterId": "book-water-cycle-ch1"
-              }
-            ]
-          }
-        ]
       }
     ],
     "availableSpecs": [
@@ -511,8 +484,7 @@
         "visualSummary": "猴王形象，身穿虎皮裙，手持金箍棒，头戴紧箍儿，目光如炬。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%AD%99%E6%82%9F%E7%A9%BA.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717378648dd8ef7af441b125f2150dd3f48013f2a14e727_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064949Z&X-Tos-Expires=86400&X-Tos-Signature=5f7fc06c7fcd6da0a21728854f0b2768a5f8ec301d408b69c73315c763c0a383&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%AD%99%E6%82%9F%E7%A9%BA.jpg?v=1777859698087"
       },
       {
         "id": "char-tangseng",
@@ -522,8 +494,7 @@
         "visualSummary": "身披锦襴袈裟，头戴毗卢帽，骑着白龙马，面容慈祥却带着愁容。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%94%90%E5%83%A7.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717379272dd8ef7af441b125f2150dd3f48013f2a85f9b3_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064952Z&X-Tos-Expires=86400&X-Tos-Signature=1a75fce23735d80fec930c2a2544364afdd3ea03891e045ac166d7bbe633ff0d&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%94%90%E5%83%A7.jpg?v=1777859698087"
       },
       {
         "id": "char-bajie",
@@ -533,8 +504,7 @@
         "visualSummary": "猪头人身，挺着大肚子，手持九齿钉耙，穿着黑色僧衣。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%8C%AA%E5%85%AB%E6%88%92.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717380034dd8ef7af441b125f2150dd3f48013f2a577b8c_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064952Z&X-Tos-Expires=86400&X-Tos-Signature=9c4cc1b026cb7d01742b61cf6bdbd54e92291fec2079d590c59a9157ee07f740&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%8C%AA%E5%85%AB%E6%88%92.jpg?v=1777859698087"
       },
       {
         "id": "char-shaseng",
@@ -544,8 +514,7 @@
         "visualSummary": "身材高大，络腮胡须，项挂骷髅念珠，手持降妖宝杖，神情憨厚。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E6%B2%99%E5%92%8C%E5%B0%9A.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717380784dd8ef7af441b125f2150dd3f48013f2aef72e6_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064952Z&X-Tos-Expires=86400&X-Tos-Signature=c0fac4d20174f500effea9e23895430d358e5bd38d647c8013bf34f3a96cd0c1&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E6%B2%99%E5%92%8C%E5%B0%9A.jpg?v=1777859698087"
       },
       {
         "id": "char-white-bone",
@@ -555,8 +524,7 @@
         "visualSummary": "美貌女子/老妪/老翁三变，本相是一具刻有“白骨夫人”字样的骷髅，妖气森森。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%99%BD%E9%AA%A8%E7%B2%BE.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717382053dd8ef7af441b125f2150dd3f48013f2a59943e_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T064952Z&X-Tos-Expires=86400&X-Tos-Signature=29cf9a0533f0c14f01a0f2a79023a1e1db1d0719fe3ec96bc3ad31ff6f0e8b7d&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%99%BD%E9%AA%A8%E7%B2%BE.jpg?v=1777859698102"
       },
       {
         "id": "char-rabbit",
@@ -566,8 +534,7 @@
         "visualSummary": "一只活泼好动的兔子，拟人化，长耳朵，神气活现。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E5%85%94%E5%AD%90.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739238546df6479734761ee7b3ca927c635915b31438122_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125412Z&X-Tos-Expires=86400&X-Tos-Signature=371352f373180ce4fd2b8f5cd357cb3a5ad49159d4c8443111c966cc775a1369&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E5%85%94%E5%AD%90.jpg?v=1777859698087"
       },
       {
         "id": "char-turtle",
@@ -577,8 +544,7 @@
         "visualSummary": "一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E4%B9%8C%E9%BE%9F.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739239202df6479734761ee7b3ca927c635915b3151b69a_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125413Z&X-Tos-Expires=86400&X-Tos-Signature=496ed19c4dff58b3ee7d4317d35b23e3c312fa565d1e4d628202d32a5ed384b0&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E4%B9%8C%E9%BE%9F.jpg?v=1777859698146"
       },
       {
         "id": "char-1775719034451-0.2669581808692705",
@@ -588,8 +554,7 @@
         "visualSummary": "土地的样貌",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%9C%9F%E5%9C%B0.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/0217757190368744d725e50adb936741e457920f0acab3c5844c3_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T071730Z&X-Tos-Expires=86400&X-Tos-Signature=ec1d9e9889b6e1d389306b08519e0bbc3d44a847722347b828dcc87d9015271e&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%9C%9F%E5%9C%B0.jpg?v=1777859698146"
       },
       {
         "id": "char-1775719034452-0.789633387111427",
@@ -599,8 +564,7 @@
         "visualSummary": "山神的样貌",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%B1%B1%E7%A5%9E.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/0217757190380974d725e50adb936741e457920f0acab3ca21f69_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T071730Z&X-Tos-Expires=86400&X-Tos-Signature=1a316e66f2682dbc9bf8595ef774faaf5d9d0f67c567117fc4c7adcf0ff22d7b&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%B1%B1%E7%A5%9E.jpg?v=1777859698146"
       },
       {
         "id": "char-1775739924420-0.8734374142212918",
@@ -610,8 +574,7 @@
         "visualSummary": "戴着一顶用丝绒做的红色帽子的小姑娘",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%B0%8F%E7%BA%A2%E5%B8%BD.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924831e09d61fd7b21547d0c39b37ac387b5825478d8_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130534Z&X-Tos-Expires=86400&X-Tos-Signature=e5e4a6a77c05b9366d0f17d8657e795d54cfd4fd052e74521b4485c6010ebb8a&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%B0%8F%E7%BA%A2%E5%B8%BD.jpg?v=1777859698146"
       },
       {
         "id": "char-1775739924421-0.010390314170476533",
@@ -621,8 +584,7 @@
         "visualSummary": "小红帽的母亲，故事开始时叮嘱小红帽",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A6%88%E5%A6%88.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924831e09d61fd7b21547d0c39b37ac387b582517421_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130535Z&X-Tos-Expires=86400&X-Tos-Signature=84460ca11352d5399db25868b9430eb8b3c378de8d4ac89b0b5302534c336c96&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A6%88%E5%A6%88.jpg?v=1777859698146"
       },
       {
         "id": "char-1775739924421-0.5938871332650079",
@@ -632,8 +594,7 @@
         "visualSummary": "生病在床，住在森林里的老妇人",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A5%B6%E5%A5%B6.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924831e09d61fd7b21547d0c39b37ac387b58276c05a_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130537Z&X-Tos-Expires=86400&X-Tos-Signature=a4ccffbbfb502fa5678261e8a0d6e11c7c8b3aa7c3e38a86f212790aea89c3bd&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A5%B6%E5%A5%B6.jpg?v=1777859698146"
       },
       {
         "id": "char-1775739924421-0.6250970107236709",
@@ -643,8 +604,7 @@
         "visualSummary": "森林里遇到的、会说话的狼，最终伪装成奶奶",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8B%BC.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924832e09d61fd7b21547d0c39b37ac387b58290f364_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130536Z&X-Tos-Expires=86400&X-Tos-Signature=0055357ce89626d5c08342b0deda38136699ef89837d31227b7308535084b848&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8B%BC.jpg?v=1777859698146"
       },
       {
         "id": "char-1775739924421-0.6931096876918382",
@@ -654,8 +614,7 @@
         "visualSummary": "带着枪和剪刀，路过奶奶家并救出小红帽和奶奶的男子",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8C%8E%E4%BA%BA.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739956037e09d61fd7b21547d0c39b37ac387b5822952b6_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130607Z&X-Tos-Expires=86400&X-Tos-Signature=f312a5e794d87fac4a41a58da33a8c9ec9426a9ec6aa3637af94c86f1ebef9ad&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8C%8E%E4%BA%BA.jpg?v=1777859698146"
       },
       {
         "id": "char-1775747724057-0.5800651146793451",
@@ -665,8 +624,7 @@
         "visualSummary": "一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E6%94%BE%E7%BE%8A%E5%A8%83.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724401282dd6b0400b132890dfb41291202ffb9a1c5b_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151536Z&X-Tos-Expires=86400&X-Tos-Signature=8fe1bf0c70ce80133e1355c553ffdab8d2076e3c8de9bc31271c2636ef973364&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E6%94%BE%E7%BE%8A%E5%A8%83.jpg?v=1777859698146"
       },
       {
         "id": "char-1775747724058-0.22687423865663847",
@@ -676,8 +634,7 @@
         "visualSummary": "一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E5%86%9C%E5%A4%AB%E4%BB%AC.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724402282dd6b0400b132890dfb41291202ffb8f154b_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151536Z&X-Tos-Expires=86400&X-Tos-Signature=0aaab03ee50ebddde8854e851c4b869f4c89e13970820fb3739ad168c40763cc&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E5%86%9C%E5%A4%AB%E4%BB%AC.jpg?v=1777859698146"
       },
       {
         "id": "char-1775747724059-0.9412958141219245",
@@ -687,8 +644,7 @@
         "visualSummary": "一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E7%8B%BC.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724402282dd6b0400b132890dfb41291202ffba0be1f_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151535Z&X-Tos-Expires=86400&X-Tos-Signature=0079fc765d62839310dfbe6859f0f027d750d6706bcd6e135d1f2d954c42700f&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E7%8B%BC.jpg?v=1777859698146"
       }
     ],
     "locations": [
@@ -700,8 +656,7 @@
         "visualSummary": "怪石嶙峋的山岭，枯木横生，阴云密布，透着一股杀气。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/locations/%E7%99%BD%E8%99%8E%E5%B2%AD.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775717389968dd8ef7af441b125f2150dd3f48013f2ac7e45a_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T065003Z&X-Tos-Expires=86400&X-Tos-Signature=e19918d6b964b7541568442042c3dbe0e3c318d5c47098a0d5cc278db4cb220f&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/locations/%E7%99%BD%E8%99%8E%E5%B2%AD.jpg?v=1777859698185"
       },
       {
         "id": "loc-forest-track",
@@ -711,8 +666,7 @@
         "visualSummary": "阳光明媚的森林小径，路边长满野花，尽头是一棵枝繁叶茂的大槐树。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E6%A3%AE%E6%9E%97%E8%B5%9B%E9%81%93.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739241165df6479734761ee7b3ca927c635915b31cdafe7_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125413Z&X-Tos-Expires=86400&X-Tos-Signature=1132e1992fa74457b48ab86e12f491d2e2be09e245e9f19a373775070a09a2fd&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E6%A3%AE%E6%9E%97%E8%B5%9B%E9%81%93.jpg?v=1777859698185"
       },
       {
         "id": "loc-1775739328858-0.8152861886302005",
@@ -722,8 +676,7 @@
         "visualSummary": "故事开始的地方，可能是一片开阔地",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E8%B5%9B%E8%B7%91%E8%B5%B7%E7%82%B9.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739329176df6479734761ee7b3ca927c635915b31e8f67f_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125541Z&X-Tos-Expires=86400&X-Tos-Signature=5f0dc4d8935835f7f3de0c5bda30f66a42504ded150037cf63311425ed79d2c7&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E8%B5%9B%E8%B7%91%E8%B5%B7%E7%82%B9.jpg?v=1777859698187"
       },
       {
         "id": "loc-1775739328861-0.6867293794731226",
@@ -733,8 +686,7 @@
         "visualSummary": "赛跑的终点，一棵位于山脚下的大树",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E5%B1%B1%E8%84%9A%E4%B8%8B%E7%9A%84%E5%A4%A7%E6%A0%91.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739329176df6479734761ee7b3ca927c635915b31a17059_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T125544Z&X-Tos-Expires=86400&X-Tos-Signature=3d4592db3572cead8b9be45740c7f984a191b5d8b2fdcc5e76ea496381d4ef44&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E5%B1%B1%E8%84%9A%E4%B8%8B%E7%9A%84%E5%A4%A7%E6%A0%91.jpg?v=1777859698185"
       },
       {
         "id": "loc-1775739924422-0.8922986201092508",
@@ -744,8 +696,7 @@
         "visualSummary": "故事开始的地方，小红帽从这里出发去奶奶家",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%B0%8F%E7%BA%A2%E5%B8%BD%E7%9A%84%E5%AE%B6.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924993e09d61fd7b21547d0c39b37ac387b582f17277_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130535Z&X-Tos-Expires=86400&X-Tos-Signature=45d0c607f93817e4d1e23b29ed016359e508da3bdbee54f85d5b04dd4138e063&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%B0%8F%E7%BA%A2%E5%B8%BD%E7%9A%84%E5%AE%B6.jpg?v=1777859698187"
       },
       {
         "id": "loc-1775739924422-0.9385975427346704",
@@ -755,8 +706,7 @@
         "visualSummary": "连接小红帽家和奶奶家的大路及周边区域，树木茂密，有阳光、鲜花和小鸟",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E6%A3%AE%E6%9E%97.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924993e09d61fd7b21547d0c39b37ac387b5829e434a_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130535Z&X-Tos-Expires=86400&X-Tos-Signature=3a5b092c0c11c6fd2f3cd9df827b8f7a6b75c98e03c2c39e466456342697ad84&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E6%A3%AE%E6%9E%97.jpg?v=1777859698193"
       },
       {
         "id": "loc-1775739924422-0.17177610250174735",
@@ -766,8 +716,7 @@
         "visualSummary": "位于森林深处，三棵大橡树下，低处围着核桃树篱笆的小屋，屋前有一个大石头槽子",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%A5%B6%E5%A5%B6%E7%9A%84%E6%88%BF%E5%AD%90.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775739924993e09d61fd7b21547d0c39b37ac387b58217ac1f_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T130534Z&X-Tos-Expires=86400&X-Tos-Signature=48854e1bbd48227fd2ced854f5bdb024b3fd71ee8405a6f3c12ae7268a7e5cac&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%A5%B6%E5%A5%B6%E7%9A%84%E6%88%BF%E5%AD%90.jpg?v=1777859698193"
       },
       {
         "id": "loc-1775747724059-0.530433944004928",
@@ -777,8 +726,7 @@
         "visualSummary": "一个放羊娃放羊的山坡或山顶，有草地供羊群吃草，视野开阔，可以俯瞰山下的农田。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8A.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724402282dd6b0400b132890dfb41291202ffb214e6f_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151537Z&X-Tos-Expires=86400&X-Tos-Signature=ed74712c68c417bedda606fdb002ff9c056f69d0a317f81feba1560d676626af&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8A.jpg?v=1777859698193"
       },
       {
         "id": "loc-1775747724060-0.8532256384396684",
@@ -788,8 +736,7 @@
         "visualSummary": "山脚下的农田区域，农夫们在此耕种，环境较为平坦，有种植的庄稼。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8B%E5%86%9C%E7%94%B0.jpg",
-        "referenceImageUrl": "https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/doubao-seedream-4-5/021775747724402282dd6b0400b132890dfb41291202ffb8c8e5c_0.jpeg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Credential=AKLTYWJkZTExNjA1ZDUyNDc3YzhjNTM5OGIyNjBhNDcyOTQ%2F20260409%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20260409T151536Z&X-Tos-Expires=86400&X-Tos-Signature=9fda9a62def9129536fa76e98a57aee4021b766fc54064bc091fc7fd73ae39e0&X-Tos-SignedHeaders=host"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8B%E5%86%9C%E7%94%B0.jpg?v=1777859698193"
       }
     ],
     "relationships": [
@@ -1022,6 +969,35 @@
             "content": "我、我知道错了……我不该闲得无聊撒谎捉弄山下的农夫们，把大家的好心当乐子耍，现在狼真的来了，我的羊被咬死了好多，我喊得嗓子都哑了也没人愿意信我来帮我，我真的后悔死了，以后再也不敢说谎骗人了。",
             "assistantMode": "character",
             "assistantCharacterId": "char-1775747724057-0.5800651146793451"
+          },
+          {
+            "role": "user",
+            "content": "你以后怎么做"
+          },
+          {
+            "role": "assistant",
+            "content": "我以后肯定再也不撒谎捉弄人了！等我先把剩下的羊安顿好，就下山给农夫伯伯们挨个赔礼道歉，以后我好好看管羊群，再也不拿大家的好心当乐子了，只有真遇上事才会喊人，说的每一句都是真话，再也不骗人了！",
+            "assistantMode": "character",
+            "assistantCharacterId": "char-1775747724057-0.5800651146793451"
+          }
+        ],
+        "scopeLabel": "这是到第一章为止的阅读进度"
+      },
+      "book-white-bone": {
+        "messages": [
+          {
+            "role": "assistant",
+            "assistantMode": "companion",
+            "content": "可以问我剧情理解、人物关系，也可以切换成书中角色和你对话。"
+          },
+          {
+            "role": "user",
+            "content": "你觉得孙悟空怎么样"
+          },
+          {
+            "role": "assistant",
+            "content": "在《三打白骨精》的故事里，孙悟空的形象特别鲜活：\n首先他本领过硬，独有火眼金睛能识破白骨精三次变化的伪装，八戒、唐僧全被妖怪骗过去了，只有他从始至终看得清对方是要害师父的妖精。\n其次他对唐僧忠心极深，哪怕每次打妖后都会被唐僧误会，被紧箍咒疼得死去活来，甚至要被逐出师门，他也宁可受委屈也要先除掉妖精护师父周全；最后真的被写贬书赶走时，还特意分身四面拜别唐僧，嘱托沙僧好好照看师父、提防妖怪，重情重义得很。\n而且他做事也有周全的心思，第三次打白骨精前特意先召来土地、山神当证人，就是怕又被挑唆冤枉，考虑得很细致。只是他性子偏急，每次识破妖邪就先动手除害，没来得及先和师父掰扯清楚，才给了八戒进谗言的机会，平白受了好多委屈。",
+            "assistantMode": "companion"
           }
         ],
         "scopeLabel": "这是到第一章为止的阅读进度"
@@ -1047,7 +1023,7 @@
             "桃子"
           ]
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1777859698231"
       },
       "book-white-bone-p-4": {
         "id": "ill-1775718405591-0.13950043865364659",
@@ -1066,7 +1042,7 @@
             "拐杖"
           ]
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg?v=1777859698233"
       },
       "book-white-bone-p-6": {
         "id": "ill-1775718900738-0.6232728661548878",
@@ -1085,7 +1061,7 @@
             "行李"
           ]
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg?v=1777859698232"
       },
       "book-white-bone-p-9": {
         "id": "ill-1775718902890-0.06758248711100268",
@@ -1102,7 +1078,7 @@
           "mood": "悲伤、不舍、决绝、前途未卜",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC10%E6%AE%B5.jpg"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC10%E6%AE%B5.jpg?v=1777859698232"
       },
       "book-white-bone-p-7": {
         "id": "ill-1775718986315-0.4478333000470335",
@@ -1126,7 +1102,7 @@
             "白骨（脊梁刻有'白骨夫人'）"
           ]
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg?v=1777859698232"
       },
       "book-tortoise-hare-p-2": {
         "id": "ill-1775739223180-0.839971201029128",
@@ -1142,7 +1118,7 @@
           "mood": "戏谑、挑衅、得意",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC3%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC3%E6%AE%B5.jpg?v=1777859698229",
         "promptUsed": "生成画面: 地点: 森林赛道 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子遇见乌龟并提议赛跑，乌龟不理睬，兔子得意地蹦跳并唱歌嘲笑乌龟。 | 氛围: 戏谑、挑衅、得意 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "book-tortoise-hare-p-7": {
@@ -1159,7 +1135,7 @@
           "mood": "紧张、对立、挑衅",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg?v=1777859698234",
         "promptUsed": "生成画面: 地点: 森林赛道起点 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 乌龟因被兔子取笑而生气，向兔子发起赛跑挑战 | 氛围: 紧张、对立、挑衅 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "book-tortoise-hare-p-10": {
@@ -1176,7 +1152,7 @@
           "mood": "轻蔑、傲慢、得意",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC11%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC11%E6%AE%B5.jpg?v=1777859698235",
         "promptUsed": "生成画面: 地点: 赛跑起点 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子嘲笑乌龟并提出赛跑，然后快速起跑，将乌龟远远甩在后面并决定睡觉等待 | 氛围: 轻蔑、傲慢、得意 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "book-tortoise-hare-p-12": {
@@ -1193,7 +1169,7 @@
           "mood": "骄傲、轻敌、松懈",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg?v=1777859698236",
         "promptUsed": "生成画面: 地点: 森林赛道上（起点到山脚下大树之间的某处） | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子因骄傲和轻敌，在赛跑途中躺下睡觉 | 氛围: 骄傲、轻敌、松懈 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "book-tortoise-hare-p-13": {
@@ -1212,7 +1188,7 @@
             "大树"
           ]
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg?v=1777859698237",
         "promptUsed": "生成画面: 地点: 山脚下的大树 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子醒来发现乌龟已到达终点，急忙追赶但失败，乌龟赢得比赛 | 氛围: 惊讶、焦急、懊悔、胜利 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-0": {
@@ -1231,7 +1207,7 @@
             "小红帽（丝绒做的帽子）"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1777859698238",
         "promptUsed": "生成画面: 地点: 未知（可能在小红帽家或奶奶家） | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 奶奶送给小红帽一顶丝绒小红帽，她非常喜欢并因此得名。 | 氛围: 温馨、喜爱 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-3": {
@@ -1248,7 +1224,7 @@
           "mood": "平静、天真，略带未知的危险",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg?v=1777859698237",
         "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 小红帽走进森林并遇到了狼 | 氛围: 平静、天真，略带未知的危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-6": {
@@ -1265,7 +1241,7 @@
           "mood": "看似平静友好，暗藏危险",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg?v=1777859698237",
         "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼向小红帽询问去向 | 氛围: 看似平静友好，暗藏危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-12": {
@@ -1285,7 +1261,7 @@
             "小鸟"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg?v=1777859698243",
         "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼在陪伴小红帽走路时，通过言语引诱她欣赏周围的风景和花朵，意图拖延时间并让她偏离大路。 | 氛围: 表面平静美好但暗藏阴谋 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-13": {
@@ -1305,7 +1281,7 @@
             "树木"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg?v=1777859698240",
         "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘.  | 动作: 小红帽离开大路，在森林中采摘鲜花 | 氛围: 宁静、美好、天真、专注 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-18": {
@@ -1329,7 +1305,7 @@
             "帘子"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC19%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC19%E6%AE%B5.jpg?v=1777859698238",
         "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 狼拉开门栓，冲进房间，将奶奶吞下，然后伪装成奶奶躺在床上 | 氛围: 紧张、危险、诡异 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-20": {
@@ -1351,72 +1327,8 @@
             "帽子"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC21%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC21%E6%AE%B5.jpg?v=1777859698241",
         "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 小红帽进入奶奶的房子，发现门开着且无人应答，她走到床前拉开帘子观察躺在床上的奶奶 | 氛围: 奇怪、害怕、诡异 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
-      },
-      "book-water-cycle-p-0": {
-        "id": "ill-1775747394592-0.5744202921114712",
-        "paragraphId": "book-water-cycle-p-0",
-        "status": "completed",
-        "extractedFacts": {
-          "characters": [],
-          "location": "地球上的自然系统（包括海洋、陆地、大气）",
-          "action": "水在太阳、重力和大气运动的驱动下，通过蒸发/蒸腾、成云、降水、地表径流、下渗与地下径流等方式，在海洋、陆地与大气之间循环流动。",
-          "mood": "客观、科学、描述性",
-          "objects": [
-            "海洋",
-            "湖泊",
-            "土壤",
-            "植物",
-            "水汽",
-            "云",
-            "雨",
-            "雪",
-            "溪流",
-            "河流",
-            "地下水"
-          ]
-        },
-        "imageUrl": "/pic_db/%E7%A7%91%E6%99%AE%20%E6%B0%B4%E5%BE%AA%E7%8E%AF/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg",
-        "promptUsed": "生成画面: 依据原文: \"水循环是地球上水在海洋、陆地与大气之间不断往返的过程，靠的主要是太阳能驱动蒸发与大气运动，外加重力让水回到地表并汇入江河湖海。海洋、湖泊、土壤和植物把水以水汽形式送入空气（蒸发/蒸腾），水汽随气流上升冷却后形成云，并在合适条件下变成雨、雪等降到地面（凝结与降水）。降到陆地的水一部分沿地表流动汇成溪流河流（地表径流），一部分渗入土壤和岩层成为地下水并缓慢流动（下渗与地下径流），最终又回到海洋；同时地表水还会再次蒸发。正是这套循环，持续补给淡水资源、调节气候，也影响着洪涝与干旱的发生。\" | 地点: 地球上的自然系统（包括海洋、陆地、大气） | 角色:  | 动作: 水在太阳、重力和大气运动的驱动下，通过蒸发/蒸腾、成云、降水、地表径流、下渗与地下径流等方式，在海洋、陆地与大气之间循环流动。 | 氛围: 客观、科学、描述性 | 风格: minimalist line art, continuous line drawing, abstract style, clean background, high contrast, monochrome or limited color palette, vector art style, simple shapes, modern aesthetic | 镜头: flat lay, 2D perspective, plenty of negative space｜禁止出现文字"
-      },
-      "book-water-cycle-p-1": {
-        "id": "ill-1775747395400-0.5420431852702824",
-        "paragraphId": "book-water-cycle-p-1",
-        "status": "completed",
-        "extractedFacts": {
-          "characters": [],
-          "location": "地球自然环境",
-          "action": "太阳加热水体导致蒸发和蒸腾，水汽上升形成云并最终以降水的形式返回地表，随后通过地表径流、下渗、地下径流等方式流动，构成一个完整的循环过程。",
-          "mood": "客观、科学、动态",
-          "objects": [
-            "太阳",
-            "海洋",
-            "湖泊",
-            "河流",
-            "湿润地表",
-            "植物",
-            "水汽",
-            "风",
-            "尘埃",
-            "云",
-            "雨",
-            "雪",
-            "冰雹",
-            "沟渠",
-            "溪流",
-            "江河",
-            "土壤",
-            "地下水",
-            "含水层",
-            "泉",
-            "海岸",
-            "积雪",
-            "冰川"
-          ]
-        },
-        "imageUrl": "/pic_db/%E7%A7%91%E6%99%AE%20%E6%B0%B4%E5%BE%AA%E7%8E%AF/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC2%E6%AE%B5.jpg",
-        "promptUsed": "生成画面: 依据原文: \"水循环可以按“海洋/陆地 → 大气 → 陆地/海洋 → 回到海洋”这条闭环来理解。首先，太阳加热海面、湖泊、河流和湿润地表，使水变成水汽上升（蒸发）；植物通过叶片把水分释放到空气中（蒸腾），两者合起来常写作“蒸散”。水汽被风带走并抬升到更高处，温度降低后在尘埃等凝结核上形成小水滴或冰晶，聚集成云（凝结/成云）。当云滴长大到空气托不住，就会落到地面或海面，形成雨、雪、冰雹等（降水）。降到陆地的水有几条去路：一部分顺坡流入沟渠、溪流、江河，最后入海（地表径流）；一部分渗入土壤成为土壤水，被植物吸收后再蒸腾回到空气（入渗—植物吸收—蒸腾）；还有一部分继续下渗到更深处形成含水层中的地下水，缓慢流动并在泉、河道或海岸处补给地表水/海洋（地下径流与出露）。在寒冷地区，降水会暂时以积雪、冰川的形式储存，气温回升后融化补给河流（冻结—融化）。这样，水不断在各“水库”（海洋、大气、河流湖泊、土壤、地下水、冰雪）之间转移，构成一张用箭头就能清晰表达的循环流程图。\" | 地点: 地球自然环境 | 角色:  | 动作: 太阳加热水体导致蒸发和蒸腾，水汽上升形成云并最终以降水的形式返回地表，随后通过地表径流、下渗、地下径流等方式流动，构成一个完整的循环过程。 | 氛围: 客观、科学、动态 | 风格: minimalist line art, continuous line drawing, abstract style, clean background, high contrast, monochrome or limited color palette, vector art style, simple shapes, modern aesthetic | 镜头: flat lay, 2D perspective, plenty of negative space｜禁止出现文字"
       },
       "imported-1775747701883-p-1": {
         "id": "ill-1775747818307-0.28040423748075094",
@@ -1435,7 +1347,7 @@
             "镰刀"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC2%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC2%E6%AE%B5.jpg?v=1777859698246",
         "promptUsed": "生成画面: 地点: 山上（放羊娃所在处）和山下农田（农夫们初始位置） | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。.  | 动作: 放羊娃为寻开心，向山下农夫们谎报狼来了；农夫们听到呼救后，急忙拿着农具从农田跑向山上准备打狼。 | 氛围: 紧张、急迫（农夫们的反应），但源于欺骗（放羊娃的动机） | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775747701883-p-4": {
@@ -1455,7 +1367,7 @@
             "羊群"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg?v=1777859698244",
         "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。. 狼: 一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。.  | 动作: 狼闯入羊群，放羊娃惊慌失措地向山下的农夫们呼救 | 氛围: 紧张、恐惧、绝望 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 图中不要出现农民"
       },
       "imported-1775747701883-p-5": {
@@ -1475,7 +1387,7 @@
             "羊"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC6%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC6%E6%AE%B5.jpg?v=1777859698245",
         "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。. 狼: 一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。.  | 动作: 放羊娃呼救，农夫们因他之前说谎而不予理睬，狼咬死了许多羊 | 氛围: 紧张、无助、悲剧 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 放羊娃的眼神要惊恐；体现出狼撕咬羊的场面"
       },
       "imported-1775747701883-p-3": {
@@ -1496,7 +1408,7 @@
             "镰刀"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg?v=1777859698246",
         "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。.  | 动作: 放羊娃再次大喊狼来了欺骗农夫们，农夫们冲上山帮忙却发现没有狼，放羊娃大笑 | 氛围: 戏谑、紧张后的滑稽、愤怒 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-29": {
@@ -1515,22 +1427,40 @@
             "床"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC30%E6%AE%B5.jpg",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC30%E6%AE%B5.jpg?v=1777859698250",
         "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼从床上跳起来吞掉了小红帽，然后躺下睡觉并打鼾 | 氛围: 紧张、惊悚、危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 狼刚把话说完，就从床上跳起来，把小红帽吞进了肚子，狼满足了食欲之后便重新躺到床上睡觉，而且鼾声震天。"
+      },
+      "imported-1775747701883-p-0": {
+        "id": "ill-1776328065196-0.5344649286976924",
+        "paragraphId": "imported-1775747701883-p-0",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "放羊娃"
+          ],
+          "location": "山上",
+          "action": "放羊娃在山上放羊",
+          "mood": "日常、平静",
+          "objects": [
+            "羊"
+          ]
+        },
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1777859698249",
+        "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。.  | 动作: 放羊娃在山上放羊 | 氛围: 日常、平静 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       }
     },
-    "currentBookId": "imported-1775747701883",
+    "currentBookId": "book-tortoise-hare",
     "preferredVisualSpecId": "watercolor_storybook",
     "imageModelId": "doubao-seedream-4-5-251128",
     "imageGenerationStats": {
-      "total": 88,
-      "assets": 39,
-      "illustrations": 49,
+      "total": 125,
+      "assets": 72,
+      "illustrations": 53,
       "byModel": {
-        "doubao-seedream-4-5-251128": 85,
+        "doubao-seedream-4-5-251128": 122,
         "doubao-seedream-5-0-260128": 3
       },
-      "lastGeneratedAt": "2026-04-09T15:24:02.865Z"
+      "lastGeneratedAt": "2026-04-18T07:15:41.550Z"
     }
   }
 }

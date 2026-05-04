@@ -1255,9 +1255,12 @@ const App: React.FC = () => {
       )}
       {view === 'reader' && currentBook && (
         <Reader 
+          books={books}
           book={currentBook}
           characters={characters.filter(c => c.bookId === currentBook.id)}
           locations={locations.filter(l => l.bookId === currentBook.id)}
+          relationships={relationships.filter(r => r.bookId === currentBook.id)}
+          relationshipChat={relationshipChats[currentBook.id]}
           visualSpec={visualSpec}
           availableSpecs={availableSpecs}
           imageModelId={imageModelId}
@@ -1272,7 +1275,9 @@ const App: React.FC = () => {
           onUpdateBookStyle={handleUpdateBookStyle}
           onUpdateImageModel={setImageModelId}
           onGenerateIllustration={handleGenerateIllustration}
+          onSelectBook={handleSelectBook}
           onOpenAssetsView={handleOpenAssetsView}
+          onUpdateRelationshipChat={handleUpdateRelationshipChat}
         />
       )}
       {view === 'assets' && (

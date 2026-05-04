@@ -29,6 +29,18 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, visualSpecs, defaul
   const pendingGeneratedCoverRef = useRef<Promise<string> | null>(null);
   const [updatingBookId, setUpdatingBookId] = useState<string | null>(null);
 
+  const getErrorMessage = (error: unknown) => {
+    if (error instanceof Error && error.message.trim()) {
+      return error.message.trim();
+    }
+
+    if (typeof error === 'string' && error.trim()) {
+      return error.trim();
+    }
+
+    return '未知错误';
+  };
+
   useEffect(() => {
     if (!showImportModal) {
       setImportStyleId(defaultImportStyleId);
@@ -144,7 +156,7 @@ export const BookShelf: React.FC<BookShelfProps> = ({ books, visualSpecs, defaul
       });
     } catch (error) {
       console.error('Failed to generate import cover:', error);
-      alert('封面生成失败，请稍后重试。');
+      alert(`封面生成失败：${getErrorMessage(error)}`);
     } finally {
       setIsGeneratingCover(false);
     }

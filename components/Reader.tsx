@@ -1,15 +1,18 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Book, Character, Location, Illustration, VisualSpec, Relationship, ReaderSettings, ImageGenerationModelId, NarrativeFacts } from '../types';
-import { analyzeNarrative, scanChapterForAssets, analyzeRelationships } from '../services/aiService';
+import { Book, Character, Location, Illustration, VisualSpec, Relationship, ReaderSettings, ImageGenerationModelId, NarrativeFacts, RelationshipChatState, ChatMessage } from '../types';
+import { analyzeNarrative, scanChapterForAssets, analyzeRelationships, chatWithBookRole } from '../services/aiService';
 import { exportBookToHtml, exportBookToPdf } from '../services/exportService';
 import { BatchActionsModal } from './BatchActionsModal';
-import { Wand2, AlertCircle, Settings2, PlayCircle, Loader2, ChevronLeft, ChevronRight, ScanSearch, CheckCircle2, Circle, Layers, Palette, X, UserPlus, Info, Type, Trash2 } from 'lucide-react';
+import { Wand2, AlertCircle, Settings2, Loader2, ChevronLeft, ChevronRight, ScanSearch, CheckCircle2, Circle, Layers, Palette, X, UserPlus, Info, Type, Trash2, Bot, MessageCircle, Send, BookOpen, Download, FileText, FileType } from 'lucide-react';
 
 interface ReaderProps {
+  books: Book[];
   book: Book;
   characters: Character[];
   locations: Location[];
+  relationships: Relationship[];
+  relationshipChat?: RelationshipChatState;
   visualSpec: VisualSpec;
   availableSpecs: VisualSpec[];
   imageModelId: ImageGenerationModelId;
@@ -24,12 +27,16 @@ interface ReaderProps {
   onUpdateBookStyle: (bookId: string, styleId: string) => void;
   onUpdateImageModel: (modelId: ImageGenerationModelId) => void;
   onGenerateIllustration: (bookId: string, paragraphId: string, facts: NarrativeFacts, spec: VisualSpec, illustrationCharacters: Character[], illustrationLocations: Location[], originalText?: string, customRequirement?: string) => Promise<{ imageUrl: string; promptUsed: string }>;
+  onSelectBook: (book: Book) => void;
   onOpenAssetsView: (bookId?: string) => void;
+  onUpdateRelationshipChat: (bookId: string, chatState: RelationshipChatState) => void;
 }
 
 export const Reader: React.FC<ReaderProps> = ({
+  books,
   book, characters, locations, visualSpec, availableSpecs, imageModelId, imageModels, illustrations,
-  onAddIllustration, onDeleteIllustration, onUpdateIllustration, onDiscoverCharacter, onDiscoverLocation, onDiscoverRelationships, onUpdateBookStyle, onUpdateImageModel, onGenerateIllustration, onOpenAssetsView
+  relationships, relationshipChat,
+  onAddIllustration, onDeleteIllustration, onUpdateIllustration, onDiscoverCharacter, onDiscoverLocation, onDiscoverRelationships, onUpdateBookStyle, onUpdateImageModel, onGenerateIllustration, onSelectBook, onOpenAssetsView, onUpdateRelationshipChat
 }) => {
   const BATCH_CONCURRENCY = 3;
   const [activeParagraphId, setActiveParagraphId] = useState<string | null>(null);
@@ -57,6 +64,11 @@ export const Reader: React.FC<ReaderProps> = ({
   const [customRequirements, setCustomRequirements] = useState<Record<string, string>>({});
   const [requirementEditorMap, setRequirementEditorMap] = useState<Record<string, boolean>>({});
   const autoResumingPendingRef = useRef<Record<string, boolean>>({});
+  const [focusedSidebarCharacterId, setFocusedSidebarCharacterId] = useState<string | null>(null);
+  const [chatRole, setChatRole] = useState<string>('companion');
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [isChatting, setIsChatting] = useState(false);
 
   // Missing Character Modal State
   const [pendingGenerationQueue, setPendingGenerationQueue] = useState<Array<{
@@ -81,6 +93,30 @@ export const Reader: React.FC<ReaderProps> = ({
   const isScienceBook = book.genre.includes("科普") || book.genre.includes("科学");
   const currentPendingGeneration = pendingGenerationQueue[0] || null;
   const queuedGenerationCount = Math.max(0, pendingGenerationQueue.length - 1);
+  const currentBookRelationships = useMemo(() => relationships.filter(relationship => relationship.bookId === book.id), [relationships, book.id]);
+  const latestIllustratedChapterIndex = useMemo(() => {
+    return book.chapters.reduce((latestIndex, chapter, chapterIndex) => {
+      const hasCompletedIllustration = chapter.paragraphs.some(paragraph => {
+        const illustration = illustrations[paragraph.id];
+        return illustration?.status === 'completed' && Boolean(illustration.imageUrl);
+      });
+      return hasCompletedIllustration ? chapterIndex : latestIndex;
+    }, -1);
+  }, [book, illustrations]);
+  const readingScopeLabel = useMemo(() => {
+    if (latestIllustratedChapterIndex < 0) return '';
+    return `这是到${book.chapters[latestIllustratedChapterIndex].title}为止的角色关系图`;
+  }, [book, latestIllustratedChapterIndex]);
+  const focusedSidebarCharacter = useMemo(() => {
+    if (focusedSidebarCharacterId) {
+      return characters.find(character => character.id === focusedSidebarCharacterId) || characters[0];
+    }
+    return characters[0];
+  }, [characters, focusedSidebarCharacterId]);
+  const currentChatCharacter = useMemo(
+    () => characters.find(character => character.id === chatRole),
+    [characters, chatRole]
+  );
 
   useEffect(() => {
     latestCharactersRef.current = characters;
@@ -89,6 +125,23 @@ export const Reader: React.FC<ReaderProps> = ({
   useEffect(() => {
     latestLocationsRef.current = locations;
   }, [locations]);
+
+  useEffect(() => {
+    setFocusedSidebarCharacterId(null);
+    setChatInput('');
+    setChatRole('companion');
+    setChatMessages(
+      relationshipChat?.messages?.length
+        ? relationshipChat.messages
+        : [
+            {
+              role: 'assistant',
+              assistantMode: 'companion',
+              content: '可以问我剧情理解、人物关系，也可以切换成书中角色和你对话。'
+            }
+          ]
+    );
+  }, [book.id, relationshipChat]);
 
   useEffect(() => {
     const pendingIllustrations = Object.values(illustrations).filter(
@@ -445,6 +498,11 @@ export const Reader: React.FC<ReaderProps> = ({
     else exportBookToPdf(book, illustrations, mode);
   };
 
+  const handleSettingsExport = (mode: 'full' | 'generated_chapters', format: 'html' | 'pdf') => {
+    handleExport(mode, format);
+    setShowSettings(false);
+  };
+
   const handleGenMissingChars = async () => {
     if (!currentPendingGeneration) return;
     const charNames = [...currentPendingGeneration.missingChars];
@@ -509,8 +567,103 @@ export const Reader: React.FC<ReaderProps> = ({
     setRequirementEditorMap(prev => ({ ...prev, [paragraphId]: !prev[paragraphId] }));
   };
 
+  const handleSendChat = async () => {
+    const trimmedInput = chatInput.trim();
+    if (!trimmedInput || isChatting) return;
+
+    const nextHistory: ChatMessage[] = [...chatMessages, { role: 'user', content: trimmedInput }];
+    setChatMessages(nextHistory);
+    setChatInput('');
+    setIsChatting(true);
+
+    const roleCharacter = chatRole === 'companion' ? undefined : characters.find(character => character.id === chatRole);
+
+    try {
+      const roleRelationships = roleCharacter
+        ? currentBookRelationships.filter(rel => rel.sourceId === roleCharacter.id || rel.targetId === roleCharacter.id)
+        : currentBookRelationships;
+      const scopedChapters = roleCharacter
+        ? (latestIllustratedChapterIndex >= 0 ? book.chapters.slice(0, latestIllustratedChapterIndex + 1) : [])
+        : book.chapters;
+      const bookText = scopedChapters
+        .map(chapter => `${chapter.title}\n${chapter.paragraphs.map(paragraph => paragraph.text).join('\n')}`)
+        .join('\n\n');
+
+      const reply = await chatWithBookRole({
+        bookTitle: book.title,
+        bookText,
+        roleMode: roleCharacter ? 'character' : 'companion',
+        roleCharacter,
+        relatedRelationships: roleRelationships,
+        history: nextHistory,
+        userMessage: trimmedInput,
+        readingScopeLabel: roleCharacter ? readingScopeLabel : `整本《${book.title}》`,
+        hasReadingProgress: latestIllustratedChapterIndex >= 0,
+      });
+
+      setChatMessages(prev => {
+        const nextMessages: ChatMessage[] = [
+          ...prev,
+          {
+            role: 'assistant',
+            content: reply,
+            assistantMode: roleCharacter ? 'character' : 'companion',
+            assistantCharacterId: roleCharacter?.id,
+          }
+        ];
+        onUpdateRelationshipChat(book.id, {
+          messages: nextMessages,
+          scopeLabel: readingScopeLabel,
+        });
+        return nextMessages;
+      });
+    } catch (error: any) {
+      setChatMessages(prev => {
+        const nextMessages: ChatMessage[] = [
+          ...prev,
+          {
+            role: 'assistant',
+            content: error?.message || '对话失败，请稍后重试。',
+            assistantMode: roleCharacter ? 'character' : 'companion',
+            assistantCharacterId: roleCharacter?.id,
+          }
+        ];
+        onUpdateRelationshipChat(book.id, {
+          messages: nextMessages,
+          scopeLabel: readingScopeLabel,
+        });
+        return nextMessages;
+      });
+    } finally {
+      setIsChatting(false);
+    }
+  };
+
+  const handleClearChat = () => {
+    const initialMessages: ChatMessage[] = [
+      {
+        role: 'assistant',
+        assistantMode: 'companion',
+        content: '可以问我剧情理解、人物关系，也可以切换成书中角色和你对话。'
+      }
+    ];
+    setChatMessages(initialMessages);
+    setChatInput('');
+    onUpdateRelationshipChat(book.id, {
+      messages: initialMessages,
+      scopeLabel: readingScopeLabel,
+    });
+  };
+
+  const getAssistantAvatar = (message: ChatMessage) => {
+    if (message.assistantMode === 'character' && message.assistantCharacterId) {
+      return characters.find(character => character.id === message.assistantCharacterId);
+    }
+    return null;
+  };
+
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 relative min-h-full flex flex-col">
+    <div className="box-border flex h-full w-full flex-col overflow-hidden px-6 py-8 xl:px-8 2xl:px-10">
       {/* Missing Character Modal */}
       {currentPendingGeneration && (
           <div className="fixed inset-0 bg-black/60 z-[110] flex items-center justify-center p-4 backdrop-blur-sm">
@@ -629,51 +782,141 @@ export const Reader: React.FC<ReaderProps> = ({
         onExport={handleExport}
       />
 
-      <div className="absolute top-4 right-4 z-20 flex gap-2">
-         <button onClick={() => setShowStylePicker(true)} className="p-2 bg-white rounded-lg border text-sm px-3 shadow-sm hover:text-brand-600 flex items-center gap-2"><Palette size={16} /><span className="hidden sm:inline">{visualSpec.label}</span></button>
-         <button onClick={handleScanAssets} disabled={isScanning} className="p-2 bg-white rounded-lg border text-sm px-3 shadow-sm hover:text-brand-600 flex items-center gap-2">{isScanning ? <Loader2 className="animate-spin" size={16} /> : <ScanSearch size={16} />}<span className="hidden sm:inline">扫描设定</span></button>
-         <button onClick={() => setShowBatchModal(true)} className="p-2 bg-white rounded-lg border text-sm px-3 shadow-sm hover:text-brand-600 flex items-center gap-2"><Layers size={16} /><span className="hidden sm:inline">批量/导出</span></button>
-         <button onClick={() => setShowSettings(!showSettings)} className="p-2 bg-white rounded-lg border shadow-sm hover:text-brand-600 transition-all"><Settings2 size={20} /></button>
-         
-         {showSettings && (
-            <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border p-5 z-30 animate-in fade-in slide-in-from-top-2 duration-200">
-                <h3 className="font-bold text-sm mb-4 flex items-center gap-2 text-slate-700"><Type size={16} /> 阅读生图设置</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">生图频率 (每隔多少字)</label>
-                    <div className="grid grid-cols-4 gap-2">
-                        {[0, 300, 500, 1000].map(v => (
-                            <button key={v} onClick={() => setSettings(s => ({...s, wordInterval: v}))} className={`py-1.5 text-xs rounded-lg border transition-all ${settings.wordInterval === v ? 'bg-brand-500 text-white border-brand-600 shadow-sm' : 'bg-slate-50 text-slate-500 border-slate-100 hover:bg-slate-100'}`}>{v === 0 ? '手动' : v}</button>
-                        ))}
-                    </div>
-                  </div>
-                  <div className="text-[10px] text-slate-400 italic bg-slate-50 p-2 rounded">
-                    {settings.wordInterval === 0 ? '仅在手动点击时生图' : `每隔约 ${settings.wordInterval} 字出现生图控件`}
-                  </div>
-                  <div>
-                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">图片模型</label>
-                    <select value={imageModelId} onChange={e => onUpdateImageModel(e.target.value as ImageGenerationModelId)} className="w-full px-3 py-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-500 outline-none">
-                      {imageModels.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
-                    </select>
-                    <div className="text-[10px] text-slate-400 italic bg-slate-50 p-2 rounded mt-2">
-                      {imageModels.find(model => model.id === imageModelId)?.description}
-                    </div>
-                  </div>
-                </div>
+      <div className="grid flex-1 min-h-0 items-start gap-6 2xl:grid-cols-[260px_minmax(760px,1fr)_360px] xl:grid-cols-[240px_minmax(0,1fr)_340px]">
+        <aside className="h-full min-h-0 overflow-y-auto pr-1 space-y-4">
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div>
+                <div className="text-sm font-bold text-slate-900">我的书架</div>
+                <div className="text-xs text-slate-400">在阅读页直接切换作品</div>
+              </div>
+              <button
+                onClick={() => onSelectBook(book)}
+                className="rounded-xl bg-brand-600 px-3 py-2 text-xs font-bold text-white shadow-sm hover:bg-brand-700 transition-colors"
+              >
+                阅读中
+              </button>
             </div>
-         )}
-      </div>
+            <div className="grid grid-cols-2 gap-3">
+              {books.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => onSelectBook(item)}
+                  className={`group overflow-hidden rounded-2xl border text-left transition-all ${item.id === book.id ? 'border-brand-300 bg-brand-50 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'}`}
+                >
+                  <div className="aspect-[3/4] bg-slate-100 overflow-hidden">
+                    {item.coverUrl ? (
+                      <img src={item.coverUrl} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-4xl">{item.coverEmoji || '📘'}</div>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <div className="text-sm font-bold text-slate-800 line-clamp-1">{item.title}</div>
+                    <div className="mt-1 text-[11px] text-slate-400 line-clamp-1">
+                      {item.id === book.id ? `${currentChapter.title} · 第 ${currentPage + 1} 页` : item.chapters[0]?.title || '待阅读'}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
 
-      <div className="mb-8 text-center pb-4 border-b">
-        <h1 className="text-2xl font-serif font-bold text-slate-900">{book.title}</h1>
-        <p className="text-slate-400 text-sm mt-1">{currentChapter.title} • 第 {currentPage + 1} 页</p>
-      </div>
+        <section className="min-w-0 h-full min-h-0">
+          <div className="min-w-0 h-full min-h-0 rounded-[28px] border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col">
+            <div className="border-b border-slate-100 px-6 py-5">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-brand-500">
+                    <BookOpen size={14} />
+                    阅读工作台
+                  </div>
+                  <h1 className="mt-2 text-3xl font-serif font-bold text-slate-900">{book.title}</h1>
+                  <p className="mt-1 text-sm text-slate-400">{currentChapter.title} · 第 {currentPage + 1} 页</p>
+                </div>
+                <div className="relative flex flex-wrap gap-2">
+                  <button onClick={() => setShowStylePicker(true)} className="rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:text-brand-600 flex items-center gap-2"><Palette size={16} /><span>{visualSpec.label}</span></button>
+                  <button onClick={handleScanAssets} disabled={isScanning} className="rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:text-brand-600 flex items-center gap-2 disabled:opacity-50">{isScanning ? <Loader2 className="animate-spin" size={16} /> : <ScanSearch size={16} />}<span>扫描设定</span></button>
+                  <button onClick={() => setShowBatchModal(true)} className="rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:text-brand-600 flex items-center gap-2"><Layers size={16} /><span>批量生图</span></button>
+                  <button onClick={() => setShowSettings(!showSettings)} className="rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:text-brand-600 flex items-center gap-2 transition-all"><Settings2 size={16} /><span>设置</span></button>
 
-      <div className="flex-1">
-          {currentParagraphs.map((paragraph, index) => {
-            const pIdx = currentPage * PARAGRAPHS_PER_PAGE + index;
-            const wordData = paragraphWordData[pIdx];
-            const ill = illustrations[paragraph.id];
+                  {showSettings && (
+                    <div className="absolute right-0 top-14 w-80 bg-white rounded-xl shadow-xl border p-5 z-30 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <h3 className="font-bold text-sm mb-4 flex items-center gap-2 text-slate-700"><Type size={16} /> 阅读生图设置</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">生图频率 (每隔多少字)</label>
+                          <div className="grid grid-cols-4 gap-2">
+                            {[0, 300, 500, 1000].map(v => (
+                              <button key={v} onClick={() => setSettings(s => ({...s, wordInterval: v}))} className={`py-1.5 text-xs rounded-lg border transition-all ${settings.wordInterval === v ? 'bg-brand-500 text-white border-brand-600 shadow-sm' : 'bg-slate-50 text-slate-500 border-slate-100 hover:bg-slate-100'}`}>{v === 0 ? '手动' : v}</button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="text-[10px] text-slate-400 italic bg-slate-50 p-2 rounded">
+                          {settings.wordInterval === 0 ? '仅在手动点击时生图' : `每隔约 ${settings.wordInterval} 字出现生图控件`}
+                        </div>
+                        <div>
+                          <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">图片模型</label>
+                          <select value={imageModelId} onChange={e => onUpdateImageModel(e.target.value as ImageGenerationModelId)} className="w-full px-3 py-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-brand-500 outline-none">
+                            {imageModels.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
+                          </select>
+                          <div className="text-[10px] text-slate-400 italic bg-slate-50 p-2 rounded mt-2">
+                            {imageModels.find(model => model.id === imageModelId)?.description}
+                          </div>
+                        </div>
+                        <div className="border-t border-slate-100 pt-4">
+                          <h3 className="font-bold text-sm mb-3 flex items-center gap-2 text-slate-700"><Download size={16} /> 导出书籍</h3>
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              onClick={() => handleSettingsExport('full', 'html')}
+                              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-left transition-colors hover:border-brand-300 hover:bg-brand-50"
+                            >
+                              <FileText size={18} className="mb-2 text-slate-400" />
+                              <div className="text-xs font-bold text-slate-700">完整 HTML</div>
+                              <div className="mt-1 text-[10px] text-slate-400">整本图文下载</div>
+                            </button>
+                            <button
+                              onClick={() => handleSettingsExport('full', 'pdf')}
+                              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-left transition-colors hover:border-brand-300 hover:bg-brand-50"
+                            >
+                              <FileType size={18} className="mb-2 text-brand-500" />
+                              <div className="text-xs font-bold text-slate-700">完整 PDF</div>
+                              <div className="mt-1 text-[10px] text-slate-400">打印保存分享</div>
+                            </button>
+                            <button
+                              onClick={() => handleSettingsExport('generated_chapters', 'html')}
+                              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-left transition-colors hover:border-green-300 hover:bg-green-50"
+                            >
+                              <FileText size={18} className="mb-2 text-green-500" />
+                              <div className="text-xs font-bold text-slate-700">精选 HTML</div>
+                              <div className="mt-1 text-[10px] text-slate-400">仅含配图章节</div>
+                            </button>
+                            <button
+                              onClick={() => handleSettingsExport('generated_chapters', 'pdf')}
+                              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-left transition-colors hover:border-green-300 hover:bg-green-50"
+                            >
+                              <FileType size={18} className="mb-2 text-green-500" />
+                              <div className="text-xs font-bold text-slate-700">精选 PDF</div>
+                              <div className="mt-1 text-[10px] text-slate-400">配图章节排版</div>
+                            </button>
+                          </div>
+                          <div className="mt-2 rounded-lg bg-slate-50 p-2 text-[10px] leading-relaxed text-slate-400">
+                            PDF 会打开系统打印面板，可选择“存储为 PDF”。
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 min-h-0 overflow-y-auto px-6 py-6">
+              {currentParagraphs.map((paragraph, index) => {
+                const pIdx = currentPage * PARAGRAPHS_PER_PAGE + index;
+                const wordData = paragraphWordData[pIdx];
+                const ill = illustrations[paragraph.id];
             const customRequirement = customRequirements[paragraph.id] || '';
             const isRequirementEditorOpen = !!requirementEditorMap[paragraph.id];
             const interval = settings.wordInterval;
@@ -681,8 +924,8 @@ export const Reader: React.FC<ReaderProps> = ({
             const isFirstPar = pIdx === 0 && interval > 0;
             const shouldShowSuggestControl = isIntervalReached || isFirstPar;
 
-            return (
-              <div key={paragraph.id} className="group mb-8">
+                return (
+                  <div key={paragraph.id} className="group mb-8">
                 <p className={`font-serif text-xl leading-loose text-slate-800 mb-4 hover:bg-brand-50 rounded px-2 -mx-2 cursor-pointer transition-colors ${activeParagraphId === paragraph.id ? 'bg-brand-50 shadow-sm' : ''}`} onClick={() => setActiveParagraphId(paragraph.id)}>{paragraph.text}</p>
                 <div className="my-6">
                   {ill ? (
@@ -801,14 +1044,172 @@ export const Reader: React.FC<ReaderProps> = ({
                     </div>
                   )}
                 </div>
+                  </div>
+                );
+              })}
+
+              <div className="mt-8 pt-6 border-t flex items-center justify-between">
+                <button onClick={() => currentPage > 0 && setCurrentPage(currentPage - 1)} disabled={currentPage === 0} className="flex items-center gap-2 px-6 py-2 bg-white border rounded-xl text-slate-600 disabled:opacity-30 hover:bg-slate-50 transition-colors shadow-sm"><ChevronLeft size={20} /> 上一页</button>
+                <div className="text-sm font-medium text-slate-400 bg-slate-100 px-4 py-1 rounded-full">{currentPage + 1} / {totalPages}</div>
+                <button onClick={() => currentPage < totalPages - 1 && setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages - 1} className="flex items-center gap-2 px-6 py-2 bg-white border rounded-xl text-slate-600 disabled:opacity-30 hover:bg-slate-50 transition-colors shadow-sm">下一页 <ChevronRight size={20} /></button>
               </div>
-            );
-          })}
-      </div>
-      <div className="mt-8 pt-6 border-t flex items-center justify-between">
-          <button onClick={() => currentPage > 0 && setCurrentPage(currentPage - 1)} disabled={currentPage === 0} className="flex items-center gap-2 px-6 py-2 bg-white border rounded-xl text-slate-600 disabled:opacity-30 hover:bg-slate-50 transition-colors shadow-sm"><ChevronLeft size={20} /> 上一页</button>
-          <div className="text-sm font-medium text-slate-400 bg-slate-100 px-4 py-1 rounded-full">{currentPage + 1} / {totalPages}</div>
-          <button onClick={() => currentPage < totalPages - 1 && setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages - 1} className="flex items-center gap-2 px-6 py-2 bg-white border rounded-xl text-slate-600 disabled:opacity-30 hover:bg-slate-50 transition-colors shadow-sm">下一页 <ChevronRight size={20} /></button>
+            </div>
+          </div>
+        </section>
+
+        <aside className="flex h-full min-h-0 flex-col gap-4">
+          <div className="flex min-h-0 basis-1/3 flex-col rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div>
+                <div className="text-sm font-bold text-slate-900">角色设定</div>
+                <div className="text-xs text-slate-400">当前书籍的主要角色视觉卡片</div>
+              </div>
+              <button
+                onClick={() => onOpenAssetsView(book.id)}
+                className="text-xs font-bold text-brand-600 hover:text-brand-700"
+              >
+                查看全部
+              </button>
+            </div>
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+              {characters.slice(0, 4).map(character => (
+                <div
+                  key={character.id}
+                  className={`w-full rounded-2xl border p-3 text-left transition-all ${focusedSidebarCharacter?.id === character.id ? 'border-brand-300 bg-brand-50' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}
+                >
+                  <button
+                    onClick={() => setFocusedSidebarCharacterId(character.id)}
+                    className="w-full text-left"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 shrink-0">
+                        {character.imageUrl ? <img src={character.imageUrl} alt={character.name} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-slate-300"><Bot size={20} /></div>}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-bold text-slate-800">{character.name}</div>
+                        <div className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-400">{character.visualSummary || character.description}</div>
+                      </div>
+                    </div>
+                  </button>
+                  <div className="mt-3 flex justify-end">
+                    <button
+                      onClick={() => onOpenAssetsView(book.id)}
+                      className="text-[11px] font-bold text-brand-600 hover:text-brand-700"
+                    >
+                      打开角色设定
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {characters.length === 0 && (
+                <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-xs text-slate-400">
+                  还没有角色设定，扫描章节后会自动补充。
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex min-h-0 basis-2/3 flex-col rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <div className="border-b border-slate-100 px-5 py-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                    <MessageCircle size={16} />
+                    AI 伴读对话
+                  </div>
+                  <div className="mt-1 text-xs text-slate-400">
+                    {currentChatCharacter
+                      ? `当前角色可知范围：${readingScopeLabel ? `截至${book.chapters[latestIllustratedChapterIndex].title}` : '尚未形成阅读进度'}`
+                      : `当前作品：《${book.title}》`}
+                  </div>
+                </div>
+                <button
+                  onClick={handleClearChat}
+                  disabled={isChatting}
+                  className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-50"
+                >
+                  清空
+                </button>
+              </div>
+              <div className="mt-3">
+                <select
+                  value={chatRole}
+                  onChange={(e) => setChatRole(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-300"
+                >
+                  <option value="companion">AI 伴读</option>
+                  {characters.map(character => (
+                    <option key={character.id} value={character.id}>{`扮演：${character.name}`}</option>
+                  ))}
+                </select>
+                <div className="mt-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] leading-relaxed text-slate-500">
+                  {currentChatCharacter
+                    ? `当前将以“${currentChatCharacter.name}”的身份回答，并结合角色设定、已知社会关系和当前阅读进度作答。`
+                    : '当前将以伴读身份回答，可以解释剧情、梳理人物关系并陪伴阅读。'}
+                </div>
+              </div>
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-y-auto bg-slate-50/70 px-5 py-4 space-y-3">
+              {chatMessages.map((message, index) => (
+                <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  {message.role === 'assistant' ? (
+                    <div className="flex max-w-[92%] items-start gap-3">
+                      <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full border border-slate-200 bg-slate-900 text-white flex items-center justify-center shadow-sm">
+                        {(() => {
+                          const avatarCharacter = getAssistantAvatar(message);
+                          return avatarCharacter?.imageUrl
+                            ? <img src={avatarCharacter.imageUrl} alt={avatarCharacter.name} className="h-full w-full object-cover" />
+                            : <Bot size={18} />;
+                        })()}
+                      </div>
+                      <div>
+                        <div className="mb-1 text-[11px] font-medium text-slate-500">
+                          {(() => {
+                            const avatarCharacter = getAssistantAvatar(message);
+                            return avatarCharacter ? avatarCharacter.name : 'AI 伴读';
+                          })()}
+                        </div>
+                        <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm leading-relaxed text-slate-700 shadow-sm">
+                          {message.content}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="max-w-[88%] rounded-2xl bg-brand-600 px-4 py-3 text-sm leading-relaxed text-white shadow-sm">
+                      {message.content}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-slate-100 px-5 py-4">
+              <div className="flex items-end gap-2">
+                <textarea
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      void handleSendChat();
+                    }
+                  }}
+                  rows={2}
+                  placeholder="输入你想问的问题..."
+                  className="flex-1 resize-none rounded-2xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-300"
+                />
+                <button
+                  onClick={() => void handleSendChat()}
+                  disabled={!chatInput.trim() || isChatting}
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-sm transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isChatting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                </button>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );

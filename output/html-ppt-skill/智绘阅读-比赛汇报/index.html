@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-themes="corporate-clean,academic-paper,tokyo-night,nord,aurora">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>智绘阅读 · 计算机设计大赛汇报</title>
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" id="theme-link" href="../assets/themes/corporate-clean.css">
+<link rel="stylesheet" href="../assets/animations/animations.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .tpl-presenter-mode-reveal .project-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:start}
+  .tpl-presenter-mode-reveal .img-frame{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--surface);box-shadow:0 8px 28px rgba(10,30,60,.08)}
+  .tpl-presenter-mode-reveal .img-frame img{display:block;width:100%;height:auto}
+  .tpl-presenter-mode-reveal .mini-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .tpl-presenter-mode-reveal .mini-gallery.three{grid-template-columns:repeat(3,1fr)}
+  .tpl-presenter-mode-reveal .caption{font-size:13px;color:var(--text-3);margin-top:8px}
+  .tpl-presenter-mode-reveal .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+  .tpl-presenter-mode-reveal .stat-pill{border:1px solid var(--border);border-radius:14px;padding:16px 12px;background:var(--surface);text-align:center}
+  .tpl-presenter-mode-reveal .stat-pill b{display:block;font-size:28px;color:var(--accent);line-height:1.1}
+  .tpl-presenter-mode-reveal .stat-pill span{display:block;font-size:12px;color:var(--text-3);margin-top:6px}
+  .tpl-presenter-mode-reveal .split-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+  .tpl-presenter-mode-reveal .gallery-card{border:1px solid var(--border);border-radius:14px;padding:10px;background:var(--surface)}
+  .tpl-presenter-mode-reveal .gallery-card img{width:100%;height:188px;object-fit:cover;border-radius:10px;display:block}
+  .tpl-presenter-mode-reveal .gallery-card h5{margin:10px 0 4px;font-size:15px}
+  .tpl-presenter-mode-reveal .gallery-card p{margin:0;font-size:12px;color:var(--text-3);line-height:1.5}
+  .tpl-presenter-mode-reveal .timeline{display:grid;gap:14px;margin-top:18px}
+  .tpl-presenter-mode-reveal .timeline .row{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:start}
+  .tpl-presenter-mode-reveal .timeline .tag{font-family:var(--font-mono,monospace);font-size:13px;color:var(--accent);font-weight:700}
+  .tpl-presenter-mode-reveal .end-board{display:grid;grid-template-columns:1fr 1.15fr;gap:28px;align-items:center}
+  .tpl-presenter-mode-reveal .end-images{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .tpl-presenter-mode-reveal .end-images img{width:100%;height:180px;object-fit:cover;border-radius:16px;border:1px solid rgba(255,255,255,.12)}
+</style>
+</head>
+<body class="tpl-presenter-mode-reveal">
+<div class="deck">
+
+  <section class="slide" data-title="封面">
+    <p class="kicker">computer design competition · 2026</p>
+    <h1 class="h1 anim-fade-up" data-anim="fade-up">智绘阅读：<br><span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">本地优先型 AI 阅读配图系统</span></h1>
+    <p class="lede mt-m">把书架导入、阅读器生图、世界观资产库、关系理解、AI 伴读与本地图片归档整合为一套完整的阅读创作工作流。</p>
+    <div class="speaker">
+      <div class="av"></div>
+      <div><b>项目汇报</b><span>用于计算机设计大赛展示与答辩</span></div>
+    </div>
+    <div class="project-grid mt-l">
+      <div class="img-frame"><img src="../../../docs/assets/ui-reader.png" alt="阅读器界面"></div>
+      <div class="mini-gallery">
+        <div class="img-frame"><img src="../../../pic_db/小红帽/assets/characters/小红帽.jpg" alt="小红帽"></div>
+        <div class="img-frame"><img src="../../../pic_db/狼来了/illustrations/paragraphs/第一章-第4段.jpg" alt="狼来了"></div>
+        <div class="img-frame"><img src="../../../pic_db/寓言 龟兔赛跑/illustrations/paragraphs/第一章-第13段.jpg" alt="龟兔赛跑"></div>
+        <div class="img-frame"><img src="../../../pic_db/西游记 三打白骨精/illustrations/paragraphs/第一章-第5段.jpg" alt="三打白骨精"></div>
+      </div>
+    </div>
+    <div class="deck-footer">
+      <span class="mono">阅读 · 生图 · 设定 · 关系 · 对话 · 本地存储</span>
+      <span class="slide-number" data-current="1" data-total="10"></span>
+    </div>
+    <aside class="notes">
+      <p>各位老师好，我们的项目叫做<strong>智绘阅读</strong>。这不是一个单纯“给文本生成几张图”的工具，而是一套围绕阅读场景设计的、本地优先的 AI 阅读配图系统。</p>
+      <p>它把几个原本分散的环节整合到了一起：用户可以先导入文本，进入阅读器按段落阅读；系统会在阅读过程中扫描角色和地点，建立视觉设定；接着基于段落内容生成插图；再进一步形成角色关系和 AI 伴读对话；最后把图片和状态全部长期保存在本地。</p>
+      <p>所以这个项目的重点并不是“会生图”本身，而是把<strong>阅读、理解、设定沉淀、关系梳理和图片归档</strong>组织成一条完整产品链路。接下来我会从问题背景、产品结构、核心功能、技术实现和创新点五个部分来介绍。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="背景与痛点">
+    <p class="kicker">part 01 · problem</p>
+    <h2 class="h2">为什么需要一个“会读书”的生图系统？</h2>
+    <div class="grid g2 mt-l">
+      <div class="card card-accent">
+        <h4>传统电子阅读的问题</h4>
+        <p class="dim">大多数电子书产品以纯文本为主，用户阅读童话、神话、寓言或科普内容时，需要完全依靠想象去构建角色、场景和情节画面。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>通用 AI 生图的问题</h4>
+        <p class="dim">普通文生图工具只能处理单次提示词，无法天然理解长文本叙事，也很难维持角色形象和世界观的一致性。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>理解链路割裂</h4>
+        <p class="dim">角色关系、地点设定、插图生成和阅读问答往往分散在不同工具里，用户需要来回切换，体验割裂。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>图片无法长期保存</h4>
+        <p class="dim">很多原型产品只保存远程 URL，链接过期后图片就会丢失，无法形成可持续管理的阅读资产。</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>我们先讲这个项目想解决什么问题。第一类问题来自传统电子阅读本身。对于童话、神话、寓言、科普这类内容，用户在阅读时很需要画面感，但电子书通常只有文字，没有办法帮助用户即时建立角色和场景的视觉印象。</p>
+      <p>第二类问题来自通用 AI 生图工具。它们可以根据一段提示词生成画面，但很难自然理解一本书的连续叙事，也无法保证角色设定在几十个段落里保持一致。</p>
+      <p>第三类问题是链路割裂。阅读、关系理解、角色设定、插图生成和问答解释往往是分散在多个系统里的。用户如果想边读边理解，就要不断切换工具。</p>
+      <p>最后一个问题是存储。很多演示型系统只展示远程图片链接，一旦链接失效，之前的生成结果就不能长期使用。我们的项目就是围绕这四个痛点来组织设计的。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="产品定位">
+    <p class="kicker">part 02 · positioning</p>
+    <h2 class="h2">项目定位：一套本地优先的阅读创作工作台</h2>
+    <p class="lede">智绘阅读把阅读器、世界观资产库、关系理解和 AI 对话融合为同一界面，让“阅读本身”具备持续生产视觉资产和知识结构的能力。</p>
+    <div class="stat-row">
+      <div class="stat-pill"><b>5</b><span>当前书籍数量</span></div>
+      <div class="stat-pill"><b>17</b><span>角色资产</span></div>
+      <div class="stat-pill"><b>24</b><span>关系记录</span></div>
+      <div class="stat-pill"><b>25</b><span>插图结果</span></div>
+    </div>
+    <div class="timeline">
+      <div class="row"><div class="tag">阅读层</div><div class="card"><h4>导入文本、分页阅读、段落生图、批量生图</h4><p class="dim">用户始终停留在阅读语境中，不需要跳出到外部工具。</p></div></div>
+      <div class="row"><div class="tag">世界观层</div><div class="card"><h4>角色设定、地点设定、图片复用</h4><p class="dim">系统把中间结果沉淀为可长期管理的世界观资产库。</p></div></div>
+      <div class="row"><div class="tag">理解层</div><div class="card"><h4>关系图、AI 伴读、角色扮演对话</h4><p class="dim">关系页不只是结果页，而是继续理解作品的工作区。</p></div></div>
+    </div>
+    <aside class="notes">
+      <p>所以我们对项目的定位，不是“一个会画图的阅读器”，也不是“一个会读书的生图工具”，而是一个<strong>本地优先的阅读创作工作台</strong>。</p>
+      <p>它的核心价值在于把几个层面统一起来。第一层是阅读层，负责导入文本、分页阅读、段落生图和批量生图；第二层是世界观层，把角色、地点和参考图沉淀下来；第三层是理解层，通过关系图和 AI 对话帮助用户理解剧情与人物。</p>
+      <p>现在这版项目已经积累了 5 本书、17 个角色、24 条关系和 25 张插图，所以它并不是一个空壳原型，而是已经具备内容规模和展示厚度的系统。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="阅读工作台">
+    <p class="kicker">part 03 · workspace</p>
+    <h2 class="h2">核心界面：三栏式阅读工作台</h2>
+    <div class="img-frame mt-m"><img src="../../../docs/assets/ui-reader.png" alt="阅读工作台"></div>
+    <div class="split-3 mt-m">
+      <div class="card"><h4>左侧：书架切换</h4><p class="dim">直接切换当前作品，保持在同一工作界面中进行阅读与展示。</p></div>
+      <div class="card"><h4>中间：正文 + 生图</h4><p class="dim">支持单段生图、重生成、本张额外要求、批量生成与导出。</p></div>
+      <div class="card"><h4>右侧：角色设定 + AI伴读</h4><p class="dim">阅读过程中同步查看角色视觉卡片，并通过 AI 提问剧情和人物关系。</p></div>
+    </div>
+    <aside class="notes">
+      <p>这一页展示的是我们现在最核心的界面，也就是阅读工作台。整体采用三栏结构，这样做的目的，是把阅读、设定查看和智能辅助并排放进一个稳定的工作面里。</p>
+      <p>左侧是书架切换区，方便用户在不同作品之间快速切换；中间是阅读主区，用户在这里读正文、看到段落插图、点击生图和批量操作；右侧是辅助区，用于查看角色设定和进行 AI 伴读对话。</p>
+      <p>这种布局最大的好处，是用户在阅读过程中不必频繁离开当前上下文。相比传统“先阅读、再去别的工具生图、再回来看”的方式，它更像一个连续的创作台。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="导入与封面">
+    <p class="kicker">part 04 · import</p>
+    <h2 class="h2">从导入到封面：构建作品入口</h2>
+    <div class="project-grid mt-l">
+      <div class="img-frame"><img src="../../../docs/assets/ui-bookshelf.png" alt="书架界面"></div>
+      <div>
+        <div class="card card-accent">
+          <h4>支持 TXT 导入</h4>
+          <p class="dim">导入文本后自动创建书籍、章节和段落结构，适合小说、寓言、神话与科普内容。</p>
+        </div>
+        <div class="card card-accent mt-m">
+          <h4>支持 AI 生成封面</h4>
+          <p class="dim">用户可上传封面，也可调用图片模型根据标题和内容自动生成封面图。</p>
+        </div>
+        <div class="mini-gallery three mt-m">
+          <div class="img-frame"><img src="../../../pic_db/小红帽/covers/books/封面.jpg" alt="小红帽封面"></div>
+          <div class="img-frame"><img src="../../../pic_db/狼来了/covers/books/封面.jpg" alt="狼来了封面"></div>
+          <div class="img-frame"><img src="../../../pic_db/小红帽/assets/characters/小红帽.jpg" alt="角色"></div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>书籍入口这一层，我们做了两件对比赛展示很重要的事情。第一是文本导入足够轻量，用户只需要准备一个 TXT 文件，就可以快速把内容组织成书籍和章节；第二是封面系统足够完整，既支持上传现有封面，也支持直接用 AI 生成封面。</p>
+      <p>这意味着我们不仅能展示“阅读中能发生什么”，还可以展示“作品如何进入系统”。在答辩时，这一页能很好说明项目不是只处理内部 demo，而是考虑了用户真正从外部文本进入产品的入口体验。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="段落生图">
+    <p class="kicker">part 05 · generation</p>
+    <h2 class="h2">段落生图：让阅读过程本身具备画面生产能力</h2>
+    <div class="split-3 mt-l">
+      <div class="gallery-card">
+        <img src="../../../pic_db/小红帽/illustrations/paragraphs/第一章-第13段.jpg" alt="小红帽插图">
+        <h5>小红帽</h5>
+        <p>基于正文段落生成森林相遇场景，保留人物一致性。</p>
+      </div>
+      <div class="gallery-card">
+        <img src="../../../pic_db/狼来了/illustrations/paragraphs/第一章-第4段.jpg" alt="狼来了插图">
+        <h5>狼来了</h5>
+        <p>适合寓言类故事的段落式画面化呈现。</p>
+      </div>
+      <div class="gallery-card">
+        <img src="../../../pic_db/西游记 三打白骨精/illustrations/paragraphs/第一章-第5段.jpg" alt="西游记插图">
+        <h5>三打白骨精</h5>
+        <p>复杂叙事题材也能在角色设定基础上连续出图。</p>
+      </div>
+    </div>
+    <div class="grid g2 mt-l">
+      <div class="card"><h4>交互能力</h4><p class="dim">支持单段手动生图、本张附加要求、重生成与删除。</p></div>
+      <div class="card"><h4>任务引擎</h4><p class="dim">批量模式按顺序分批生成，每批最多并发 3 张，兼顾速度与状态稳定性。</p></div>
+    </div>
+    <aside class="notes">
+      <p>这里展示的是段落生图的真实效果。我们选了三类不同内容：童话、寓言和神话，它们分别代表了儿童阅读、基础叙事和复杂角色关系场景。</p>
+      <p>从实现上看，系统不是直接把段落扔给图片模型，而是先做叙事分析，抽取角色、地点、动作、情绪和关键物体；如果涉及到还没有视觉设定的角色，系统会先补齐角色形象，再继续生成段落插图。</p>
+      <p>在用户体验上，用户可以在阅读过程中手动点击生图，也可以批量按段落生成，并且对某一张图追加“本张要求”，例如低机位、突出表情或者更强调氛围。这让阅读器本身具备了创作控制力。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="世界观资产库">
+    <p class="kicker">part 06 · worldbuilding</p>
+    <h2 class="h2">世界观资产库：让中间结果变成长期资产</h2>
+    <div class="project-grid mt-l">
+      <div class="img-frame"><img src="../../../docs/assets/ui-assets.png" alt="世界观界面"></div>
+      <div>
+        <div class="mini-gallery">
+          <div class="img-frame"><img src="../../../pic_db/小红帽/assets/characters/小红帽.jpg" alt="小红帽"></div>
+          <div class="img-frame"><img src="../../../pic_db/小红帽/assets/characters/狼.jpg" alt="狼"></div>
+          <div class="img-frame"><img src="../../../pic_db/小红帽/assets/locations/森林.jpg" alt="森林"></div>
+          <div class="img-frame"><img src="../../../pic_db/狼来了/assets/characters/放羊娃.jpg" alt="放羊娃"></div>
+        </div>
+        <div class="card mt-m">
+          <h4>设计重点</h4>
+          <p class="dim">角色图、地点图和参考图并不是一次性结果，而是会进入世界观资产库，供后续插图、关系理解和角色对话反复调用。</p>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>这一页想强调的是，智绘阅读不是“生成完图片就结束”，而是把角色、地点和参考图沉淀成一个世界观资产库。</p>
+      <p>这个设计很关键。因为如果没有这一层，每次段落生图都只能从零开始，角色形象会不断漂移；有了资产库之后，后续插图和聊天就可以持续复用这些设定，从而提高人物一致性和整体完成度。</p>
+      <p>在比赛展示上，这也让系统从“单点功能”上升成了“可持续积累内容的工具”。评委能看到的不只是几张好看的图，而是一整套正在成长的视觉世界观。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="关系理解与AI伴读">
+    <p class="kicker">part 07 · understanding</p>
+    <h2 class="h2">关系理解与 AI 伴读：从结果页升级为理解工作区</h2>
+    <div class="project-grid mt-l">
+      <div class="card card-accent">
+        <h4>关系页的两类核心能力</h4>
+        <p class="dim">一类是自动生成关系图：系统会从书籍开头阅读到“最后一个已生图章节”为止，生成当前阶段的角色关系。另一类是基于作品上下文做 AI 伴读和角色扮演对话。</p>
+        <div class="img-frame mt-m"><img src="../../../docs/assets/relationship-chat.svg" alt="关系与对话流程"></div>
+      </div>
+      <div>
+        <div class="mini-gallery">
+          <div class="img-frame"><img src="../../../pic_db/小红帽/assets/characters/小红帽.jpg" alt="小红帽"></div>
+          <div class="img-frame"><img src="../../../pic_db/小红帽/assets/characters/狼.jpg" alt="狼"></div>
+          <div class="img-frame"><img src="../../../pic_db/小红帽/assets/characters/奶奶.jpg" alt="奶奶"></div>
+          <div class="img-frame"><img src="../../../pic_db/小红帽/assets/characters/猎人.jpg" alt="猎人"></div>
+        </div>
+        <div class="card mt-m">
+          <h4>角色对话的边界控制</h4>
+          <p class="dim">角色扮演模式不会读取整本书，而只知道当前阅读进度之前的剧情，因此回答更符合叙事逻辑，也减少剧透。</p>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>关系页是这个项目比较有辨识度的一部分。通常关系图只是一个静态可视化结果，但我们把它扩展成了“继续理解作品”的工作区。</p>
+      <p>一方面，系统可以按当前阅读进度去重新阅读书籍，然后生成角色关系；另一方面，用户可以直接在关系页与 AI 伴读对话，或者切换成书中角色来对话。</p>
+      <p>这里最重要的一个设计点，是<strong>角色只知道当前阅读进度之前的剧情</strong>。这样如果用户问到后面章节，角色会明确表示暂时不知道。这种边界控制让角色对话更像真实叙事中的“在场角色”，而不是拿着整本书答案的全知问答系统。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="本地优先架构">
+    <p class="kicker">part 08 · local-first</p>
+    <h2 class="h2">本地优先架构：状态可恢复，图片可长期保存</h2>
+    <div class="grid g2 mt-l">
+      <div class="img-frame"><img src="../../../docs/assets/arch-overview.svg" alt="系统架构图"></div>
+      <div class="img-frame"><img src="../../../docs/assets/storage-sync.svg" alt="存储同步图"></div>
+    </div>
+    <div class="grid g2 mt-l">
+      <div class="card">
+        <h4>IndexedDB</h4>
+        <p class="dim">存储书籍、角色、地点、关系、聊天记录、插图状态和图片记录，保证前端状态可恢复。</p>
+      </div>
+      <div class="card">
+        <h4>pic_db 本地图片库</h4>
+        <p class="dim">自动保存封面、资产图和段落插图，解决远程 URL 过期问题，并支持桌面版冷启动重建。</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>这一页是项目的工程亮点。为了避免图片只存在临时 URL 里，我们采用了双持久化架构。</p>
+      <p>第一层是 IndexedDB，用来保存结构化状态，比如书籍、角色、地点、关系、聊天记录和插图状态。第二层是仓库本地的 `pic_db`，专门用来存储真实图片文件，包括封面、角色图、地点图和段落插图。</p>
+      <p>这样做的好处有两个。第一，网页刷新后可以完整恢复状态；第二，图片不会因为远程地址失效而丢失。对比赛来说，这一点非常关键，因为它让我们的系统更像一个真正可长期使用的产品，而不是只能演示一次的短期原型。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="技术路线">
+    <p class="kicker">part 09 · engineering</p>
+    <h2 class="h2">技术路线：前端单页应用 + 火山方舟模型 + 本地图片归档</h2>
+    <div class="grid g3 mt-l">
+      <div class="card card-accent">
+        <h4>前端技术栈</h4>
+        <p class="dim">React 19、TypeScript 5、Vite 6、lucide-react，负责界面组织、状态编排和本地交互。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>模型分工</h4>
+        <p class="dim">DeepSeek 负责文本分析；Seedream 4.5/5.0 负责图片生成；Doubao Seed 2.0 Pro 负责关系生成与对话。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>桌面版迁移</h4>
+        <p class="dim">通过 Electron + app_state_snapshot.json，把网页版完整状态同步到 exe demo 中。</p>
+      </div>
+    </div>
+    <div class="code-block mt-l"><span class="comment">核心实现特性</span>
+<span class="cmd">•</span> 统一任务引擎：单段生图与批量生图共用同一编排逻辑
+<span class="cmd">•</span> 批量模式：从前往后分批并行，每批最多 3 张
+<span class="cmd">•</span> 自动补资产：缺失角色形象时自动补齐再继续出图
+<span class="cmd">•</span> 状态快照：网页状态可导出并在桌面版首次启动时自动导入
+    </div>
+    <aside class="notes">
+      <p>从技术路线看，这个项目采用的是前端单页应用为核心、外接模型接口、本地文件和状态双存储的思路。</p>
+      <p>界面部分用的是 React、TypeScript 和 Vite；文本分析由 DeepSeek 模型完成；图片生成由 Seedream 4.5 和 5.0 完成；关系生成与聊天则使用 Doubao Seed 2.0 Pro。</p>
+      <p>在工程实现上，我们把单段生图和批量生图统一到同一套任务引擎中，并把批量模式设计成“从前往后、按批并发”的策略，每批最多并行 3 张。这样既能提升效率，也避免大量并发导致状态混乱。</p>
+      <p>此外，我们还实现了网页状态快照与桌面版导入，这让比赛提交时的 exe 演示版本可以和网页版保持一致。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="创新点与总结">
+    <p class="kicker">part 10 · innovation</p>
+    <h2 class="h2">创新点总结：不是“会生图”，而是“会把阅读组织成产品流程”</h2>
+    <div class="stack mt-l">
+      <div class="agenda-row"><span class="num">01</span><span class="t">把阅读器、世界观、关系页、AI 对话打通为一条连续工作流</span><span class="d">产品整合</span></div>
+      <div class="agenda-row"><span class="num">02</span><span class="t">让角色和地点成为可复用资产，而不是单次生图中间结果</span><span class="d">资产沉淀</span></div>
+      <div class="agenda-row"><span class="num">03</span><span class="t">让角色对话遵守阅读边界，减少剧透并增强叙事合理性</span><span class="d">交互设计</span></div>
+      <div class="agenda-row"><span class="num">04</span><span class="t">采用 IndexedDB + pic_db 的本地优先双持久化架构</span><span class="d">工程实现</span></div>
+    </div>
+    <div class="end-board mt-l">
+      <div>
+        <p class="lede">这个项目最核心的创新，是让阅读、生成、理解和保存形成闭环，使阅读产品从“内容消费工具”进化成“阅读创作工作台”。</p>
+        <p class="lede mt-m">谢谢各位老师，欢迎提问。</p>
+      </div>
+      <div class="end-images">
+        <img src="../../../pic_db/小红帽/assets/characters/小红帽.jpg" alt="小红帽">
+        <img src="../../../pic_db/狼来了/illustrations/paragraphs/第一章-第4段.jpg" alt="狼来了">
+        <img src="../../../pic_db/寓言 龟兔赛跑/illustrations/paragraphs/第一章-第13段.jpg" alt="龟兔赛跑">
+        <img src="../../../pic_db/西游记 三打白骨精/illustrations/paragraphs/第一章-第5段.jpg" alt="三打白骨精">
+      </div>
+    </div>
+    <div class="deck-footer">
+      <span class="mono">S 演讲者视图 · T 切换主题 · ← → 翻页 · O 总览</span>
+      <span class="slide-number" data-current="10" data-total="10"></span>
+    </div>
+    <aside class="notes">
+      <p>最后我用一句话总结这个项目：我们的创新点，不是简单地“让 AI 给书配图”，而是让阅读、生成、理解和保存形成一个完整闭环。</p>
+      <p>第一，我们把阅读器、世界观、关系页和 AI 对话统一成一条连续工作流；第二，我们让角色和地点沉淀为可复用资产，而不是单次生成的中间结果；第三，我们让角色扮演对话遵守阅读边界，这一点增强了叙事合理性；第四，我们通过本地优先双持久化解决了图片和状态长期保存的问题。</p>
+      <p>因此，智绘阅读更像一个“阅读创作工作台”，而不是一个单一功能的 AI 工具。它既有展示价值，也有后续继续演进成正式产品的空间。谢谢各位老师，欢迎提问。</p>
+    </aside>
+  </section>
+
+</div>
+<div style="position:fixed;bottom:12px;left:12px;font-size:11px;color:#484f5866;z-index:100;pointer-events:none">
+  S 演讲者视图 · T 切换主题 · ← → 翻页 · O 总览
+</div>
+<script src="../assets/runtime.js"></script>
+</body>
+</html>
