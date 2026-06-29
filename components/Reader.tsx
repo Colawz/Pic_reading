@@ -494,8 +494,8 @@ export const Reader: React.FC<ReaderProps> = ({
   };
 
   const handleExport = (mode: 'full' | 'generated_chapters', format: 'html' | 'pdf') => {
-    if (format === 'html') exportBookToHtml(book, illustrations, mode);
-    else exportBookToPdf(book, illustrations, mode);
+    if (format === 'html') exportBookToHtml(book, illustrations, mode, { visualSpec });
+    else exportBookToPdf(book, illustrations, mode, { visualSpec });
   };
 
   const handleSettingsExport = (mode: 'full' | 'generated_chapters', format: 'html' | 'pdf') => {

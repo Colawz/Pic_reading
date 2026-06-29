@@ -78,6 +78,7 @@ describe('buildBookExportHtml', () => {
       author: '作者',
       genre: '童话',
       coverEmoji: '📘',
+      coverUrl: '/pic_db/book/covers/cover.png',
       visualSpecId: 'default',
       chapters: [
         {
@@ -97,9 +98,30 @@ describe('buildBookExportHtml', () => {
         imageUrl: 'data:image/png;base64,abc',
       },
     };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(new Blob(['cover'], { type: 'image/png' }), { status: 200 }),
+      );
 
-    const html = await buildBookExportHtml(book, illustrations, 'full');
+    const html = await buildBookExportHtml(book, illustrations, 'full', fetchMock as typeof fetch, {
+      visualSpec: {
+        id: 'default',
+        label: '国风水彩',
+        promptStyle: '温柔国风水彩，细腻笔触，干净明亮',
+        cameraLanguage: '中景',
+        negatives: '低清晰度',
+      },
+    });
 
+    expect(fetchMock).toHaveBeenCalledWith('/pic_db/book/covers/cover.png');
+    expect(html).toContain('data:image/png;base64,Y292ZXI=');
+    expect(html).toContain('国风水彩');
+    expect(html).toContain('温柔国风水彩，细腻笔触，干净明亮');
+    expect(html).toContain('1 / 1 章');
+    expect(html).toContain('1 / 1 段');
+    expect(html).toContain('1 张');
+    expect(html).toContain('page-break-after: always');
     expect(html).toContain('max-height: 460px');
     expect(html).toContain('max-height: 9.2cm');
     expect(html).not.toContain('height: 30vh');

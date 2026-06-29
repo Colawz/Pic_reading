@@ -1,8 +1,11 @@
 
-import { Book, Illustration, Character, Location } from '../types';
+import { Book, Illustration, Character, Location, VisualSpec } from '../types';
 import { localImageUrlToDataUrl } from './referenceImageService';
 
 type ExportableEntity = Character | Location;
+type BookExportOptions = {
+  visualSpec?: VisualSpec;
+};
 
 const escapeHtml = (value?: string) =>
   String(value ?? '')
@@ -147,8 +150,10 @@ export const buildBookExportHtml = async (
   illustrations: Record<string, Illustration>,
   mode: 'full' | 'generated_chapters',
   fetchImpl: typeof fetch = fetch,
+  options: BookExportOptions = {},
 ) => {
   const resolvedIllustrations = await resolveIllustrationsForExport(illustrations, fetchImpl);
+  const resolvedCoverUrl = await resolveExportImageSrc(book.coverUrl, fetchImpl);
   const date = new Date().toLocaleDateString();
   const chaptersToExport = book.chapters.filter(chapter => {
     if (mode === 'full') return true;
@@ -157,6 +162,21 @@ export const buildBookExportHtml = async (
       return illustration?.status === 'completed' && Boolean(illustration.imageUrl);
     });
   });
+  const exportedParagraphCount = chaptersToExport.reduce((sum, chapter) => sum + chapter.paragraphs.length, 0);
+  const totalParagraphCount = book.chapters.reduce((sum, chapter) => sum + chapter.paragraphs.length, 0);
+  const exportedParagraphIds = new Set(chaptersToExport.flatMap(chapter => chapter.paragraphs.map(paragraph => paragraph.id)));
+  const illustrationsInScope = Object.values(resolvedIllustrations).filter(illustration => exportedParagraphIds.has(illustration.paragraphId));
+  const completedIllustrations = illustrationsInScope.filter(illustration => illustration.status === 'completed' && illustration.imageUrl);
+  const failedIllustrations = illustrationsInScope.filter(illustration => illustration.status === 'failed');
+  const pendingIllustrations = illustrationsInScope.filter(illustration => illustration.status === 'pending' || illustration.status === 'generating');
+  const illustratedChapterCount = chaptersToExport.filter(chapter =>
+    chapter.paragraphs.some(paragraph => {
+      const illustration = resolvedIllustrations[paragraph.id];
+      return illustration?.status === 'completed' && Boolean(illustration.imageUrl);
+    }),
+  ).length;
+  const exportModeLabel = mode === 'full' ? '完整图文导出' : '精选配图章节';
+  const visualSpec = options.visualSpec;
 
   let htmlContent = `
     <!DOCTYPE html>
@@ -177,16 +197,97 @@ export const buildBookExportHtml = async (
           background: #fff; 
         }
         .cover { 
-          padding: 34px 30px 28px; 
+          position: relative;
+          overflow: hidden;
+          min-height: 720px;
+          padding: 0; 
           margin-bottom: 24px; 
-          border: 1px solid #e5e7eb; 
-          border-radius: 18px; 
-          background: linear-gradient(135deg, #f8fafc 0%, #eef6ff 100%);
-          text-align: center;
+          border: 1px solid #e7ded1; 
+          border-radius: 22px; 
+          background:
+            radial-gradient(circle at 92% 12%, rgba(248, 113, 113, 0.18), transparent 26%),
+            linear-gradient(120deg, #fff8ed 0%, #f8efe2 45%, #e8f2ef 100%);
+          box-shadow: 0 24px 70px rgba(47, 41, 34, 0.11);
         }
-        .cover h1 { color: #111827; font-size: 2.6rem; line-height: 1.15; margin: 0 0 12px; }
-        .author { color: #64748b; font-family: Inter, sans-serif; font-size: 1rem; margin: 0; }
-        .meta { margin-top: 16px; color: #94a3b8; font-family: Inter, sans-serif; font-size: 0.82rem; }
+        .cover::before {
+          content: "";
+          position: absolute;
+          inset: 0 auto 0 0;
+          width: 16px;
+          background: linear-gradient(180deg, #ef5d4a, #f5b85b 48%, #2d7f7a);
+        }
+        .cover::after {
+          content: "";
+          position: absolute;
+          right: -110px;
+          bottom: -130px;
+          width: 330px;
+          height: 330px;
+          border: 1px solid rgba(45, 127, 122, 0.2);
+          border-radius: 999px;
+        }
+        .cover-inner {
+          position: relative;
+          z-index: 1;
+          min-height: inherit;
+          display: grid;
+          grid-template-rows: 1fr auto;
+          padding: 44px 46px 38px 58px;
+        }
+        .cover-header { display: grid; grid-template-columns: minmax(220px, 280px) minmax(0, 1fr); align-items: center; gap: 44px; }
+        .cover-art { 
+          width: 100%; 
+          aspect-ratio: 3 / 4; 
+          border-radius: 18px; 
+          overflow: hidden; 
+          background: #efe4d1; 
+          border: 10px solid rgba(255, 255, 255, 0.82);
+          box-shadow: 0 26px 55px rgba(70, 51, 35, 0.24);
+          flex-shrink: 0;
+          transform: rotate(-1.4deg);
+        }
+        .cover-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .cover-emoji { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+        .cover-main { min-width: 0; }
+        .eyebrow { 
+          display: inline-flex;
+          align-items: center;
+          color: #7f2d1c; 
+          background: rgba(255, 255, 255, 0.72);
+          border: 1px solid rgba(239, 93, 74, 0.28);
+          border-radius: 999px;
+          font-family: Inter, sans-serif; 
+          font-size: 0.72rem; 
+          font-weight: 800; 
+          letter-spacing: 0.14em; 
+          text-transform: uppercase; 
+          margin: 0 0 18px; 
+          padding: 8px 12px;
+        }
+        .cover h1 { color: #17231d; font-size: 3.45rem; line-height: 1.02; letter-spacing: 0; margin: 0 0 18px; max-width: 560px; }
+        .author { color: #4b5b53; font-family: Inter, sans-serif; font-size: 1.04rem; margin: 0; }
+        .meta { margin-top: 18px; color: #7d8a82; font-family: Inter, sans-serif; font-size: 0.84rem; }
+        .info-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 36px; }
+        .info-card { 
+          min-height: 88px;
+          background: rgba(255, 255, 255, 0.7); 
+          border: 1px solid rgba(255, 255, 255, 0.72); 
+          border-radius: 16px; 
+          padding: 14px 14px 13px; 
+          box-shadow: 0 10px 26px rgba(82, 68, 47, 0.08);
+          backdrop-filter: blur(8px);
+        }
+        .info-label { color: #7a897f; font-family: Inter, sans-serif; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+        .info-value { color: #17231d; font-family: Inter, 'Noto Serif SC', sans-serif; font-size: 1.08rem; font-weight: 800; line-height: 1.3; }
+        .style-panel { 
+          margin-top: 14px; 
+          border: 1px solid rgba(45, 127, 122, 0.18); 
+          border-radius: 18px; 
+          background: rgba(255, 255, 255, 0.58); 
+          padding: 16px 18px; 
+        }
+        .style-panel h3 { margin: 0 0 8px; color: #245e5a; font-family: Inter, sans-serif; font-size: 0.88rem; letter-spacing: 0.04em; }
+        .style-panel p { margin: 0; color: #4c5f58; font-family: Inter, 'Noto Serif SC', sans-serif; font-size: 0.82rem; line-height: 1.58; }
         .chapter { padding: 0 4px; margin: 0 0 34px; }
         .chapter + .chapter { break-before: page; page-break-before: always; }
         h2 { 
@@ -216,8 +317,29 @@ export const buildBookExportHtml = async (
         @media print {
           @page { margin: 1.2cm 1.35cm; }
           body { padding: 0; margin: 0; width: 100%; background: #fff !important; }
-          .cover { border-radius: 0; margin-bottom: 18px; padding: 22px 18px; }
-          .cover h1 { font-size: 2.1rem; }
+          .cover { 
+            min-height: 25.6cm;
+            page-break-after: always;
+            break-after: page;
+            border-radius: 0;
+            border: 0;
+            margin: 0 0 18px; 
+          }
+          .cover::before { width: 0.22cm; }
+          .cover-inner { padding: 1.35cm 0.8cm 0.8cm 1.05cm; }
+          .cover-header { grid-template-columns: 6.35cm minmax(0, 1fr); gap: 0.9cm; }
+          .cover-art { border-width: 0.18cm; border-radius: 10px; box-shadow: 0 0.35cm 0.9cm rgba(70, 51, 35, 0.22); }
+          .eyebrow { font-size: 8px; padding: 5px 8px; margin-bottom: 0.42cm; }
+          .cover h1 { font-size: 31px; line-height: 1.05; margin-bottom: 0.32cm; }
+          .author { font-size: 11px; }
+          .meta { font-size: 9.5px; margin-top: 0.32cm; }
+          .info-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.22cm; margin-top: 0.85cm; }
+          .info-card { min-height: 1.72cm; padding: 0.25cm 0.22cm; border-radius: 9px; box-shadow: none; }
+          .info-label { font-size: 7.5px; margin-bottom: 0.12cm; }
+          .info-value { font-size: 10.6px; }
+          .style-panel { margin-top: 0.32cm; padding: 0.28cm 0.34cm; border-radius: 10px; }
+          .style-panel h3 { font-size: 10px; }
+          .style-panel p { font-size: 10px; line-height: 1.45; }
           .chapter { margin-bottom: 20px; }
           h2 { font-size: 1.35rem; margin-bottom: 14px; }
           .paragraph { font-size: 13.8px; line-height: 1.65; margin-bottom: 10px; }
@@ -226,13 +348,46 @@ export const buildBookExportHtml = async (
           .illustration-caption { font-size: 10.5px; }
           img { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
+        @media (max-width: 720px) {
+          .cover-inner { padding: 28px 26px 26px 36px; }
+          .cover-header { grid-template-columns: 1fr; gap: 26px; }
+          .cover-art { width: min(220px, 72vw); }
+          .cover h1 { font-size: 2.5rem; }
+          .info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
       </style>
     </head>
     <body>
       <div class="cover">
-        <h1>${escapeHtml(book.title)}</h1>
-        <p class="author">${escapeHtml(book.author || '未知作者')}</p>
-        <div class="meta">由 智绘阅读 AI 辅助生成 • ${escapeHtml(date)}</div>
+        <div class="cover-inner">
+          <div class="cover-header">
+            <div class="cover-art">
+              ${resolvedCoverUrl ? `<img src="${resolvedCoverUrl}" alt="${escapeHtml(book.title)}封面">` : `<div class="cover-emoji">${escapeHtml(book.coverEmoji || '📘')}</div>`}
+            </div>
+            <div class="cover-main">
+              <p class="eyebrow">${escapeHtml(exportModeLabel)}</p>
+              <h1>${escapeHtml(book.title)}</h1>
+              <p class="author">作者：${escapeHtml(book.author || '未知作者')} · 类型：${escapeHtml(book.genre || '未分类')}</p>
+              <div class="meta">由 智绘阅读 AI 辅助生成 • ${escapeHtml(date)}</div>
+            </div>
+          </div>
+          <div>
+            <div class="info-grid">
+              <div class="info-card"><div class="info-label">章节范围</div><div class="info-value">${chaptersToExport.length} / ${book.chapters.length} 章</div></div>
+              <div class="info-card"><div class="info-label">正文段落</div><div class="info-value">${exportedParagraphCount} / ${totalParagraphCount} 段</div></div>
+              <div class="info-card"><div class="info-label">配图数量</div><div class="info-value">${completedIllustrations.length} 张</div></div>
+              <div class="info-card"><div class="info-label">配图章节</div><div class="info-value">${illustratedChapterCount} 章</div></div>
+              <div class="info-card"><div class="info-label">生成状态</div><div class="info-value">待处理 ${pendingIllustrations.length} · 失败 ${failedIllustrations.length}</div></div>
+              <div class="info-card"><div class="info-label">导出模式</div><div class="info-value">${escapeHtml(exportModeLabel)}</div></div>
+              <div class="info-card"><div class="info-label">绘图风格</div><div class="info-value">${escapeHtml(visualSpec?.label || '当前书籍默认风格')}</div></div>
+              <div class="info-card"><div class="info-label">图片来源</div><div class="info-value">AI 图文阅读插图</div></div>
+            </div>
+            <div class="style-panel">
+              <h3>绘图风格说明</h3>
+              <p>${escapeHtml(visualSpec?.promptStyle || '使用当前书籍绑定的视觉风格生成插图。')}</p>
+            </div>
+          </div>
+        </div>
       </div>
   `;
 
@@ -316,9 +471,9 @@ const printViaIframe = (htmlContent: string) => {
   doc.close();
 };
 
-export const exportBookToHtml = (book: Book, illustrations: Record<string, Illustration>, mode: 'full' | 'generated_chapters') => {
+export const exportBookToHtml = (book: Book, illustrations: Record<string, Illustration>, mode: 'full' | 'generated_chapters', options?: BookExportOptions) => {
   void (async () => {
-    const htmlContent = await buildBookExportHtml(book, illustrations, mode);
+    const htmlContent = await buildBookExportHtml(book, illustrations, mode, fetch, options);
     const blob = new Blob([htmlContent], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -334,9 +489,9 @@ export const exportBookToHtml = (book: Book, illustrations: Record<string, Illus
   });
 };
 
-export const exportBookToPdf = (book: Book, illustrations: Record<string, Illustration>, mode: 'full' | 'generated_chapters') => {
+export const exportBookToPdf = (book: Book, illustrations: Record<string, Illustration>, mode: 'full' | 'generated_chapters', options?: BookExportOptions) => {
   void (async () => {
-    const htmlContent = await buildBookExportHtml(book, illustrations, mode);
+    const htmlContent = await buildBookExportHtml(book, illustrations, mode, fetch, options);
     printViaIframe(htmlContent);
   })().catch(error => {
     console.error('导出 PDF 失败:', error);
