@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-05-04T03:19:27.538Z",
+  "exportedAt": "2026-06-30T02:04:16.734Z",
   "snapshot": {
     "books": [
       {
@@ -9,7 +9,7 @@
         "genre": "自定义",
         "coverEmoji": "📚",
         "visualSpecId": "ink_illustration",
-        "coverUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/covers/books/%E5%B0%81%E9%9D%A2.jpg?v=1777864269972",
+        "coverUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/covers/books/%E5%B0%81%E9%9D%A2.jpg?v=1782785056210",
         "chapters": [
           {
             "id": "imported-1777864295722-ch1",
@@ -91,7 +91,7 @@
         "genre": "自定义",
         "coverEmoji": "📚",
         "visualSpecId": "watercolor_storybook",
-        "coverUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/covers/books/%E5%B0%81%E9%9D%A2.jpg?v=1777859697969",
+        "coverUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/covers/books/%E5%B0%81%E9%9D%A2.jpg?v=1782785056235",
         "chapters": [
           {
             "id": "imported-1775747701883-ch1",
@@ -138,7 +138,7 @@
         "genre": "自定义",
         "coverEmoji": "📚",
         "visualSpecId": "watercolor_storybook",
-        "coverUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/covers/books/%E5%B0%81%E9%9D%A2.jpg?v=1777859697969",
+        "coverUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/covers/books/%E5%B0%81%E9%9D%A2.jpg?v=1782785056235",
         "chapters": [
           {
             "id": "imported-1775739901213-ch1",
@@ -566,7 +566,7 @@
         "visualSummary": "猴王形象，身穿虎皮裙，手持金箍棒，头戴紧箍儿，目光如炬。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%AD%99%E6%82%9F%E7%A9%BA.jpg?v=1777859698087"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%AD%99%E6%82%9F%E7%A9%BA.jpg?v=1782785056419"
       },
       {
         "id": "char-tangseng",
@@ -576,7 +576,7 @@
         "visualSummary": "身披锦襴袈裟，头戴毗卢帽，骑着白龙马，面容慈祥却带着愁容。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%94%90%E5%83%A7.jpg?v=1777859698087"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%94%90%E5%83%A7.jpg?v=1782785056420"
       },
       {
         "id": "char-bajie",
@@ -586,7 +586,7 @@
         "visualSummary": "猪头人身，挺着大肚子，手持九齿钉耙，穿着黑色僧衣。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%8C%AA%E5%85%AB%E6%88%92.jpg?v=1777859698087"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%8C%AA%E5%85%AB%E6%88%92.jpg?v=1782785056442"
       },
       {
         "id": "char-shaseng",
@@ -596,7 +596,7 @@
         "visualSummary": "身材高大，络腮胡须，项挂骷髅念珠，手持降妖宝杖，神情憨厚。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E6%B2%99%E5%92%8C%E5%B0%9A.jpg?v=1777859698087"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E6%B2%99%E5%92%8C%E5%B0%9A.jpg?v=1782785056442"
       },
       {
         "id": "char-white-bone",
@@ -606,7 +606,7 @@
         "visualSummary": "美貌女子/老妪/老翁三变，本相是一具刻有“白骨夫人”字样的骷髅，妖气森森。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%99%BD%E9%AA%A8%E7%B2%BE.jpg?v=1777859698102"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E7%99%BD%E9%AA%A8%E7%B2%BE.jpg?v=1782785056442"
       },
       {
         "id": "char-rabbit",
@@ -616,7 +616,7 @@
         "visualSummary": "一只活泼好动的兔子，拟人化，长耳朵，神气活现。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E5%85%94%E5%AD%90.jpg?v=1777859698087"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E5%85%94%E5%AD%90.jpg?v=1782785056478"
       },
       {
         "id": "char-turtle",
@@ -626,7 +626,7 @@
         "visualSummary": "一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E4%B9%8C%E9%BE%9F.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/characters/%E4%B9%8C%E9%BE%9F.jpg?v=1782785056483"
       },
       {
         "id": "char-1775719034451-0.2669581808692705",
@@ -636,7 +636,7 @@
         "visualSummary": "土地的样貌",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%9C%9F%E5%9C%B0.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%9C%9F%E5%9C%B0.jpg?v=1782785056557"
       },
       {
         "id": "char-1775719034452-0.789633387111427",
@@ -646,7 +646,7 @@
         "visualSummary": "山神的样貌",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%B1%B1%E7%A5%9E.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/characters/%E5%B1%B1%E7%A5%9E.jpg?v=1782785056547"
       },
       {
         "id": "char-1775739924420-0.8734374142212918",
@@ -656,7 +656,7 @@
         "visualSummary": "戴着一顶用丝绒做的红色帽子的小姑娘",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%B0%8F%E7%BA%A2%E5%B8%BD.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%B0%8F%E7%BA%A2%E5%B8%BD.jpg?v=1782785056558"
       },
       {
         "id": "char-1775739924421-0.010390314170476533",
@@ -666,7 +666,7 @@
         "visualSummary": "小红帽的母亲，故事开始时叮嘱小红帽",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A6%88%E5%A6%88.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A6%88%E5%A6%88.jpg?v=1782785056558"
       },
       {
         "id": "char-1775739924421-0.5938871332650079",
@@ -676,7 +676,7 @@
         "visualSummary": "生病在床，住在森林里的老妇人",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A5%B6%E5%A5%B6.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E5%A5%B6%E5%A5%B6.jpg?v=1782785056559"
       },
       {
         "id": "char-1775739924421-0.6250970107236709",
@@ -686,7 +686,7 @@
         "visualSummary": "森林里遇到的、会说话的狼，最终伪装成奶奶",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8B%BC.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8B%BC.jpg?v=1782785056559"
       },
       {
         "id": "char-1775739924421-0.6931096876918382",
@@ -696,7 +696,7 @@
         "visualSummary": "带着枪和剪刀，路过奶奶家并救出小红帽和奶奶的男子",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8C%8E%E4%BA%BA.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/characters/%E7%8C%8E%E4%BA%BA.jpg?v=1782785056560"
       },
       {
         "id": "char-1775747724057-0.5800651146793451",
@@ -706,7 +706,7 @@
         "visualSummary": "一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E6%94%BE%E7%BE%8A%E5%A8%83.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E6%94%BE%E7%BE%8A%E5%A8%83.jpg?v=1782785056562"
       },
       {
         "id": "char-1775747724058-0.22687423865663847",
@@ -716,7 +716,7 @@
         "visualSummary": "一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E5%86%9C%E5%A4%AB%E4%BB%AC.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E5%86%9C%E5%A4%AB%E4%BB%AC.jpg?v=1782785056563"
       },
       {
         "id": "char-1775747724059-0.9412958141219245",
@@ -726,7 +726,7 @@
         "visualSummary": "一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E7%8B%BC.jpg?v=1777859698146"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/characters/%E7%8B%BC.jpg?v=1782785056565"
       },
       {
         "id": "char-1777864315650-0.22614042206986096",
@@ -736,7 +736,7 @@
         "visualSummary": "身材高大，青白脸色，皱纹间时常夹些伤痕，一部乱蓬蓬的花白胡子。穿着又脏又破的长衫，后来穿破夹袄，盘腿垫蒲包，用手走路，脸上黑瘦。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E5%AD%94%E4%B9%99%E5%B7%B1.jpg?v=1777864330830"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E5%AD%94%E4%B9%99%E5%B7%B1.jpg?v=1782785056564"
       },
       {
         "id": "char-1777864315651-0.3283361292218695",
@@ -746,7 +746,7 @@
         "visualSummary": "咸亨酒店的伙计，从十二岁起在店里工作，被掌柜认为样子太傻，主要职务是温酒。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E6%88%91(%E5%B0%8F%E4%BC%99%E8%AE%A1).jpg?v=1777864329404"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E6%88%91(%E5%B0%8F%E4%BC%99%E8%AE%A1).jpg?v=1782785056565"
       },
       {
         "id": "char-1777864315651-0.2680690479402329",
@@ -756,7 +756,7 @@
         "visualSummary": "一副凶脸孔，在酒店里结账、记账，对孔乙己时常取笑。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E6%8E%8C%E6%9F%9C.jpg?v=1777864329714"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E6%8E%8C%E6%9F%9C.jpg?v=1782785056565"
       },
       {
         "id": "char-1777864315651-0.6529410496371942",
@@ -766,7 +766,7 @@
         "visualSummary": "做工的人，傍午傍晚散工后，靠柜台外站着喝酒，穿着短衣。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E7%9F%AD%E8%A1%A3%E5%B8%AE%E9%A1%BE%E5%AE%A2.jpg?v=1777864326918"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E7%9F%AD%E8%A1%A3%E5%B8%AE%E9%A1%BE%E5%AE%A2.jpg?v=1782785056566"
       },
       {
         "id": "char-1777864315652-0.1885890735150224",
@@ -776,7 +776,7 @@
         "visualSummary": "穿长衫，踱进店面隔壁的房子里，要酒要菜，慢慢地坐喝。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E9%95%BF%E8%A1%AB%E9%A1%BE%E5%AE%A2.jpg?v=1777864326721"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E9%95%BF%E8%A1%AB%E9%A1%BE%E5%AE%A2.jpg?v=1782785056573"
       },
       {
         "id": "char-1777864315652-0.04533645282635712",
@@ -786,7 +786,7 @@
         "visualSummary": "听到笑声赶来围住孔乙己，眼睛望着茴香豆碟子。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E9%82%BB%E5%B1%85%E5%AD%A9%E5%AD%90.jpg?v=1777864328309"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E9%82%BB%E5%B1%85%E5%AD%A9%E5%AD%90.jpg?v=1782785056573"
       },
       {
         "id": "char-1777864315652-0.1629447532164804",
@@ -796,7 +796,7 @@
         "visualSummary": "未直接出场，但提及孔乙己偷到他家，导致被打折腿。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E4%B8%81%E4%B8%BE%E4%BA%BA.jpg?v=1777864331172"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E4%B8%81%E4%B8%BE%E4%BA%BA.jpg?v=1782785056573"
       },
       {
         "id": "char-1777864359565-0.3503381950107296",
@@ -806,7 +806,7 @@
         "visualSummary": "主顾（泛指）的样貌",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E4%B8%BB%E9%A1%BE(%E6%B3%9B%E6%8C%87).jpg?v=1777864378409"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/characters/%E4%B8%BB%E9%A1%BE(%E6%B3%9B%E6%8C%87).jpg?v=1782785056573"
       }
     ],
     "locations": [
@@ -818,7 +818,7 @@
         "visualSummary": "怪石嶙峋的山岭，枯木横生，阴云密布，透着一股杀气。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/locations/%E7%99%BD%E8%99%8E%E5%B2%AD.jpg?v=1777859698185"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/assets/locations/%E7%99%BD%E8%99%8E%E5%B2%AD.jpg?v=1782785056607"
       },
       {
         "id": "loc-forest-track",
@@ -828,7 +828,7 @@
         "visualSummary": "阳光明媚的森林小径，路边长满野花，尽头是一棵枝繁叶茂的大槐树。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E6%A3%AE%E6%9E%97%E8%B5%9B%E9%81%93.jpg?v=1777859698185"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E6%A3%AE%E6%9E%97%E8%B5%9B%E9%81%93.jpg?v=1782785056608"
       },
       {
         "id": "loc-1775739328858-0.8152861886302005",
@@ -838,7 +838,7 @@
         "visualSummary": "故事开始的地方，可能是一片开阔地",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E8%B5%9B%E8%B7%91%E8%B5%B7%E7%82%B9.jpg?v=1777859698187"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E8%B5%9B%E8%B7%91%E8%B5%B7%E7%82%B9.jpg?v=1782785056610"
       },
       {
         "id": "loc-1775739328861-0.6867293794731226",
@@ -848,7 +848,7 @@
         "visualSummary": "赛跑的终点，一棵位于山脚下的大树",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E5%B1%B1%E8%84%9A%E4%B8%8B%E7%9A%84%E5%A4%A7%E6%A0%91.jpg?v=1777859698185"
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/assets/locations/%E5%B1%B1%E8%84%9A%E4%B8%8B%E7%9A%84%E5%A4%A7%E6%A0%91.jpg?v=1782785056610"
       },
       {
         "id": "loc-1775739924422-0.8922986201092508",
@@ -858,7 +858,7 @@
         "visualSummary": "故事开始的地方，小红帽从这里出发去奶奶家",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%B0%8F%E7%BA%A2%E5%B8%BD%E7%9A%84%E5%AE%B6.jpg?v=1777859698187"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%B0%8F%E7%BA%A2%E5%B8%BD%E7%9A%84%E5%AE%B6.jpg?v=1782785056611"
       },
       {
         "id": "loc-1775739924422-0.9385975427346704",
@@ -868,7 +868,7 @@
         "visualSummary": "连接小红帽家和奶奶家的大路及周边区域，树木茂密，有阳光、鲜花和小鸟",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E6%A3%AE%E6%9E%97.jpg?v=1777859698193"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E6%A3%AE%E6%9E%97.jpg?v=1782785056615"
       },
       {
         "id": "loc-1775739924422-0.17177610250174735",
@@ -878,7 +878,7 @@
         "visualSummary": "位于森林深处，三棵大橡树下，低处围着核桃树篱笆的小屋，屋前有一个大石头槽子",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%A5%B6%E5%A5%B6%E7%9A%84%E6%88%BF%E5%AD%90.jpg?v=1777859698193"
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/assets/locations/%E5%A5%B6%E5%A5%B6%E7%9A%84%E6%88%BF%E5%AD%90.jpg?v=1782785056615"
       },
       {
         "id": "loc-1775747724059-0.530433944004928",
@@ -888,7 +888,7 @@
         "visualSummary": "一个放羊娃放羊的山坡或山顶，有草地供羊群吃草，视野开阔，可以俯瞰山下的农田。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8A.jpg?v=1777859698193"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8A.jpg?v=1782785056615"
       },
       {
         "id": "loc-1775747724060-0.8532256384396684",
@@ -898,7 +898,7 @@
         "visualSummary": "山脚下的农田区域，农夫们在此耕种，环境较为平坦，有种植的庄稼。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8B%E5%86%9C%E7%94%B0.jpg?v=1777859698193"
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/assets/locations/%E5%B1%B1%E4%B8%8B%E5%86%9C%E7%94%B0.jpg?v=1782785056615"
       },
       {
         "id": "loc-1777864315653-0.14201441948523863",
@@ -908,7 +908,7 @@
         "visualSummary": "当街一个曲尺形的大柜台，柜里预备着热水温酒。店面隔壁有房子供长衫顾客坐喝。有粉板用于记账。环境教人活泼不得，但孔乙己到店时充满快活的空气。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/locations/%E5%92%B8%E4%BA%A8%E9%85%92%E5%BA%97.jpg?v=1777864326069"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/locations/%E5%92%B8%E4%BA%A8%E9%85%92%E5%BA%97.jpg?v=1782785056615"
       },
       {
         "id": "loc-1777864315653-0.2849053532510747",
@@ -918,7 +918,7 @@
         "visualSummary": "故事发生的乡镇背景，咸亨酒店位于镇口。",
         "locked": true,
         "generationStatus": "success",
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/locations/%E9%B2%81%E9%95%87.jpg?v=1777864331339"
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/assets/locations/%E9%B2%81%E9%95%87.jpg?v=1782785056615"
       }
     ],
     "relationships": [
@@ -1280,6 +1280,15 @@
             "content": "（捻着乱蓬蓬的花白胡子，青白脸上的皱纹动了动，摆出几分不屑的神气）我辈读书人，安贫乐道便是本分，君子固穷，小人穷斯滥矣！闲来有二两温酒，一碟茴香豆，能教小子们写几个字，总比那些粗鄙短衣帮只知卖力气要强些……（声音忽然低了，摸着长衫上的破洞，头也垂下去）不过是……时运未到，不曾中得秀才，待他日金榜题名，何愁没有好日子过？",
             "assistantMode": "character",
             "assistantCharacterId": "char-1777864315650-0.22614042206986096"
+          },
+          {
+            "role": "user",
+            "content": "你好"
+          },
+          {
+            "role": "assistant",
+            "content": "（捻着乱蓬蓬的花白胡子，整了整身上打了补丁的破长衫，对着你微微拱手，话音里还带着点之乎者也的酸气）这位小友有礼了，是要同我吃半盏温酒，还是要我教你写茴香豆的“茴”字呀？",
+            "assistantMode": "companion"
           }
         ],
         "scopeLabel": "这是到第一章为止的角色关系图"
@@ -1305,7 +1314,7 @@
             "桃子"
           ]
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1777859698231"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1782785056679"
       },
       "book-white-bone-p-4": {
         "id": "ill-1775718405591-0.13950043865364659",
@@ -1324,7 +1333,7 @@
             "拐杖"
           ]
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg?v=1777859698233"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg?v=1782785056679"
       },
       "book-white-bone-p-6": {
         "id": "ill-1775718900738-0.6232728661548878",
@@ -1343,7 +1352,7 @@
             "行李"
           ]
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg?v=1777859698232"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg?v=1782785056679"
       },
       "book-white-bone-p-9": {
         "id": "ill-1775718902890-0.06758248711100268",
@@ -1360,7 +1369,7 @@
           "mood": "悲伤、不舍、决绝、前途未卜",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC10%E6%AE%B5.jpg?v=1777859698232"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC10%E6%AE%B5.jpg?v=1782785056679"
       },
       "book-white-bone-p-7": {
         "id": "ill-1775718986315-0.4478333000470335",
@@ -1384,7 +1393,7 @@
             "白骨（脊梁刻有'白骨夫人'）"
           ]
         },
-        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg?v=1777859698232"
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg?v=1782785056679"
       },
       "book-tortoise-hare-p-2": {
         "id": "ill-1775739223180-0.839971201029128",
@@ -1400,7 +1409,7 @@
           "mood": "戏谑、挑衅、得意",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC3%E6%AE%B5.jpg?v=1777859698229",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC3%E6%AE%B5.jpg?v=1782785056684",
         "promptUsed": "生成画面: 地点: 森林赛道 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子遇见乌龟并提议赛跑，乌龟不理睬，兔子得意地蹦跳并唱歌嘲笑乌龟。 | 氛围: 戏谑、挑衅、得意 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "book-tortoise-hare-p-7": {
@@ -1417,7 +1426,7 @@
           "mood": "紧张、对立、挑衅",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg?v=1777859698234",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC8%E6%AE%B5.jpg?v=1782785056684",
         "promptUsed": "生成画面: 地点: 森林赛道起点 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 乌龟因被兔子取笑而生气，向兔子发起赛跑挑战 | 氛围: 紧张、对立、挑衅 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "book-tortoise-hare-p-10": {
@@ -1434,7 +1443,7 @@
           "mood": "轻蔑、傲慢、得意",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC11%E6%AE%B5.jpg?v=1777859698235",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC11%E6%AE%B5.jpg?v=1782785056685",
         "promptUsed": "生成画面: 地点: 赛跑起点 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子嘲笑乌龟并提出赛跑，然后快速起跑，将乌龟远远甩在后面并决定睡觉等待 | 氛围: 轻蔑、傲慢、得意 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "book-tortoise-hare-p-12": {
@@ -1451,7 +1460,7 @@
           "mood": "骄傲、轻敌、松懈",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg?v=1777859698236",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg?v=1782785056685",
         "promptUsed": "生成画面: 地点: 森林赛道上（起点到山脚下大树之间的某处） | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子因骄傲和轻敌，在赛跑途中躺下睡觉 | 氛围: 骄傲、轻敌、松懈 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "book-tortoise-hare-p-13": {
@@ -1470,7 +1479,7 @@
             "大树"
           ]
         },
-        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg?v=1777859698237",
+        "imageUrl": "/pic_db/%E5%AF%93%E8%A8%80%20%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg?v=1782785056686",
         "promptUsed": "生成画面: 地点: 山脚下的大树 | 角色: 兔子: 一只活泼好动的兔子，拟人化，长耳朵，神气活现。. 乌龟: 一只憨厚的老龟，背着厚厚的壳，眼神坚定且从容。.  | 动作: 兔子醒来发现乌龟已到达终点，急忙追赶但失败，乌龟赢得比赛 | 氛围: 惊讶、焦急、懊悔、胜利 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-0": {
@@ -1489,7 +1498,7 @@
             "小红帽（丝绒做的帽子）"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1777859698238",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1782785056686",
         "promptUsed": "生成画面: 地点: 未知（可能在小红帽家或奶奶家） | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 奶奶送给小红帽一顶丝绒小红帽，她非常喜欢并因此得名。 | 氛围: 温馨、喜爱 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-3": {
@@ -1506,7 +1515,7 @@
           "mood": "平静、天真，略带未知的危险",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg?v=1777859698237",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg?v=1782785056693",
         "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 小红帽走进森林并遇到了狼 | 氛围: 平静、天真，略带未知的危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-6": {
@@ -1523,7 +1532,7 @@
           "mood": "看似平静友好，暗藏危险",
           "objects": []
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg?v=1777859698237",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC7%E6%AE%B5.jpg?v=1782785056691",
         "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼向小红帽询问去向 | 氛围: 看似平静友好，暗藏危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-12": {
@@ -1543,7 +1552,7 @@
             "小鸟"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg?v=1777859698243",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC13%E6%AE%B5.jpg?v=1782785056694",
         "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼在陪伴小红帽走路时，通过言语引诱她欣赏周围的风景和花朵，意图拖延时间并让她偏离大路。 | 氛围: 表面平静美好但暗藏阴谋 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-13": {
@@ -1563,7 +1572,7 @@
             "树木"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg?v=1777859698240",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC14%E6%AE%B5.jpg?v=1782785056693",
         "promptUsed": "生成画面: 地点: 森林 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘.  | 动作: 小红帽离开大路，在森林中采摘鲜花 | 氛围: 宁静、美好、天真、专注 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-18": {
@@ -1587,7 +1596,7 @@
             "帘子"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC19%E6%AE%B5.jpg?v=1777859698238",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC19%E6%AE%B5.jpg?v=1782785056694",
         "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 狼拉开门栓，冲进房间，将奶奶吞下，然后伪装成奶奶躺在床上 | 氛围: 紧张、危险、诡异 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-20": {
@@ -1609,7 +1618,7 @@
             "帽子"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC21%E6%AE%B5.jpg?v=1777859698241",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC21%E6%AE%B5.jpg?v=1782785056694",
         "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 奶奶: 生病在床，住在森林里的老妇人.  | 动作: 小红帽进入奶奶的房子，发现门开着且无人应答，她走到床前拉开帘子观察躺在床上的奶奶 | 氛围: 奇怪、害怕、诡异 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775747701883-p-1": {
@@ -1629,7 +1638,7 @@
             "镰刀"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC2%E6%AE%B5.jpg?v=1777859698246",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC2%E6%AE%B5.jpg?v=1782785056695",
         "promptUsed": "生成画面: 地点: 山上（放羊娃所在处）和山下农田（农夫们初始位置） | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。.  | 动作: 放羊娃为寻开心，向山下农夫们谎报狼来了；农夫们听到呼救后，急忙拿着农具从农田跑向山上准备打狼。 | 氛围: 紧张、急迫（农夫们的反应），但源于欺骗（放羊娃的动机） | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775747701883-p-4": {
@@ -1649,7 +1658,7 @@
             "羊群"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg?v=1777859698244",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC5%E6%AE%B5.jpg?v=1782785056697",
         "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。. 狼: 一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。.  | 动作: 狼闯入羊群，放羊娃惊慌失措地向山下的农夫们呼救 | 氛围: 紧张、恐惧、绝望 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 图中不要出现农民"
       },
       "imported-1775747701883-p-5": {
@@ -1669,7 +1678,7 @@
             "羊"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC6%E6%AE%B5.jpg?v=1777859698245",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC6%E6%AE%B5.jpg?v=1782785056700",
         "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。. 狼: 一只凶恶的狼，具体毛色和体型未在文本中详细描述，但通常被想象为灰色或棕色的、具有攻击性的野兽形象。.  | 动作: 放羊娃呼救，农夫们因他之前说谎而不予理睬，狼咬死了许多羊 | 氛围: 紧张、无助、悲剧 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 放羊娃的眼神要惊恐；体现出狼撕咬羊的场面"
       },
       "imported-1775747701883-p-3": {
@@ -1690,7 +1699,7 @@
             "镰刀"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg?v=1777859698246",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC4%E6%AE%B5.jpg?v=1782785056701",
         "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。. 农夫们: 一群在山下种田的农夫，他们拿着锄头和镰刀等农具，穿着适合劳作的衣物，形象朴实勤劳。.  | 动作: 放羊娃再次大喊狼来了欺骗农夫们，农夫们冲上山帮忙却发现没有狼，放羊娃大笑 | 氛围: 戏谑、紧张后的滑稽、愤怒 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1775739901213-p-29": {
@@ -1709,7 +1718,7 @@
             "床"
           ]
         },
-        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC30%E6%AE%B5.jpg?v=1777859698250",
+        "imageUrl": "/pic_db/%E5%B0%8F%E7%BA%A2%E5%B8%BD/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC30%E6%AE%B5.jpg?v=1782785056701",
         "promptUsed": "生成画面: 地点: 奶奶的房子 | 角色: 小红帽: 戴着一顶用丝绒做的红色帽子的小姑娘. 狼: 森林里遇到的、会说话的狼，最终伪装成奶奶.  | 动作: 狼从床上跳起来吞掉了小红帽，然后躺下睡觉并打鼾 | 氛围: 紧张、惊悚、危险 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字 | 额外要求: 狼刚把话说完，就从床上跳起来，把小红帽吞进了肚子，狼满足了食欲之后便重新躺到床上睡觉，而且鼾声震天。"
       },
       "imported-1775747701883-p-0": {
@@ -1727,7 +1736,7 @@
             "羊"
           ]
         },
-        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1777859698249",
+        "imageUrl": "/pic_db/%E7%8B%BC%E6%9D%A5%E4%BA%86/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1782785056702",
         "promptUsed": "生成画面: 地点: 山上 | 角色: 放羊娃: 一个在山上放羊的男孩，具体年龄和外貌未在文本中详细描述，但通常被想象为穿着简朴的牧童装束。.  | 动作: 放羊娃在山上放羊 | 氛围: 日常、平静 | 风格: soft watercolor illustration, gentle brush strokes, dreamy atmosphere, high quality storybook art | 镜头: cinematic composition, shallow depth of field｜禁止出现文字"
       },
       "imported-1777864295722-p-2": {
@@ -1749,7 +1758,7 @@
             "温酒设备（热水等）"
           ]
         },
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC3%E6%AE%B5.jpg?v=1777864472715",
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC3%E6%AE%B5.jpg?v=1782785056703",
         "promptUsed": "生成画面: 地点: 咸亨酒店柜台内 | 角色: 我（小伙计）: 咸亨酒店的伙计，从十二岁起在店里工作，被掌柜认为样子太傻，主要职务是温酒。. 掌柜: 一副凶脸孔，在酒店里结账、记账，对孔乙己时常取笑。. 主顾（泛指）. 孔乙己: 身材高大，青白脸色，皱纹间时常夹些伤痕，一部乱蓬蓬的花白胡子。穿着又脏又破的长衫，后来穿破夹袄，盘腿垫蒲包，用手走路，脸上黑瘦。.  | 动作: 小伙计在柜台里整天站着，专管温酒，感到单调无聊；掌柜表情凶恶，主顾态度不好；只有孔乙己到来时，气氛才会活跃，引人发笑。 | 氛围: 单调、无聊、沉闷、压抑，但提及孔乙己时带有期待与轻松 | 风格: traditional Chinese ink wash painting style, black and white ink illustration, brush strokes, elegant atmosphere | 镜头: centered composition, detailed background｜禁止出现文字"
       },
       "imported-1777864295722-p-5": {
@@ -1769,7 +1778,7 @@
             "酒碗"
           ]
         },
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC6%E6%AE%B5.jpg?v=1777864449340",
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC6%E6%AE%B5.jpg?v=1782785056703",
         "promptUsed": "生成画面: 地点: 咸亨酒店 | 角色: 孔乙己: 身材高大，青白脸色，皱纹间时常夹些伤痕，一部乱蓬蓬的花白胡子。穿着又脏又破的长衫，后来穿破夹袄，盘腿垫蒲包，用手走路，脸上黑瘦。. 短衣帮顾客: 做工的人，傍午傍晚散工后，靠柜台外站着喝酒，穿着短衣。.  | 动作: 孔乙己喝酒时被旁人嘲笑不识字和未中秀才，他情绪从涨红到颓唐，众人哄笑 | 氛围: 嘲讽、快活、尴尬、颓唐 | 风格: traditional Chinese ink wash painting style, black and white ink illustration, brush strokes, elegant atmosphere | 镜头: centered composition, detailed background｜禁止出现文字"
       },
       "imported-1777864295722-p-8": {
@@ -1795,7 +1804,7 @@
             "粉板"
           ]
         },
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC9%E6%AE%B5.jpg?v=1777864522266",
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC9%E6%AE%B5.jpg?v=1782785056705",
         "promptUsed": "生成画面: 地点: 咸亨酒店 | 角色: 孔乙己: 身材高大，青白脸色，皱纹间时常夹些伤痕，一部乱蓬蓬的花白胡子。穿着又脏又破的长衫，后来穿破夹袄，盘腿垫蒲包，用手走路，脸上黑瘦。. 我（小伙计）: 咸亨酒店的伙计，从十二岁起在店里工作，被掌柜认为样子太傻，主要职务是温酒。. 掌柜: 一副凶脸孔，在酒店里结账、记账，对孔乙己时常取笑。. 短衣帮顾客: 做工的人，傍午傍晚散工后，靠柜台外站着喝酒，穿着短衣。. 长衫顾客: 穿长衫，踱进店面隔壁的房子里，要酒要菜，慢慢地坐喝。. 邻居孩子: 听到笑声赶来围住孔乙己，眼睛望着茴香豆碟子。.  | 动作: 叙述孔乙己在酒店中作为众人取笑对象的功能，以及他不在时人们的日常生活 | 氛围: 讽刺、悲凉、淡漠 | 风格: traditional Chinese ink wash painting style, black and white ink illustration, brush strokes, elegant atmosphere | 镜头: centered composition, detailed background｜禁止出现文字"
       },
       "imported-1777864295722-p-11": {
@@ -1814,22 +1823,68 @@
             "粉板"
           ]
         },
-        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC12%E6%AE%B5.jpg?v=1777864609690",
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC12%E6%AE%B5.jpg?v=1782785056703",
         "promptUsed": "生成画面: 地点: 咸亨酒店 | 角色: 掌柜: 一副凶脸孔，在酒店里结账、记账，对孔乙己时常取笑。. 我（小伙计）: 咸亨酒店的伙计，从十二岁起在店里工作，被掌柜认为样子太傻，主要职务是温酒。.  | 动作: 掌柜在年关和端午两次取下记账的粉板，念叨孔乙己还欠十九个钱；之后的中秋和年关没有再提，也再未见到孔乙己。 | 氛围: 漠然、遗忘、时间流逝的萧索 | 风格: traditional Chinese ink wash painting style, black and white ink illustration, brush strokes, elegant atmosphere | 镜头: centered composition, detailed background｜禁止出现文字"
+      },
+      "imported-1777864295722-p-0": {
+        "id": "ill-1782739013528-0.7976012006886687",
+        "paragraphId": "imported-1777864295722-p-0",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "短衣帮顾客",
+            "长衫顾客"
+          ],
+          "location": "咸亨酒店",
+          "action": "短衣帮顾客靠柜台站着喝酒，长衫顾客在隔壁房间坐着慢慢吃喝",
+          "mood": "市井、忙碌、有阶层差异",
+          "objects": [
+            "曲尺形大柜台",
+            "热水",
+            "酒",
+            "铜钱",
+            "盐煮笋",
+            "茴香豆",
+            "荤菜"
+          ]
+        },
+        "imageUrl": "/pic_db/%E5%AD%94%E4%B9%99%E5%B7%B1/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC1%E6%AE%B5.jpg?v=1782785056715",
+        "promptUsed": "生成画面: 地点: 咸亨酒店 | 角色: 短衣帮顾客: 做工的人，傍午傍晚散工后，靠柜台外站着喝酒，穿着短衣。. 长衫顾客: 穿长衫，踱进店面隔壁的房子里，要酒要菜，慢慢地坐喝。.  | 动作: 短衣帮顾客靠柜台站着喝酒，长衫顾客在隔壁房间坐着慢慢吃喝 | 氛围: 市井、忙碌、有阶层差异 | 风格: traditional Chinese ink wash painting style, black and white ink illustration, brush strokes, elegant atmosphere | 镜头: centered composition, detailed background｜禁止出现文字"
+      },
+      "book-white-bone-p-8": {
+        "id": "ill-1782741062913-0.2660196198680346",
+        "paragraphId": "book-white-bone-p-8",
+        "status": "completed",
+        "extractedFacts": {
+          "characters": [
+            "唐僧",
+            "悟空",
+            "八戒"
+          ],
+          "location": "白虎岭",
+          "action": "八戒诬陷悟空伪造证据，唐僧写下贬书驱逐悟空",
+          "mood": "猜疑、不信任、紧张、决绝",
+          "objects": [
+            "骷髅",
+            "贬书"
+          ]
+        },
+        "imageUrl": "/pic_db/%E8%A5%BF%E6%B8%B8%E8%AE%B0%20%E4%B8%89%E6%89%93%E7%99%BD%E9%AA%A8%E7%B2%BE/illustrations/paragraphs/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AC%AC9%E6%AE%B5.jpg?v=1782785056714",
+        "promptUsed": "生成画面: 地点: 白虎岭 | 角色: 唐僧: 身披锦襴袈裟，头戴毗卢帽，骑着白龙马，面容慈祥却带着愁容。. 孙悟空: 猴王形象，身穿虎皮裙，手持金箍棒，头戴紧箍儿，目光如炬。. 猪八戒: 猪头人身，挺着大肚子，手持九齿钉耙，穿着黑色僧衣。.  | 动作: 八戒诬陷悟空伪造证据，唐僧写下贬书驱逐悟空 | 氛围: 猜疑、不信任、紧张、决绝 | 风格: traditional chinese line art, gongbi style, new year picture aesthetic, flat coloring, large color blocks, ink line outlines, decorative lines, retro color palette, low saturation, earthy background, chinese opera character styling, exaggerated poses, strong narrative, lianhuanhua style | 镜头: flat perspective, 2D composition, narrative framing｜禁止出现文字"
       }
     },
-    "currentBookId": "imported-1777864295722",
-    "preferredVisualSpecId": "ink_illustration",
+    "currentBookId": "book-white-bone",
+    "preferredVisualSpecId": "chinese_line_art",
     "imageModelId": "doubao-seedream-4-5-251128",
     "imageGenerationStats": {
-      "total": 150,
+      "total": 152,
       "assets": 93,
-      "illustrations": 57,
+      "illustrations": 59,
       "byModel": {
-        "doubao-seedream-4-5-251128": 147,
+        "doubao-seedream-4-5-251128": 149,
         "doubao-seedream-5-0-260128": 3
       },
-      "lastGeneratedAt": "2026-05-04T03:16:49.691Z"
+      "lastGeneratedAt": "2026-06-29T13:54:12.365Z"
     }
   }
 }

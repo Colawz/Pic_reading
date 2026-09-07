@@ -69,6 +69,7 @@ export const Reader: React.FC<ReaderProps> = ({
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isChatting, setIsChatting] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<'books' | 'roles' | 'chat'>('chat');
 
   // Missing Character Modal State
   const [pendingGenerationQueue, setPendingGenerationQueue] = useState<Array<{
@@ -663,7 +664,7 @@ export const Reader: React.FC<ReaderProps> = ({
   };
 
   return (
-    <div className="box-border flex h-full w-full flex-col overflow-hidden px-6 py-8 xl:px-8 2xl:px-10">
+    <div className="box-border flex h-full w-full flex-col overflow-hidden px-3 py-4 md:px-6 md:py-8 xl:px-8 2xl:px-10">
       {/* Missing Character Modal */}
       {currentPendingGeneration && (
           <div className="fixed inset-0 bg-black/60 z-[110] flex items-center justify-center p-4 backdrop-blur-sm">
@@ -782,7 +783,412 @@ export const Reader: React.FC<ReaderProps> = ({
         onExport={handleExport}
       />
 
-      <div className="grid flex-1 min-h-0 items-start gap-6 2xl:grid-cols-[260px_minmax(760px,1fr)_360px] xl:grid-cols-[240px_minmax(0,1fr)_340px]">
+      <div className="lg:hidden flex flex-1 min-h-0 flex-col gap-4">
+        <section className="min-h-0 flex-1">
+          <div className="min-w-0 h-full min-h-0 rounded-[24px] border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col">
+            <div className="border-b border-slate-100 px-4 py-4">
+              <div className="space-y-3">
+                <div>
+                  <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-brand-500">
+                    <BookOpen size={13} />
+                    阅读工作台
+                  </div>
+                  <h1 className="mt-2 text-2xl font-serif font-bold text-slate-900">{book.title}</h1>
+                  <p className="mt-1 text-sm text-slate-400">{currentChapter.title} · 第 {currentPage + 1} 页</p>
+                </div>
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  <button onClick={() => setShowStylePicker(true)} className="shrink-0 rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:text-brand-600 flex items-center gap-2"><Palette size={16} /><span>{visualSpec.label}</span></button>
+                  <button onClick={handleScanAssets} disabled={isScanning} className="shrink-0 rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:text-brand-600 flex items-center gap-2 disabled:opacity-50">{isScanning ? <Loader2 className="animate-spin" size={16} /> : <ScanSearch size={16} />}<span>扫描设定</span></button>
+                  <button onClick={() => setShowBatchModal(true)} className="shrink-0 rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:text-brand-600 flex items-center gap-2"><Layers size={16} /><span>批量生图</span></button>
+                  <button onClick={() => setShowSettings(!showSettings)} className="shrink-0 rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:text-brand-600 flex items-center gap-2 transition-all"><Settings2 size={16} /><span>设置</span></button>
+                </div>
+                {showSettings && (
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                    <h3 className="font-bold text-sm mb-4 flex items-center gap-2 text-slate-700"><Type size={16} /> 阅读生图设置</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">生图频率</label>
+                        <div className="grid grid-cols-4 gap-2">
+                          {[0, 300, 500, 1000].map(v => (
+                            <button key={v} onClick={() => setSettings(s => ({...s, wordInterval: v}))} className={`py-2 text-xs rounded-lg border transition-all ${settings.wordInterval === v ? 'bg-brand-500 text-white border-brand-600 shadow-sm' : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-100'}`}>{v === 0 ? '手动' : v}</button>
+                          ))}
+                        </div>
+                        <div className="mt-2 text-[10px] text-slate-400 italic bg-white p-2 rounded-lg">
+                          {settings.wordInterval === 0 ? '仅在手动点击时生图' : `每隔约 ${settings.wordInterval} 字出现生图控件`}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">图片模型</label>
+                        <select value={imageModelId} onChange={e => onUpdateImageModel(e.target.value as ImageGenerationModelId)} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-brand-500 outline-none">
+                          {imageModels.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
+                        </select>
+                        <div className="mt-2 text-[10px] text-slate-400 italic bg-white p-2 rounded-lg">
+                          {imageModels.find(model => model.id === imageModelId)?.description}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => handleSettingsExport('generated_chapters', 'html')}
+                          className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-left transition-colors hover:border-brand-300 hover:bg-brand-50"
+                        >
+                          <FileText size={16} className="mb-2 text-green-500" />
+                          <div className="text-xs font-bold text-slate-700">精选 HTML</div>
+                          <div className="mt-1 text-[10px] text-slate-400">仅含配图章节</div>
+                        </button>
+                        <button
+                          onClick={() => handleSettingsExport('generated_chapters', 'pdf')}
+                          className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-left transition-colors hover:border-brand-300 hover:bg-brand-50"
+                        >
+                          <FileType size={16} className="mb-2 text-brand-500" />
+                          <div className="text-xs font-bold text-slate-700">精选 PDF</div>
+                          <div className="mt-1 text-[10px] text-slate-400">便于分享打印</div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex-1 min-h-0 overflow-y-auto px-4 py-5">
+              {currentParagraphs.map((paragraph, index) => {
+                const pIdx = currentPage * PARAGRAPHS_PER_PAGE + index;
+                const wordData = paragraphWordData[pIdx];
+                const ill = illustrations[paragraph.id];
+                const customRequirement = customRequirements[paragraph.id] || '';
+                const isRequirementEditorOpen = !!requirementEditorMap[paragraph.id];
+                const interval = settings.wordInterval;
+                const isIntervalReached = interval > 0 && Math.floor(wordData.start / interval) < Math.floor(wordData.end / interval);
+                const isFirstPar = pIdx === 0 && interval > 0;
+                const shouldShowSuggestControl = isIntervalReached || isFirstPar;
+
+                return (
+                  <div key={paragraph.id} className="group mb-8">
+                    <p className={`font-serif text-lg leading-9 text-slate-800 mb-4 hover:bg-brand-50 rounded px-2 -mx-2 cursor-pointer transition-colors ${activeParagraphId === paragraph.id ? 'bg-brand-50 shadow-sm' : ''}`} onClick={() => setActiveParagraphId(paragraph.id)}>{paragraph.text}</p>
+                    <div className="my-5">
+                      {ill ? (
+                        <div className="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm group/ill">
+                          {ill.status === 'generating' && <div className="h-52 flex flex-col items-center justify-center text-slate-400 animate-pulse"><Wand2 className="animate-spin mb-2 text-brand-500" size={28} />正在为您构思画面...</div>}
+                          {ill.status === 'pending' && (
+                            <div className="h-52 flex flex-col items-center justify-center text-amber-500 bg-amber-50/30 px-6 text-center">
+                              <Info size={28} className="mb-2" />
+                              <div className="font-medium">等待角色设定加载...</div>
+                              <div className="mt-2 text-xs text-amber-600/80">角色设定补齐后会自动继续生成。</div>
+                              <button
+                                onClick={() => handleGenerate(currentChapterIndex, pIdx)}
+                                disabled={!!activeGenerationMap[paragraph.id]}
+                                className="mt-4 rounded-xl bg-amber-100 px-4 py-2 text-xs font-bold text-amber-700 transition-colors hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-50"
+                              >
+                                {activeGenerationMap[paragraph.id] ? '继续生成中...' : '手动继续生成'}
+                              </button>
+                            </div>
+                          )}
+                          {ill.status === 'completed' && ill.imageUrl && (
+                            <div className="relative">
+                              <img src={ill.imageUrl} className="w-full h-auto object-cover max-h-[420px] transition-transform duration-700 group-hover/ill:scale-[1.02]" />
+                              <div className="absolute top-3 right-3">
+                                <button
+                                  onClick={() => toggleRequirementEditor(paragraph.id)}
+                                  className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium shadow-sm backdrop-blur transition-colors ${isRequirementEditorOpen ? 'bg-white text-slate-900' : 'bg-white/90 text-slate-700 hover:bg-white'}`}
+                                  title="打开本张图片操作"
+                                >
+                                  <Settings2 size={14} />
+                                  <span>{customRequirement.trim() ? '本张设置' : '图片操作'}</span>
+                                </button>
+                              </div>
+                              {isRequirementEditorOpen && (
+                                <div className="border-t border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur">
+                                  <div className="mb-3 flex items-center justify-between">
+                                    <div>
+                                      <div className="text-sm font-semibold text-slate-800">本张生图要求</div>
+                                      <div className="text-[11px] text-slate-400">留空则完全按系统自动分析生成</div>
+                                    </div>
+                                    <button
+                                      onClick={() => toggleRequirementEditor(paragraph.id)}
+                                      className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+                                      title="收起"
+                                    >
+                                      <X size={14} />
+                                    </button>
+                                  </div>
+                                  <input
+                                    value={customRequirement}
+                                    onChange={(e) => setCustomRequirements(prev => ({ ...prev, [paragraph.id]: e.target.value }))}
+                                    placeholder="例如：低机位、人物居中、突出表情"
+                                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-brand-300"
+                                  />
+                                  <div className="mt-2 text-[11px] text-slate-400">
+                                    {customRequirement.trim().length > 0 ? `当前将附加 ${customRequirement.trim().length} 个字的本张要求` : '未填写附加要求'}
+                                  </div>
+                                  <div className="mt-3 flex items-center justify-end gap-2">
+                                    <button
+                                      onClick={() => onDeleteIllustration(paragraph.id)}
+                                      className="rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-600 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                                    >
+                                      删除
+                                    </button>
+                                    <button
+                                      disabled={!!activeGenerationMap[paragraph.id]}
+                                      onClick={() => handleGenerate(currentChapterIndex, pIdx)}
+                                      className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                      重生成
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                                {ill.extractedFacts && <p className="text-white text-[11px] italic">场景: {ill.extractedFacts.location} | 氛围: {ill.extractedFacts.mood}</p>}
+                              </div>
+                            </div>
+                          )}
+                          {ill.status === 'failed' && <div className="p-6 text-red-400 bg-red-50 flex flex-col items-center text-center"><AlertCircle size={28} className="mb-2" /><span className="font-bold">生成失败</span>{ill.error && <p className="text-xs mt-2 max-w-md break-words opacity-80">{ill.error}</p>}<button onClick={() => handleGenerate(currentChapterIndex, pIdx)} className="mt-4 px-6 py-2 bg-red-100 rounded-xl text-xs font-bold hover:bg-red-200 transition-colors">重新尝试</button></div>}
+                        </div>
+                      ) : (
+                        <div className={`transition-all duration-300 ${shouldShowSuggestControl || isRequirementEditorOpen ? 'opacity-100 mb-8' : 'opacity-0 h-0 overflow-hidden group-hover:h-12 group-hover:opacity-100'}`}>
+                          <div className={`border-2 border-dashed rounded-2xl transition-colors ${shouldShowSuggestControl || isRequirementEditorOpen ? 'border-brand-200 bg-brand-50/30 p-4' : 'border-slate-100 p-3'}`}>
+                            <div className="flex flex-col gap-3">
+                              <button disabled={!!activeGenerationMap[paragraph.id]} onClick={() => handleGenerate(currentChapterIndex, pIdx)} className={`flex items-center justify-center gap-3 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0 ${shouldShowSuggestControl ? 'text-brand-600 hover:text-brand-700 hover:scale-105' : 'text-slate-300 hover:text-brand-500 text-xs'}`}>
+                                <Wand2 size={shouldShowSuggestControl ? 22 : 16} className={shouldShowSuggestControl ? 'animate-pulse' : ''} />
+                                <span>{shouldShowSuggestControl ? `AI 建议生图点 (${wordData.start}字处)` : '在此处生图'}</span>
+                              </button>
+                              <button
+                                onClick={() => toggleRequirementEditor(paragraph.id)}
+                                className={`px-3 py-2 rounded-xl text-xs font-medium transition-colors ${customRequirement.trim() ? 'bg-amber-50 text-amber-700 hover:bg-amber-100' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-300 hover:text-slate-700'}`}
+                              >
+                                {isRequirementEditorOpen ? '收起要求' : '本张要求'}
+                              </button>
+                              {isRequirementEditorOpen && (
+                                <input
+                                  value={customRequirement}
+                                  onChange={(e) => setCustomRequirements(prev => ({ ...prev, [paragraph.id]: e.target.value }))}
+                                  placeholder="可为空，例如：低机位、人物居中、突出表情"
+                                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-brand-300"
+                                />
+                              )}
+                            </div>
+                            {isRequirementEditorOpen && (
+                              <div className="mt-2 text-center text-[11px] text-slate-400 px-1">
+                                {customRequirement.trim().length > 0 ? `当前将附加 ${customRequirement.trim().length} 个字的本张要求` : '留空则完全按系统自动分析生成'}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              <div className="mt-6 pt-5 border-t flex items-center justify-between gap-3">
+                <button onClick={() => currentPage > 0 && setCurrentPage(currentPage - 1)} disabled={currentPage === 0} className="flex items-center gap-2 px-4 py-2 bg-white border rounded-xl text-sm text-slate-600 disabled:opacity-30 hover:bg-slate-50 transition-colors shadow-sm"><ChevronLeft size={18} /> 上一页</button>
+                <div className="text-sm font-medium text-slate-400 bg-slate-100 px-3 py-1 rounded-full whitespace-nowrap">{currentPage + 1} / {totalPages}</div>
+                <button onClick={() => currentPage < totalPages - 1 && setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages - 1} className="flex items-center gap-2 px-4 py-2 bg-white border rounded-xl text-sm text-slate-600 disabled:opacity-30 hover:bg-slate-50 transition-colors shadow-sm">下一页 <ChevronRight size={18} /></button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="min-h-0 rounded-[24px] border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col">
+          <div className="border-b border-slate-100 px-4 py-3">
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { key: 'books', label: '书架' },
+                { key: 'roles', label: '角色' },
+                { key: 'chat', label: '伴读' },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => setMobilePanel(item.key as 'books' | 'roles' | 'chat')}
+                  className={`rounded-xl px-3 py-2 text-sm font-medium transition-colors ${mobilePanel === item.key ? 'bg-brand-50 text-brand-700' : 'bg-slate-50 text-slate-500'}`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="h-[38vh] min-h-0 overflow-y-auto p-4 sm:h-[42vh]">
+            {mobilePanel === 'books' && (
+              <div className="space-y-4">
+                <div>
+                  <div className="text-sm font-bold text-slate-900">我的书架</div>
+                  <div className="text-xs text-slate-400 mt-1">在阅读页直接切换作品</div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {books.map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => onSelectBook(item)}
+                      className={`group overflow-hidden rounded-2xl border text-left transition-all ${item.id === book.id ? 'border-brand-300 bg-brand-50 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'}`}
+                    >
+                      <div className="aspect-[3/4] bg-slate-100 overflow-hidden">
+                        {item.coverUrl ? (
+                          <img src={item.coverUrl} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center text-4xl">{item.coverEmoji || '📘'}</div>
+                        )}
+                      </div>
+                      <div className="p-3">
+                        <div className="text-sm font-bold text-slate-800 line-clamp-1">{item.title}</div>
+                        <div className="mt-1 text-[11px] text-slate-400 line-clamp-1">
+                          {item.id === book.id ? `${currentChapter.title} · 第 ${currentPage + 1} 页` : item.chapters[0]?.title || '待阅读'}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {mobilePanel === 'roles' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <div>
+                    <div className="text-sm font-bold text-slate-900">角色设定</div>
+                    <div className="text-xs text-slate-400 mt-1">当前书籍的主要角色视觉卡片</div>
+                  </div>
+                  <button
+                    onClick={() => onOpenAssetsView(book.id)}
+                    className="text-xs font-bold text-brand-600 hover:text-brand-700"
+                  >
+                    查看全部
+                  </button>
+                </div>
+                {characters.map(character => (
+                  <div
+                    key={character.id}
+                    className={`w-full rounded-2xl border p-3 text-left transition-all ${focusedSidebarCharacter?.id === character.id ? 'border-brand-300 bg-brand-50' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}
+                  >
+                    <button
+                      onClick={() => setFocusedSidebarCharacterId(character.id)}
+                      className="w-full text-left"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 shrink-0">
+                          {character.imageUrl ? <img src={character.imageUrl} alt={character.name} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-slate-300"><Bot size={20} /></div>}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-bold text-slate-800">{character.name}</div>
+                          <div className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-400">{character.visualSummary || character.description}</div>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                ))}
+                {characters.length === 0 && (
+                  <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-xs text-slate-400">
+                    还没有角色设定，扫描章节后会自动补充。
+                  </div>
+                )}
+              </div>
+            )}
+
+            {mobilePanel === 'chat' && (
+              <div className="flex h-full min-h-0 flex-col">
+                <div className="pb-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                        <MessageCircle size={16} />
+                        AI 伴读对话
+                      </div>
+                      <div className="mt-1 text-xs text-slate-400">
+                        {currentChatCharacter
+                          ? `当前角色可知范围：${readingScopeLabel ? `截至${book.chapters[latestIllustratedChapterIndex].title}` : '尚未形成阅读进度'}`
+                          : `当前作品：《${book.title}》`}
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleClearChat}
+                      disabled={isChatting}
+                      className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-50"
+                    >
+                      清空
+                    </button>
+                  </div>
+                  <div className="mt-3">
+                    <select
+                      value={chatRole}
+                      onChange={(e) => setChatRole(e.target.value)}
+                      className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-300"
+                    >
+                      <option value="companion">AI 伴读</option>
+                      {characters.map(character => (
+                        <option key={character.id} value={character.id}>{`扮演：${character.name}`}</option>
+                      ))}
+                    </select>
+                    <div className="mt-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] leading-relaxed text-slate-500">
+                      {currentChatCharacter
+                        ? `当前将以“${currentChatCharacter.name}”的身份回答，并结合角色设定、已知社会关系和当前阅读进度作答。`
+                        : '当前将以伴读身份回答，可以解释剧情、梳理人物关系并陪伴阅读。'}
+                    </div>
+                  </div>
+                </div>
+                <div className="min-h-0 flex-1 overflow-y-auto rounded-2xl bg-slate-50/70 px-3 py-3 space-y-3">
+                  {chatMessages.map((message, index) => (
+                    <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      {message.role === 'assistant' ? (
+                        <div className="flex max-w-[96%] items-start gap-3">
+                          <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full border border-slate-200 bg-slate-900 text-white flex items-center justify-center shadow-sm">
+                            {(() => {
+                              const avatarCharacter = getAssistantAvatar(message);
+                              return avatarCharacter?.imageUrl
+                                ? <img src={avatarCharacter.imageUrl} alt={avatarCharacter.name} className="h-full w-full object-cover" />
+                                : <Bot size={18} />;
+                            })()}
+                          </div>
+                          <div>
+                            <div className="mb-1 text-[11px] font-medium text-slate-500">
+                              {(() => {
+                                const avatarCharacter = getAssistantAvatar(message);
+                                return avatarCharacter ? avatarCharacter.name : 'AI 伴读';
+                              })()}
+                            </div>
+                            <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm leading-relaxed text-slate-700 shadow-sm">
+                              {message.content}
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="max-w-[92%] rounded-2xl bg-brand-600 px-4 py-3 text-sm leading-relaxed text-white shadow-sm">
+                          {message.content}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-3">
+                  <div className="flex items-end gap-2">
+                    <textarea
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          void handleSendChat();
+                        }
+                      }}
+                      rows={2}
+                      placeholder="输入你想问的问题..."
+                      className="flex-1 resize-none rounded-2xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-300"
+                    />
+                    <button
+                      onClick={() => void handleSendChat()}
+                      disabled={!chatInput.trim() || isChatting}
+                      className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-sm transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {isChatting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
+
+      <div className="hidden lg:grid flex-1 min-h-0 items-start gap-6 2xl:grid-cols-[260px_minmax(760px,1fr)_360px] xl:grid-cols-[240px_minmax(0,1fr)_340px]">
         <aside className="h-full min-h-0 overflow-y-auto pr-1 space-y-4">
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3 mb-4">
